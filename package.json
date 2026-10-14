@@ -1,0 +1,13 @@
+{
+  "name": "immersion-library",
+  "version": "1.0.0",
+  "description": "Biblioteca Infinita — Mago dos Idiomas Discovery Platform",
+  "scripts": {
+    "build": "node generate-production-app.js",
+    "preview": "npx serve . -l 3000",
+    "check": "node -e \"console.log('Environment ready')\""
+  },
+  "keywords": ["immersion", "language-learning", "ui"],
+  "author": "Mago dos Idiomas",
+  "license": "ISC"
+}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca de Imersão — Hierarquia Refinada (Anti-Slop)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #09090b;
+      color: #fafafa;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-6 sm:p-12 selection:bg-purple-900 selection:text-white">
+
+  <div class="max-w-5xl mx-auto space-y-16">
+
+    <!-- HEADER DE CONTEXTO -->
+    <div>
+      <span class="text-xs font-semibold text-purple-400">Design Taste & Craft Floor</span>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100 mt-1">
+        Hierarquia Pura: Sem Adereços, Sem Números, Sem Dividers
+      </h1>
+      <p class="text-xs text-zinc-400 mt-2 max-w-2xl leading-relaxed">
+        Eliminamos completamente números decorativos (<code>01</code>), setas estranhas, divisores internos no meio do card e tags soltas. A hierarquia agora é tipográfica e espacial: <strong>Quem é o criador</strong>, <strong>Para quem serve (Nível)</strong>, <strong>Como ouvir (Fala pausada / Legendas)</strong> e <strong>O que ele aborda</strong>.
+      </p>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ESTUDO 1: GRADE COMPARTILHADA PURIFICADA (SEM NÚMEROS) -->
+    <!-- ======================================================== -->
+    <section class="space-y-4">
+      <div class="flex items-baseline justify-between border-b border-zinc-800 pb-2">
+        <div>
+          <span class="text-xs font-semibold text-purple-400">Opção 1</span>
+          <h2 class="text-base font-semibold text-zinc-100">Grade Contínua (Bordas de 1px) — Sem Adereços Artificiais</h2>
+        </div>
+        <span class="text-xs text-zinc-500">Excelente para listas de 100+ itens no desktop e mobile</span>
+      </div>
+
+      <div class="rounded-xl border border-zinc-800 bg-[#09090b] overflow-hidden grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-800">
+
+        <!-- CARD 1: YOUTUBE -->
+        <a href="https://youtube.com/@RussianProgress" target="_blank" class="group block p-6 hover:bg-zinc-900/40 transition-colors flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <!-- Topo: Avatar e Origem sutil -->
+            <div class="flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80" class="w-12 h-12 rounded-full object-cover border border-zinc-800 flex-shrink-0" alt="">
+              <div class="min-w-0">
+                <h3 class="text-base font-bold text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                  Russian Progress
+                </h3>
+                <span class="text-xs text-zinc-500">Canal do YouTube</span>
+              </div>
+            </div>
+
+            <!-- Bio real do canal -->
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-3">
+              Vídeos e conversas em ritmo moderado para desenvolver compreensão natural sem decoreba de gramática.
+            </p>
+          </div>
+
+          <!-- Base: 3 Sinais Vitais com UX Writing claro -->
+          <div class="space-y-2">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2.5 py-1 rounded text-xs font-medium bg-emerald-950/70 border border-emerald-800/40 text-emerald-300">
+                🌱 Iniciante
+              </span>
+              <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Legendas
+              </span>
+              <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Fala pausada
+              </span>
+            </div>
+            <span class="text-xs text-zinc-500 block">Vlogs · Viagens</span>
+          </div>
+        </a>
+
+        <!-- CARD 2: SPOTIFY -->
+        <a href="https://spotify.com" target="_blank" class="group block p-6 hover:bg-zinc-900/40 transition-colors flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=120&h=120&q=80" class="w-12 h-12 rounded-lg object-cover border border-zinc-800 flex-shrink-0" alt="">
+              <div class="min-w-0">
+                <h3 class="text-base font-bold text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                  Very Much Russian
+                </h3>
+                <span class="text-xs text-zinc-500">Podcast no Spotify</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-3">
+              Expressões idiomáticas, gírias e histórias em velocidade real explicadas com contexto cultural.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2.5 py-1 rounded text-xs font-medium bg-blue-950/70 border border-blue-800/40 text-blue-300">
+                🌳 Nativo
+              </span>
+              <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Transcrição
+              </span>
+              <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Fala rápida
+              </span>
+            </div>
+            <span class="text-xs text-zinc-500 block">Cultura · Expressões</span>
+          </div>
+        </a>
+
+        <!-- CARD 3: ELLLO -->
+        <a href="https://elllo.org" target="_blank" class="group block p-6 hover:bg-zinc-900/40 transition-colors flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg bg-zinc-900 border border-zinc-800 p-2 flex items-center justify-center flex-shrink-0">
+                <img src="https://www.google.com/s2/favicons?domain=elllo.org&sz=128" class="w-full h-full object-contain" alt="">
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-base font-bold text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                  Elllo Views
+                </h3>
+                <span class="text-xs text-zinc-500">Portal de Áudio & Texto</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-3">
+              Acervo com mais de 1.000 conversas autênticas com transcrição simultânea sincronizada e ritmo compassado.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2.5 py-1 rounded text-xs font-medium bg-emerald-950/70 border border-emerald-800/40 text-emerald-300">
+                🌱 Iniciante
+              </span>
+              <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Transcrição
+              </span>
+              <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Fala pausada
+              </span>
+            </div>
+            <span class="text-xs text-zinc-500 block">Diálogos cotidianos</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- ESTUDO 2: ILHAS INDEPENDENTES COM HIERARQUIA RECALIBRADA -->
+    <!-- ======================================================== -->
+    <section class="space-y-4">
+      <div class="flex items-baseline justify-between border-b border-zinc-800 pb-2">
+        <div>
+          <span class="text-xs font-semibold text-purple-400">Opção 2</span>
+          <h2 class="text-base font-semibold text-zinc-100">Cards Independentes com Hierarquia Corrigida (`gap-4`)</h2>
+        </div>
+        <span class="text-xs text-zinc-500">Ritmo espacial de 3 blocos claros: Identidade → Bio → Sinais</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- CARD 1 -->
+        <a href="https://youtube.com/@RussianProgress" target="_blank" class="group block p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80" class="w-11 h-11 rounded-full object-cover border border-zinc-800 flex-shrink-0" alt="">
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                  Russian Progress
+                </h3>
+                <span class="text-xs text-zinc-500">Canal do YouTube</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-2">
+              Vídeos e conversas em ritmo moderado para desenvolver compreensão natural sem decoreba.
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/70 border border-emerald-800/40 text-emerald-300">🌱 Iniciante</span>
+              <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Legendas</span>
+              <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Fala pausada</span>
+            </div>
+            <span class="text-xs text-zinc-500 block">Vlogs</span>
+          </div>
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="https://spotify.com" target="_blank" class="group block p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=120&h=120&q=80" class="w-11 h-11 rounded-lg object-cover border border-zinc-800 flex-shrink-0" alt="">
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                  Very Much Russian
+                </h3>
+                <span class="text-xs text-zinc-500">Podcast no Spotify</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-2">
+              Expressões idiomáticas, gírias e histórias em velocidade real explicadas com contexto.
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-950/70 border border-blue-800/40 text-blue-300">🌳 Nativo</span>
+              <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Transcrição</span>
+              <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Fala rápida</span>
+            </div>
+            <span class="text-xs text-zinc-500 block">Expressões</span>
+          </div>
+        </a>
+
+        <!-- CARD 3 -->
+        <a href="https://elllo.org" target="_blank" class="group block p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-lg bg-zinc-950 border border-zinc-800 p-2 flex items-center justify-center flex-shrink-0">
+                <img src="https://www.google.com/s2/favicons?domain=elllo.org&sz=128" class="w-full h-full object-contain" alt="">
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                  Elllo Views
+                </h3>
+                <span class="text-xs text-zinc-500">Portal de Áudio & Texto</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-2">
+              Acervo com mais de 1.000 conversas autênticas com transcrição simultânea sincronizada.
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/70 border border-emerald-800/40 text-emerald-300">🌱 Iniciante</span>
+              <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Transcrição</span>
+              <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Fala pausada</span>
+            </div>
+            <span class="text-xs text-zinc-500 block">Diálogos</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

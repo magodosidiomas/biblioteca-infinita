@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Versão B — Cards com SEO Snippet & Miniatura Lateral</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #09090b; color: #fafafa; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+  </style>
+</head>
+<body class="min-h-screen p-6 sm:p-12 selection:bg-purple-900 selection:text-white">
+
+  <div class="max-w-5xl mx-auto space-y-12">
+    
+    <div>
+      <span class="text-xs font-mono text-purple-400">Versão B — Baseada em SEO & Rich Snippets</span>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100 mt-1">
+        Cards com SEO Snippet & Miniatura Lateral (Estilo Google Search / Arc Search)
+      </h1>
+      <p class="text-xs text-zinc-400 mt-2 max-w-2xl leading-relaxed">
+        Aqui não forçamos capa 16:9 grande. Puxamos o <strong>Favicon em alta resolução</strong>, o <strong>domínio de origem</strong>, a <strong>meta description real (snippet de busca)</strong> e uma <strong>miniatura lateral limpa</strong>.
+      </p>
+    </div>
+
+    <!-- GRID DE CARDS ESTILO VERSÃO B -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=www.youtube.com&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">youtube.com</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-950/60 border border-amber-800/40 text-amber-300 flex-shrink-0">
+                🌿 Básico
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  TED - YouTube
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  The TED Talks channel features the best talks and performances from the TED Conference, where the world&#39;s leading thinkers and doers give the talk of their l...
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://yt3.googleusercontent.com/ytc/AIdro_koIFcCOrvh0KThLNOiazAIDu6hcs8bjkGNwe1f6A_OYm8=s900-c-k-c0x00ffffff-no-rj" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://www.youtube.com/@TED/videos" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=www.youtube.com&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">youtube.com</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-950/60 border border-amber-800/40 text-amber-300 flex-shrink-0">
+                🌿 Básico
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Steve Kaufmann - lingosteve - YouTube
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  I will teach you how to learn a new language.I have learned 20 languages and in my videos I share the techniques and resources I use to help you achieve your...
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://yt3.googleusercontent.com/ytc/AIdro_mKdbvZ6naFnbw-mIbszy-LSH4e0fALn6ufyOwMITE7T8c=s900-c-k-c0x00ffffff-no-rj" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://www.youtube.com/user/lingosteve" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=www.elllo.org&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">elllo.org</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/60 border border-emerald-800/40 text-emerald-300 flex-shrink-0">
+                🌱 Iniciante
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  ELLLO Views 1451 to 1500
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  ESL students and teachers can access free listening lessons that come with audio, script, quiz and vocabulary support.
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=www.elllo.org&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://www.elllo.org/english/1451/index.htm" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=teacherluke.co.uk&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">teacherluke.co.uk</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-950/60 border border-amber-800/40 text-amber-300 flex-shrink-0">
+                🌿 Básico
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Luke’s ENGLISH Podcast | Learn British English with Luke Thompson
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  Recurso curado para imersão natural. Clique para acessar o conteúdo na íntegra.
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=teacherluke.co.uk&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://teacherluke.co.uk/" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=podcastitaliano.com&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">podcastitaliano.com</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/60 border border-emerald-800/40 text-emerald-300 flex-shrink-0">
+                🌱 Iniciante
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Podcast Italiano - Impara l&#x27;italiano, per davvero
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  Recurso curado para imersão natural. Clique para acessar o conteúdo na íntegra.
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=podcastitaliano.com&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://podcastitaliano.com/" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=innerfrench.com&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">innerfrench.com</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-950/60 border border-amber-800/40 text-amber-300 flex-shrink-0">
+                🌿 Básico
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Just a moment...
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  Recurso curado para imersão natural. Clique para acessar o conteúdo na íntegra.
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=innerfrench.com&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://innerfrench.com/" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=easystoriesinenglish.com&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">easystoriesinenglish.com</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/60 border border-emerald-800/40 text-emerald-300 flex-shrink-0">
+                🌱 Iniciante
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Easy Stories in English | Learn English the natural way
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  Learn English the natural way
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=easystoriesinenglish.com&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://easystoriesinenglish.com/" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=www.languagereactor.com&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">languagereactor.com</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-950/60 border border-amber-800/40 text-amber-300 flex-shrink-0">
+                Ferramenta
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Language Reactor
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  Language Reactor: your language learning toolbox. Discover, understand, and learn from native materials, including Netflix and YouTube. (Formerly called
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=www.languagereactor.com&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://www.languagereactor.com/" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+        <article class="group p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all duration-200 flex flex-col justify-between space-y-3.5">
+          
+          <div class="space-y-2.5">
+            <!-- Header do Snippet: Favicon + Domínio + Nível -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-zinc-950 border border-zinc-800 p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://www.google.com/s2/favicons?domain=anisub.tv&sz=128" alt="" class="w-full h-full object-contain">
+                </div>
+                <span class="text-xs font-medium text-zinc-400 truncate">anisub.tv</span>
+              </div>
+
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-950/60 border border-amber-800/40 text-amber-300 flex-shrink-0">
+                🌳 Nativo
+              </span>
+            </div>
+
+            <!-- Corpo: Título + Snippet de Busca + Miniatura Lateral -->
+            <div class="flex gap-3.5 items-start justify-between">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-2 leading-snug">
+                  Учим японский язык онлайн по аниме, дорамам и фильмам
+                </h3>
+                
+                <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  Сервис изучения японского языка по аниме, дорамам и фильмам с помощью интерактивных субтитров
+                </p>
+              </div>
+
+              <!-- Miniatura lateral (Thumbnail quadrada ou avatar) -->
+              <div class="w-16 h-16 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=anisub.tv&sz=128" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rodapé do Card: Tags de Apoio e Link Direto (Sem dividers feios) -->
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Legendas</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-xs">Pausado</span>
+            </div>
+
+            <a href="https://anisub.tv/" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 font-medium transition">
+              <span>Acessar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      
+
+    </div>
+
+  </div>
+
+</body>
+</html>

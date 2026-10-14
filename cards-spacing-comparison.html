@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparativo: Com Espaçamento vs Sem Espaçamento (Linhas Grid)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #09090b; color: #fafafa; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+  </style>
+</head>
+<body class="min-h-screen p-6 sm:p-12 selection:bg-purple-900 selection:text-white">
+
+  <div class="max-w-5xl mx-auto space-y-16">
+
+    <div>
+      <span class="text-xs font-mono text-purple-400">Estudo de Espaçamento Inspirado na Referência</span>
+      <h1 class="text-2xl font-bold tracking-tight text-zinc-100 mt-1">
+        Lado a Lado: Ilhas com Espaçamento vs Grade Conectada (Sem Espaçamento)
+      </h1>
+      <p class="text-xs text-zinc-400 mt-2 max-w-2xl leading-relaxed">
+        Na imagem que você enviou (WordCraft, SoundCraft, DeckCraft), os cards dividem <strong>linhas de borda contínuas de 1px</strong>, com numeração técnica e layout monolítico. Aqui está a aplicação dessa mesma linguagem nos recursos de imersão.
+      </p>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- ESTILO B: GRADE CONECTADA (SEM ESPAÇAMENTO - INSPIRADO NA IMAGEM) -->
+    <!-- ============================================== -->
+    <section class="space-y-4">
+      <div class="flex items-baseline justify-between border-b border-zinc-800 pb-2">
+        <div>
+          <span class="text-xs font-semibold text-purple-400">Estilo B</span>
+          <h2 class="text-base font-semibold text-zinc-100">Grade Conectada / Sem Espaçamento (Linhas Finas de 1px)</h2>
+        </div>
+        <span class="text-xs text-zinc-500 font-mono">grid divide-x divide-zinc-800 border-zinc-800</span>
+      </div>
+
+      <!-- Container do grid monolítico com bordas compartilhadas -->
+      <div class="rounded-xl border border-zinc-800 bg-[#09090b] overflow-hidden grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-800">
+
+        <!-- CARD 1 -->
+        <a href="https://youtube.com/@RussianProgress" target="_blank" class="group block p-6 hover:bg-zinc-900/40 transition-colors flex flex-col justify-between space-y-6">
+          <div class="space-y-5">
+            <!-- Header Técnico: Número + Plataforma -->
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-purple-400 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-800/40">01</span>
+              <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">YouTube</span>
+            </div>
+
+            <!-- Ícone / Avatar Oficial -->
+            <div class="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden group-hover:scale-105 transition-transform">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=140&h=140&q=80" class="w-full h-full object-cover" alt="">
+            </div>
+
+            <!-- Nome & Descrição -->
+            <div class="space-y-1.5">
+              <h3 class="text-lg font-bold text-zinc-100 group-hover:text-purple-300 transition-colors">
+                Russian Progress
+              </h3>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                Vlogs cotidianos e conversas em velocidade controlada para escuta fluida sem decoreba de regras.
+              </p>
+            </div>
+          </div>
+
+          <!-- Micro-Tags Escaneáveis na Base (Hierarquia Clara) -->
+          <div class="space-y-3 pt-4 border-t border-zinc-800/60">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/70 border border-emerald-800/40 text-emerald-300">
+                🌱 Iniciante
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Legendas
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Pausado
+              </span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-zinc-500 font-mono">
+              <span>Vlogs · Viagens</span>
+              <span class="text-purple-400 group-hover:translate-x-0.5 transition-transform">Abrir ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="https://spotify.com" target="_blank" class="group block p-6 hover:bg-zinc-900/40 transition-colors flex flex-col justify-between space-y-6">
+          <div class="space-y-5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-purple-400 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-800/40">02</span>
+              <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Spotify</span>
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden group-hover:scale-105 transition-transform">
+              <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=140&h=140&q=80" class="w-full h-full object-cover" alt="">
+            </div>
+
+            <div class="space-y-1.5">
+              <h3 class="text-lg font-bold text-zinc-100 group-hover:text-purple-300 transition-colors">
+                Very Much Russian
+              </h3>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                Expressões idiomáticas, gírias e histórias em velocidade nativa explicadas com contexto.
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-3 pt-4 border-t border-zinc-800/60">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-950/70 border border-blue-800/40 text-blue-300">
+                🌳 Nativo
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Transcrição
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Natural
+              </span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-zinc-500 font-mono">
+              <span>Podcast · Cultura</span>
+              <span class="text-purple-400 group-hover:translate-x-0.5 transition-transform">Abrir ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 3 -->
+        <a href="https://elllo.org" target="_blank" class="group block p-6 hover:bg-zinc-900/40 transition-colors flex flex-col justify-between space-y-6">
+          <div class="space-y-5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-purple-400 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-800/40">03</span>
+              <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider">Web Portal</span>
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 p-2.5 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <img src="https://www.google.com/s2/favicons?domain=elllo.org&sz=128" class="w-full h-full object-contain" alt="">
+            </div>
+
+            <div class="space-y-1.5">
+              <h3 class="text-lg font-bold text-zinc-100 group-hover:text-purple-300 transition-colors">
+                Elllo English Views
+              </h3>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                Acervo de diálogos em áudio com transcrição simultânea completa e ritmo pausado para iniciantes.
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-3 pt-4 border-t border-zinc-800/60">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/70 border border-emerald-800/40 text-emerald-300">
+                🌱 Iniciante
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Transcrição
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+                Pausado
+              </span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-zinc-500 font-mono">
+              <span>Áudio & Texto</span>
+              <span class="text-purple-400 group-hover:translate-x-0.5 transition-transform">Abrir ↗</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ESTILO A: COM ESPAÇAMENTO (ILHAS TRADICIONAIS) -->
+    <!-- ============================================== -->
+    <section class="space-y-4">
+      <div class="flex items-baseline justify-between border-b border-zinc-800 pb-2">
+        <div>
+          <span class="text-xs font-semibold text-purple-400">Estilo A</span>
+          <h2 class="text-base font-semibold text-zinc-100">Ilhas Tradicionais com Espaçamento (`gap-4`)</h2>
+        </div>
+        <span class="text-xs text-zinc-500 font-mono">grid gap-4</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <a href="https://youtube.com/@RussianProgress" target="_blank" class="group block p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80" class="w-12 h-12 rounded-full object-cover border border-zinc-800" alt="">
+              <span class="text-xs text-zinc-500">YouTube</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors">Russian Progress</h3>
+              <p class="text-xs text-zinc-400 mt-1 line-clamp-2">Vlogs cotidianos e conversas em velocidade controlada.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap pt-2 border-t border-zinc-800/60">
+            <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/60 border border-emerald-800/40 text-emerald-300">🌱 Iniciante</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Legendas</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Pausado</span>
+          </div>
+        </a>
+
+        <a href="https://spotify.com" target="_blank" class="group block p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=120&h=120&q=80" class="w-12 h-12 rounded-lg object-cover border border-zinc-800" alt="">
+              <span class="text-xs text-zinc-500">Spotify</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors">Very Much Russian</h3>
+              <p class="text-xs text-zinc-400 mt-1 line-clamp-2">Expressões idiomáticas, gírias e histórias em velocidade nativa.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap pt-2 border-t border-zinc-800/60">
+            <span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-950/60 border border-blue-800/40 text-blue-300">🌳 Nativo</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Transcrição</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Natural</span>
+          </div>
+        </a>
+
+        <a href="https://elllo.org" target="_blank" class="group block p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-lg bg-zinc-950 border border-zinc-800 p-2 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=elllo.org&sz=128" class="w-full h-full object-contain" alt="">
+              </div>
+              <span class="text-xs text-zinc-500">Portal Web</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-zinc-100 group-hover:text-purple-300 transition-colors">Elllo English Views</h3>
+              <p class="text-xs text-zinc-400 mt-1 line-clamp-2">Acervo de diálogos em áudio com transcrição simultânea.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap pt-2 border-t border-zinc-800/60">
+            <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/60 border border-emerald-800/40 text-emerald-300">🌱 Iniciante</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Transcrição</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-zinc-800/80 text-zinc-300">Pausado</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

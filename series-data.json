@@ -1,0 +1,68 @@
+[
+  {
+    "id": "lupin",
+    "name": "Lupin",
+    "url": "https://www.netflix.com/title/80994082",
+    "tags": ["Mistério", "Drama"],
+    "levelTag": "B1-B2",
+    "platformTag": "Netflix",
+    "paceTag": "Fala natural",
+    "desc": "Inspirado pelas aventuras de Arsène Lupin, o ladrão cavalheiro Assane Diop busca vingar seu pai por uma injustiça cometida por uma família rica.",
+    "avatar": "https://m.media-amazon.com/images/M/MV5BMzk4MTc0NWUtZjk3Mi00ODkzLTlkYjItOWRhMTc5MmRiNjI0XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg"
+  },
+  {
+    "id": "dix_pour_cent",
+    "name": "Dix pour cent (Call My Agent!)",
+    "url": "https://www.netflix.com/title/80133335",
+    "tags": ["Comédia", "Bastidores"],
+    "levelTag": "B2-C1",
+    "platformTag": "Netflix",
+    "paceTag": "Fala rápida",
+    "desc": "Em uma renomada agência de talentos em Paris, quatro agentes lutam para manter seus clientes estrelas felizes e sua empresa funcionando após uma crise repentina.",
+    "avatar": "https://m.media-amazon.com/images/M/MV5BYTJkZDVkMWEtZmNmMC00YjRhLWFjOGEtZWMzNDFkZDdjZmQ3XkEyXkFqcGc@._V1_QL75_UY562_CR1,0,380,562_.jpg"
+  },
+  {
+    "id": "family_business",
+    "name": "Family Business",
+    "url": "https://www.netflix.com/title/81010810",
+    "tags": ["Comédia", "Família"],
+    "levelTag": "B1-B2",
+    "platformTag": "Netflix",
+    "paceTag": "Fala natural",
+    "desc": "Ao descobrir que a cannabis será legalizada na França, um jovem empreendedor convence sua família a transformar o açougue kosher tradicional em uma cafeteria especializada.",
+    "avatar": "https://m.media-amazon.com/images/M/MV5BY2VlNGZiZTEtODZjNy00YzY5LWFiMGEtYWM4YmQxMWQwYTY5XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg"
+  },
+  {
+    "id": "le_bureau",
+    "name": "Le Bureau des Légendes",
+    "url": "https://www.canalplus.com",
+    "tags": ["Espionagem", "Suspense"],
+    "levelTag": "B2-C1",
+    "platformTag": "Canal+",
+    "paceTag": "Fala natural",
+    "desc": "Dentro do serviço de inteligência francês (DGSE), agentes infiltrados sob identidades falsas vivem anos em missões perigosas, enquanto a sede em Paris administra crises de espionagem geopolítica.",
+    "avatar": "https://m.media-amazon.com/images/M/MV5BZDk2NDA3MzktNTQyOS00YjY0LWI2ZDgtMWI2MTQ5N2Q1Njg0XkEyXkFqcGc@._V1_QL75_UY562_CR21,0,380,562_.jpg"
+  },
+  {
+    "id": "engrenages",
+    "name": "Engrenages (Spiral)",
+    "url": "https://www.canalplus.com",
+    "tags": ["Policial", "Crime"],
+    "levelTag": "B2-C1",
+    "platformTag": "Canal+",
+    "paceTag": "Gírias / Rápida",
+    "desc": "Um olhar cru e realista sobre o sistema judiciário e a polícia de Paris, acompanhando uma capitã obstinada, policiais corruptíveis, promotores e advogados ambiciosos.",
+    "avatar": "https://m.media-amazon.com/images/M/MV5BODNjMzhiYWItM2FlMy00NGIzLWE0OWQtMWM5ZWY3ZWZkN2U0XkEyXkFqcGc@._V1_SX300.jpg"
+  },
+  {
+    "id": "au_service_de_la_france",
+    "name": "Au service de la France",
+    "url": "https://www.netflix.com/title/80097771",
+    "tags": ["Sátira", "História"],
+    "levelTag": "B1-B2",
+    "platformTag": "Netflix",
+    "paceTag": "Fala pausada",
+    "desc": "Em 1960, no auge da Guerra Fria e da descolonização, um jovem recruta ingênuo entra para os serviços de espionagem franceses, enfrentando a burocracia hilária e o orgulho nacional.",
+    "avatar": "https://m.media-amazon.com/images/M/MV5BZWE2MzE1YTEtYzExZS00NDYzLWIxNDUtMmU1MDRiZjg3YjUwXkEyXkFqcGc@._V1_QL75_UY562_CR1,0,380,562_.jpg"
+  }
+]
