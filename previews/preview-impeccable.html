@@ -1,0 +1,661 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Infinita</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Plus Jakarta Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+      padding: 0;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen pb-28 text-zinc-100 bg-[#09090b]">
+
+  <!-- TOP HEADER (UNIFIED ALIGNMENT: max-w-6xl mx-auto px-6) -->
+  <header class="border-b border-white/[0.08] bg-[#09090b] sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5 flex-shrink-0">
+        <span class="text-xl">🧙🏻‍♂️</span>
+        <span class="font-bold text-base tracking-tight text-zinc-100">Biblioteca Infinita</span>
+      </div>
+
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <button class="h-9 px-3 rounded-lg bg-transparent border border-white/[0.08] hover:border-zinc-700 text-xs font-semibold text-zinc-200 transition-colors flex items-center gap-2 flex-shrink-0">
+          <span>🇬🇧</span>
+          <span>English</span>
+          <svg class="w-3.5 h-3.5 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <nav class="border-t border-white/[0.06] bg-[#09090b]">
+      <div class="max-w-6xl mx-auto px-6 flex items-center gap-8 text-sm font-medium overflow-x-auto no-scrollbar whitespace-nowrap">
+        <button onclick="setActiveTab('youtube')" id="tab-youtube" class="py-3.5 border-b-2 border-purple-500 text-zinc-100 font-semibold transition-colors">
+          YouTube
+        </button>
+        <button onclick="setActiveTab('podcasts')" id="tab-podcasts" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors">
+          Podcasts
+        </button>
+        <button onclick="setActiveTab('series')" id="tab-series" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors">
+          Séries & Filmes
+        </button>
+        <button onclick="setActiveTab('sites')" id="tab-sites" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors">
+          Sites
+        </button>
+        <button onclick="setActiveTab('professores')" id="tab-professores" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors">
+          Professores
+        </button>
+        <button onclick="setActiveTab('card-lab')" id="tab-card-lab" class="py-3.5 border-b-2 border-transparent text-purple-400 hover:text-purple-300 font-mono text-xs transition-colors">
+          🧪 Testar Cards (Pokédex/Specs)
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- SEARCH & FILTER ROW (CANVAS #09090b) -->
+  <section class="border-b border-white/[0.08] bg-[#09090b] py-5 sticky top-[105px] z-40">
+    <div class="max-w-6xl mx-auto px-6 space-y-3">
+      <!-- Search Input -->
+      <div class="relative w-full">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input 
+          id="search-input"
+          type="text" 
+          placeholder="Buscar canal, assunto ou palavra-chave..." 
+          oninput="renderView()"
+          class="w-full pl-10 pr-4 h-10 bg-transparent border border-white/[0.08] focus:border-purple-500 rounded-lg text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none transition-all"
+        >
+      </div>
+
+      <!-- Action Toggles & Sorting Row -->
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button 
+            id="toggle-beginner" 
+            onclick="toggleFilter('beginner')" 
+            class="h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center"
+          >
+            Para iniciantes
+          </button>
+
+          <button 
+            id="toggle-subs" 
+            onclick="toggleFilter('subs')" 
+            class="h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5"
+          >
+            <svg class="w-3.5 h-3.5 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Legendas</span>
+          </button>
+
+          <button 
+            id="toggle-favs" 
+            onclick="toggleFilter('favs')" 
+            class="h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5"
+          >
+            <svg class="w-3.5 h-3.5 text-rose-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+            <span>Favoritos</span>
+          </button>
+
+          <button 
+            id="reset-btn" 
+            onclick="resetFilters()" 
+            class="hidden h-8 px-3 text-xs font-semibold text-purple-400 hover:text-purple-300 transition-colors inline-flex items-center"
+          >
+            Limpar filtros
+          </button>
+        </div>
+
+        <!-- Sorting Dropdown Alinhado -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-zinc-500">Ordenar:</span>
+          <div class="relative inline-flex items-center">
+            <select 
+              id="sort-select" 
+              onchange="renderView()" 
+              class="h-8 pl-3 pr-8 bg-[#111114] border border-white/[0.08] hover:border-zinc-700 rounded-lg text-xs font-medium text-zinc-300 focus:outline-none focus:border-zinc-500 appearance-none cursor-pointer transition-colors"
+            >
+              <option value="featured" class="bg-[#111114]">Destaques</option>
+              <option value="name-asc" class="bg-[#111114]">Nome (A-Z)</option>
+              <option value="name-desc" class="bg-[#111114]">Nome (Z-A)</option>
+              <option value="favs-first" class="bg-[#111114]">Favoritos primeiro</option>
+            </select>
+            <svg class="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CATALOG CONTENT -->
+  <main class="max-w-6xl mx-auto px-6 pt-6">
+    <div class="mb-5 flex items-center justify-between">
+      <h2 id="section-title" class="text-base font-bold text-zinc-100">YouTube</h2>
+      <span id="active-counter" class="text-xs text-zinc-500">11 canais</span>
+    </div>
+
+    <!-- PURE WIREFRAME CONNECTED GRID OVER CANVAS (ZERO CARD BACKGROUND) -->
+    <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+    <!-- EMPTY STATE -->
+    <div id="empty-state" class="hidden py-24 text-center max-w-sm mx-auto">
+      <h3 id="empty-title" class="text-base font-bold text-zinc-200 mb-1.5">Nenhum canal encontrado</h3>
+      <p id="empty-desc" class="text-sm text-zinc-400 mb-5 leading-relaxed">Tente ajustar o termo pesquisado ou limpe os filtros ativos.</p>
+      <button onclick="resetFilters()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-lg transition-all">
+        Limpar filtros
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const ITEMS = [
+      // YOUTUBE (NATIVE IMMERSION)
+      {
+        id: "kurzgesagt",
+        category: "youtube",
+        title: "Kurzgesagt – In a Nutshell",
+        url: "https://www.youtube.com/@kurzgesagt",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_kH1yQzC6YhB6Wb8rZ-k3N1xW1_B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "KZ",
+        description: "Animações vislumbrantes sobre ciência, espaço, biologia e crises existenciais com narração nítida e cadenciada.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British / Int.",
+        topics: ["Ciência", "Filosofia"]
+      },
+      {
+        id: "johnny-harris",
+        category: "youtube",
+        title: "Johnny Harris",
+        url: "https://www.youtube.com/@johnnyharris",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k2P1yQzC6YhB6Wb8rZ-k3N1xW1_B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "JH",
+        description: "Documentários dinâmicos com mapas visuais sobre fronteiras, história e conflitos geopolíticos globais.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Geopolítica", "História"]
+      },
+      {
+        id: "ali-abdaal",
+        category: "youtube",
+        title: "Ali Abdaal",
+        url: "https://www.youtube.com/@aliabdaal",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k5Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "AA",
+        description: "Ex-médico de Cambridge compartilhando estratégias práticas de produtividade, livros e finanças com tom acolhedor.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: null,
+        topics: ["Produtividade", "Livros"]
+      },
+      {
+        id: "tom-scott",
+        category: "youtube",
+        title: "Tom Scott",
+        url: "https://www.youtube.com/@TomScottGo",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k7Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "TS",
+        description: "Vídeos objetivos de 5 minutos sobre fatos extraordinários de computação, engenharia, linguística e lugares inusitados.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Tecnologia", "Linguística"]
+      },
+      {
+        id: "vox",
+        category: "youtube",
+        title: "Vox",
+        url: "https://www.youtube.com/@Vox",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k8Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "VX",
+        description: "Vídeo-ensaios explicativos de alto nível sobre como o mundo funciona, fenômenos sociais e design contemporâneo.",
+        beginnerFriendly: false,
+        subtitlesAvailable: false,
+        accent: null,
+        topics: ["Ciência", "Sociedade"]
+      },
+      {
+        id: "veritasium",
+        category: "youtube",
+        title: "Veritasium",
+        url: "https://www.youtube.com/@veritasium",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j1Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "VT",
+        description: "Derek Muller desvenda paradoxos da física, experimentos científicos impressionantes e reflexões provocativas.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Física", "Ciência"]
+      },
+      {
+        id: "the-daily-show",
+        category: "youtube",
+        title: "The Daily Show",
+        url: "https://www.youtube.com/@TheDailyShow",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j2Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "DS",
+        description: "Humor ácido e sátira inteligente sobre as principais notícias e absurdos da política e cultura contemporânea.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Humor", "Política"]
+      },
+      {
+        id: "ted-ed",
+        category: "youtube",
+        title: "TED-Ed",
+        url: "https://www.youtube.com/@TEDEd",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j3Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "TE",
+        description: "Curtas animados repletos de enigmas lógicos, mitologia, filosofia e mistérios científicos narrados com clareza.",
+        beginnerFriendly: true,
+        subtitlesAvailable: true,
+        accent: null,
+        topics: ["Animação", "Ciência"]
+      },
+      {
+        id: "nerdwriter1",
+        category: "youtube",
+        title: "Nerdwriter1",
+        url: "https://www.youtube.com/@Nerdwriter1",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j4Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "NW",
+        description: "Evan Puschak analisa em detalhes obras-primas da pintura, filmes clássicos, discursos e narrativas modernas.",
+        beginnerFriendly: false,
+        subtitlesAvailable: false,
+        accent: "American",
+        topics: ["Cinema", "Filosofia"]
+      },
+      {
+        id: "mark-rober",
+        category: "youtube",
+        title: "Mark Rober",
+        url: "https://www.youtube.com/@MarkRober",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j5Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "MR",
+        description: "Ex-engenheiro da NASA constrói engenhocas insanas, armadilhas anti-ladrão e experimentos virais em grande escala.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Engenharia", "Ciência"]
+      },
+      {
+        id: "wendover",
+        category: "youtube",
+        title: "Wendover Productions",
+        url: "https://www.youtube.com/@Wendoverproductions",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j7Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "WP",
+        description: "Mergulhos fascinantes na complexa logística mundial, aviação comercial, economia global e infraestrutura.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Logística", "Economia"]
+      },
+
+      // PROFESSORES
+      {
+        id: "keith-speaking",
+        category: "professores",
+        title: "English Speaking Success",
+        url: "https://www.youtube.com/@KeithSpeakingAcademy",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_l-8WvVzW9gY7zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "ES",
+        description: "Lições estruturadas para destravar fala fluente, vocabulário ativo e confiança para conversação real e exames.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Conversação", "Vocabulário"]
+      },
+      {
+        id: "bbc-learning",
+        category: "professores",
+        title: "BBC Learning English",
+        url: "https://www.youtube.com/@bbclearningenglish",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_m9_XwY1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "BBC",
+        description: "Conteúdos curtos da BBC com foco em expressões cotidianas, notícias explicadas e pronúncia britânica padrão.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Pronúncia", "Gramática"]
+      },
+      {
+        id: "bob-canadian",
+        category: "professores",
+        title: "Bob the Canadian",
+        url: "https://www.youtube.com/@BobtheCanadian",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k9Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "BC",
+        description: "Professor canadense ensina inglês do dia a dia passeando por fazendas e lojas com fala calma e acolhedora.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "Canadian",
+        topics: ["Cotidiano", "Conversação"]
+      },
+      {
+        id: "english-lucy",
+        category: "professores",
+        title: "English with Lucy",
+        url: "https://www.youtube.com/@EnglishwithLucy",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j6Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "EL",
+        description: "Conteúdo focado em pronúncia britânica elegante, vocabulário refinado e correções práticas de conversação.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Pronúncia", "Vocabulário"]
+      }
+    ];
+
+    let currentTab = 'youtube';
+    let filterBeginner = false;
+    let filterSubs = false;
+    let filterFavs = false;
+    let favorites = new Set();
+
+    const TAB_TITLES = {
+      youtube: "YouTube",
+      podcasts: "Podcasts",
+      series: "Séries & Filmes",
+      sites: "Sites",
+      professores: "Professores",
+      "card-lab": "Laboratório de Estilos de Cards (Pokédex vs Atual)"
+    };
+
+    let activeCardStyle = 'pokedex'; // 'current' | 'pokedex' | 'editorial'
+
+    function setActiveTab(tab) {
+      currentTab = tab;
+      
+      const tabs = ['youtube', 'podcasts', 'series', 'sites', 'professores', 'card-lab'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (!btn) return;
+        if (t === tab) {
+          btn.className = t === 'card-lab' 
+            ? "py-3.5 border-b-2 border-purple-500 text-purple-300 font-mono text-xs font-bold transition-colors"
+            : "py-3.5 border-b-2 border-purple-500 text-zinc-100 font-semibold transition-colors";
+        } else {
+          btn.className = t === 'card-lab'
+            ? "py-3.5 border-b-2 border-transparent text-purple-400/70 hover:text-purple-300 font-mono text-xs transition-colors"
+            : "py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors";
+        }
+      });
+
+      const beginnerBtn = document.getElementById('toggle-beginner');
+      if (tab === 'professores' || tab === 'card-lab') {
+        beginnerBtn.classList.add('hidden');
+        filterBeginner = false;
+      } else {
+        beginnerBtn.classList.remove('hidden');
+      }
+
+      document.getElementById('section-title').innerText = TAB_TITLES[tab] || tab;
+      renderView();
+    }
+
+    function toggleFilter(type) {
+      if (type === 'beginner') {
+        filterBeginner = !filterBeginner;
+        const btn = document.getElementById('toggle-beginner');
+        btn.className = filterBeginner
+          ? "h-8 px-3 rounded-lg border border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold text-xs transition-all inline-flex items-center"
+          : "h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center";
+      } else if (type === 'subs') {
+        filterSubs = !filterSubs;
+        const btn = document.getElementById('toggle-subs');
+        btn.className = filterSubs
+          ? "h-8 px-3 rounded-lg border border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold text-xs transition-all inline-flex items-center gap-1.5"
+          : "h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5";
+      } else if (type === 'favs') {
+        filterFavs = !filterFavs;
+        const btn = document.getElementById('toggle-favs');
+        btn.className = filterFavs
+          ? "h-8 px-3 rounded-lg border border-rose-800/60 bg-rose-950/40 text-rose-200 font-semibold text-xs transition-all inline-flex items-center gap-1.5"
+          : "h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5";
+      }
+      renderView();
+    }
+
+    function toggleFavorite(id, e) {
+      e.stopPropagation();
+      if (favorites.has(id)) {
+        favorites.delete(id);
+      } else {
+        favorites.add(id);
+      }
+      renderView();
+    }
+
+    function resetFilters() {
+      filterBeginner = false;
+      filterSubs = false;
+      filterFavs = false;
+      document.getElementById('search-input').value = '';
+      document.getElementById('sort-select').value = 'featured';
+
+      document.getElementById('toggle-beginner').className = "h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center";
+      document.getElementById('toggle-subs').className = "h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5";
+      document.getElementById('toggle-favs').className = "h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5";
+
+      renderView();
+    }
+
+    function renderView() {
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      const sort = document.getElementById('sort-select').value;
+      const isFiltering = q || filterBeginner || filterSubs || filterFavs;
+      document.getElementById('reset-btn').classList.toggle('hidden', !isFiltering);
+
+      const tabItems = currentTab === 'card-lab' ? ITEMS : ITEMS.filter(item => item.category === currentTab);
+      let filtered = tabItems.filter(item => {
+        if (q && !item.title.toLowerCase().includes(q) && !item.description.toLowerCase().includes(q) && !item.topics.some(t => t.toLowerCase().includes(q))) {
+          return false;
+        }
+        if (filterBeginner && !item.beginnerFriendly) return false;
+        if (filterSubs && !item.subtitlesAvailable) return false;
+        if (filterFavs && !favorites.has(item.id)) return false;
+        return true;
+      });
+
+      // Sorting
+      if (sort === 'name-asc') {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (sort === 'name-desc') {
+        filtered.sort((a, b) => b.title.localeCompare(a.title));
+      } else if (sort === 'favs-first') {
+        filtered.sort((a, b) => {
+          const aFav = favorites.has(a.id) ? 1 : 0;
+          const bFav = favorites.has(b.id) ? 1 : 0;
+          return bFav - aFav;
+        });
+      }
+
+      const grid = document.getElementById('cards-grid');
+      const emptyState = document.getElementById('empty-state');
+      const emptyTitle = document.getElementById('empty-title');
+      const emptyDesc = document.getElementById('empty-desc');
+      document.getElementById('active-counter').innerText = `${filtered.length} ${filtered.length === 1 ? 'canal' : 'canais'}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        grid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+
+        if (tabItems.length === 0) {
+          emptyTitle.innerText = `Nenhum item em ${TAB_TITLES[currentTab]}`;
+          emptyDesc.innerText = "Esta categoria ainda não possui conteúdos cadastrados para o idioma selecionado.";
+        } else {
+          emptyTitle.innerText = "Nenhum canal encontrado";
+          emptyDesc.innerText = "Tente ajustar o termo pesquisado ou limpe os filtros ativos.";
+        }
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.classList.remove('hidden');
+
+      // RENDER CARDS
+      grid.innerHTML = filtered.map(item => {
+        const isFav = favorites.has(item.id);
+        const isTeacherTab = item.category === 'professores';
+        const showBeginner = item.beginnerFriendly && !isTeacherTab;
+        const flag = item.accent?.includes('British') ? '🇬🇧' : item.accent?.includes('American') ? '🇺🇸' : '🌐';
+
+        if (currentTab === 'card-lab') {
+          // FORMATO POKÉDEX / DATA SHEET (ALTAMENTE ESTRUTURADO & LEVE)
+          return `
+            <div class="p-6 border-b md:border-r border-white/[0.08] hover:bg-white/[0.02] transition-colors flex flex-col justify-between group bg-transparent">
+              <div>
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3.5 min-w-0 group/link flex-1">
+                    <div class="w-12 h-12 rounded-xl bg-zinc-800 border border-white/[0.1] overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm text-zinc-200">
+                      <img src="${item.avatar}" alt="${item.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerText='${item.initials}'">
+                    </div>
+                    <div class="min-w-0 flex-1 flex items-center gap-1.5">
+                      <h3 class="text-base font-bold text-zinc-100 group-hover/link:text-purple-300 transition-colors truncate">
+                        ${item.title}
+                      </h3>
+                      <svg class="w-3.5 h-3.5 text-zinc-500 group-hover/link:text-purple-400 flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+                      </svg>
+                    </div>
+                  </a>
+
+                  <button onclick="toggleFavorite('${item.id}', event)" class="w-9 h-9 -mr-1 -mt-1 rounded-lg hover:bg-zinc-800/60 flex items-center justify-center flex-shrink-0 transition-colors" title="Favoritar">
+                    <svg class="w-4 h-4 transition-all ${isFav ? 'fill-rose-500 text-rose-500' : 'text-zinc-600 hover:text-zinc-400'}" width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <p class="text-sm leading-relaxed text-zinc-300 line-clamp-2 h-10 mb-4">
+                  ${item.description}
+                </p>
+              </div>
+
+              <!-- POKÉDEX DATA SPECIFICATION -->
+              <div class="space-y-3 pt-1">
+                <!-- Temas discretos (sem caixas pesadas) -->
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  ${item.topics.map(t => `
+                    <span class="text-xs font-medium text-zinc-400 bg-white/[0.04] px-2.5 py-0.5 rounded border border-white/[0.05]">${t}</span>
+                  `).join('')}
+                </div>
+
+                <!-- Tabela de Atributos Pokédex (Áudio, Nível, Legendas) -->
+                <div class="bg-[#111114] border border-white/[0.06] rounded-lg p-2.5 grid grid-cols-2 gap-2 text-xs">
+                  <div class="flex items-center gap-1.5 truncate">
+                    <span class="text-zinc-500">Áudio:</span>
+                    <span class="font-medium text-zinc-200 flex items-center gap-1">
+                      <span>${flag}</span>
+                      <span class="truncate">${item.accent || 'Nativo'}</span>
+                    </span>
+                  </div>
+
+                  <div class="flex items-center justify-end gap-1.5">
+                    <span class="text-zinc-500">Nível:</span>
+                    ${item.category === 'professores'
+                      ? `<span class="text-purple-300 font-medium">Professor</span>`
+                      : item.beginnerFriendly 
+                        ? `<span class="text-emerald-300 font-medium">Iniciante</span>`
+                        : `<span class="text-zinc-400 font-medium">Autêntico</span>`
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // FORMATO FINAL APROVADO 4A (AVATAR CIRCULAR, REDE SOCIAL EMPILHADA, CORAÇÃO INTERATIVO)
+        return `
+          <div class="bg-[#111114] border border-zinc-800 hover:border-zinc-700/80 rounded-2xl p-6 transition-all flex flex-col justify-between group min-h-[260px]">
+            <div>
+              <!-- Header: Avatar Circular + Título com ExternalLink + Coração -->
+              <div class="flex items-center justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                  <div class="w-11 h-11 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-zinc-200">
+                    <img src="${item.avatar}" alt="${item.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerText='${item.initials}'">
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 group/link max-w-full">
+                      <h3 class="text-base font-bold text-zinc-100 group-hover/link:text-white transition-colors truncate">
+                        ${item.title}
+                      </h3>
+                      <svg class="w-3.5 h-3.5 text-zinc-500 group-hover/link:text-zinc-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+
+                <button onclick="toggleFavorite('${item.id}', event)" class="w-8 h-8 rounded-lg hover:bg-zinc-800/60 flex items-center justify-center flex-shrink-0 transition-all text-zinc-600 hover:text-rose-500 active:scale-95" title="${isFav ? 'Desfavoritar' : 'Favoritar'}">
+                  <svg class="w-[18px] h-[18px] transition-colors ${isFav ? 'fill-rose-500 text-rose-500' : 'text-zinc-600 hover:text-rose-400'}" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Descrição Empilhada -->
+              <p class="text-sm leading-relaxed text-zinc-300 line-clamp-3 mb-5">
+                ${item.description}
+              </p>
+            </div>
+
+            <!-- Metadados Funcionais (Iniciante / Legendado) + Tags de Assunto na Base -->
+            <div class="flex flex-col gap-2 pt-1">
+              ${(showBeginner || item.subtitlesAvailable) ? `
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  ${showBeginner ? `<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20">Iniciante</span>` : ''}
+                  ${item.subtitlesAvailable ? `<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Legendado</span>` : ''}
+                </div>
+              ` : ''}
+
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${item.topics.map(topic => `
+                  <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50 truncate max-w-[150px]" title="${topic}">
+                    ${topic}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Initial render
+    renderView();
+  </script>
+</body>
+</html>
+

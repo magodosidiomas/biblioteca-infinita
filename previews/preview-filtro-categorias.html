@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview: Multi-select Combobox (Notion / Linear Pattern)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+      color: #f4f4f5;
+    }
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#09090b] text-zinc-100 antialiased p-6 md:p-12">
+
+  <main class="max-w-[1180px] mx-auto space-y-8">
+
+    <!-- Seção de Filtros -->
+    <section class="space-y-4">
+      
+      <!-- Busca Principal: 46px de altura, fonte 15px nítida -->
+      <div class="relative w-full">
+        <svg style="width: 20px; height: 20px;" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" stroke-width="2"></circle>
+          <path d="m21 21-4.3-4.3" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <input 
+          type="text" 
+          placeholder="Buscar por canal, assunto ou palavra-chave..."
+          class="w-full pl-12 pr-4 h-[46px] bg-transparent border border-white/[0.08] focus:border-zinc-500 rounded-lg text-[15px] text-zinc-100 placeholder-zinc-500 focus:outline-none transition-colors"
+        />
+      </div>
+
+      <!-- Linha de Controles: altura 40px padrão e arejada -->
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        
+        <div class="flex items-center gap-2.5 flex-wrap">
+          
+          <button class="h-10 px-4 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.04] text-sm font-medium inline-flex items-center transition-colors cursor-pointer">
+            Para iniciantes
+          </button>
+
+          <button class="h-10 px-4 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.04] text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer">
+            <svg style="width: 16px; height: 16px;" class="text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Legendas
+          </button>
+
+          <button class="h-10 px-4 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.04] text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer">
+            <svg style="width: 16px; height: 16px;" class="text-rose-500 fill-current" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+            Favoritos
+          </button>
+
+          <!-- ========================================== -->
+          <!-- MULTI-SELECT COMBOBOX -->
+          <!-- ========================================== -->
+          <div class="relative" id="combobox-wrapper">
+            
+            <!-- GATILHO QUANDO FECHADO -->
+            <button 
+              id="combobox-trigger"
+              type="button"
+              class="h-10 pl-4 pr-3 rounded-lg border border-white/[0.08] bg-transparent hover:bg-white/[0.04] text-zinc-300 hover:text-zinc-100 text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <div id="trigger-content" class="flex items-center gap-1.5">
+                <span class="text-zinc-400">Categorias</span>
+              </div>
+              <svg id="chevron-icon" style="width: 16px; height: 16px;" class="text-zinc-500 transition-transform duration-150 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+
+            <!-- POPOVER ABERTO (Largura 360px espaçosa) -->
+            <div 
+              id="combobox-popover" 
+              class="hidden absolute left-0 top-12 w-[360px] bg-[#121215] border border-zinc-800 rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100"
+            >
+              
+              <!-- ÁREA SUPERIOR: Tags selecionadas ativas com [x] individual + Limpar todas -->
+              <div id="popover-selected-area" class="hidden pb-3 mb-3 border-b border-zinc-800/80">
+                <div class="flex items-center justify-between mb-2 px-1">
+                  <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Selecionadas</span>
+                  <button 
+                    type="button"
+                    onclick="clearAllSelected()" 
+                    class="text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
+                  >
+                    Limpar todas
+                  </button>
+                </div>
+                <div id="popover-badges" class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto custom-scroll px-1">
+                  <!-- Badges injetadas dinamicamente com X individual -->
+                </div>
+              </div>
+
+              <!-- INPUT DE BUSCA INTERNO: Altura 42px e fonte 14px REAL -->
+              <div class="relative mb-2.5">
+                <svg style="width: 16px; height: 16px;" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                <input 
+                  id="category-search"
+                  type="text" 
+                  placeholder="Pesquisar categoria..." 
+                  oninput="filterCategories(this.value)"
+                  onkeydown="handleKeydown(event)"
+                  class="w-full pl-10 pr-3.5 h-[42px] bg-zinc-900 border border-zinc-800 focus:border-zinc-600 rounded-lg text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none transition-colors"
+                />
+              </div>
+
+              <!-- LISTA DE CATEGORIAS COM CHECKBOX (Itens com 40px de altura e fonte 14px) -->
+              <div id="categories-list" class="max-h-64 overflow-y-auto custom-scroll space-y-1">
+                <!-- Injetado dinamicamente -->
+              </div>
+
+              <!-- Estado de busca vazia -->
+              <div id="no-results" class="hidden py-6 text-center text-sm text-zinc-500">
+                Nenhuma categoria encontrada
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Limpar Filtros geral -->
+          <button id="global-reset-btn" type="button" onclick="clearAllSelected()" class="hidden h-10 px-3 text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Limpar filtros
+          </button>
+        </div>
+
+        <!-- Ordenação -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-zinc-500">Ordenar:</span>
+          <div class="relative inline-flex items-center">
+            <select class="h-10 pl-3.5 pr-9 bg-[#111114] border border-white/[0.08] hover:border-zinc-700 rounded-lg text-sm font-medium text-zinc-300 focus:outline-none focus:border-zinc-500 appearance-none cursor-pointer transition-colors">
+              <option value="featured">Destaques</option>
+              <option value="name-asc">Nome (A-Z)</option>
+              <option value="name-desc">Nome (Z-A)</option>
+              <option value="favs-first">Favoritos primeiro</option>
+            </select>
+            <svg style="width: 16px; height: 16px;" class="text-zinc-400 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CARDS DE DEMO -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="cards-container">
+      
+      <div class="channel-card bg-[#111114] border border-white/[0.08] rounded-xl p-5 flex flex-col justify-between" data-categories='["Produtividade"]'>
+        <div>
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-xs text-zinc-200">AA</div>
+              <div>
+                <h4 class="text-base font-bold text-zinc-100 flex items-center gap-1">Ali Abdaal <span class="text-xs text-zinc-500">↗</span></h4>
+                <span class="text-xs text-zinc-500">British</span>
+              </div>
+            </div>
+            <span class="text-zinc-600">♡</span>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-400 mb-4">Produtividade saudável, resumos de livros e mentalidade prática para projetos e rotina.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 pt-3 border-t border-zinc-800/60">
+          <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">Produtividade</span>
+        </div>
+      </div>
+
+      <div class="channel-card bg-[#111114] border border-white/[0.08] rounded-xl p-5 flex flex-col justify-between" data-categories='["Ciência & Astronomia"]'>
+        <div>
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-xs text-zinc-200">SE</div>
+              <div>
+                <h4 class="text-base font-bold text-zinc-100 flex items-center gap-1">SmarterEveryDay <span class="text-xs text-zinc-500">↗</span></h4>
+                <span class="text-xs text-zinc-500">American</span>
+              </div>
+            </div>
+            <span class="text-zinc-600">♡</span>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-400 mb-4">Explorações científicas no mundo real com câmeras de alta velocidade e física aplicada.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 pt-3 border-t border-zinc-800/60">
+          <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">Ciência & Astronomia</span>
+        </div>
+      </div>
+
+      <div class="channel-card bg-[#111114] border border-white/[0.08] rounded-xl p-5 flex flex-col justify-between" data-categories='["Palestras"]'>
+        <div>
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-xs text-zinc-200">TT</div>
+              <div>
+                <h4 class="text-base font-bold text-zinc-100 flex items-center gap-1">TED Talks <span class="text-xs text-zinc-500">↗</span></h4>
+                <span class="text-xs text-zinc-500">Global</span>
+              </div>
+            </div>
+            <span class="text-zinc-600">♡</span>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-400 mb-4">Apresentações curtas sobre inovação, tecnologia, comportamento e ideias transformadoras.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 pt-3 border-t border-zinc-800/60">
+          <span class="px-2.5 py-1 rounded text-xs bg-zinc-900 border border-zinc-800 text-zinc-300">Palestras</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const ALL_CATEGORIES = [
+      "Ciência & Astronomia",
+      "História & Documentários",
+      "Humor & Comédia",
+      "Palestras",
+      "Produtividade",
+      "Tecnologia & Programação",
+      "True Crime & Investigação",
+      "Viagens & Cultura"
+    ];
+
+    let selectedCategories = [];
+
+    const popover = document.getElementById('combobox-popover');
+    const trigger = document.getElementById('combobox-trigger');
+    const triggerContent = document.getElementById('trigger-content');
+    const chevronIcon = document.getElementById('chevron-icon');
+    const searchInput = document.getElementById('category-search');
+    const categoriesList = document.getElementById('categories-list');
+    const noResults = document.getElementById('no-results');
+    const popoverSelectedArea = document.getElementById('popover-selected-area');
+    const popoverBadges = document.getElementById('popover-badges');
+    const globalResetBtn = document.getElementById('global-reset-btn');
+
+    // Inicializar lista
+    renderCategoriesList();
+
+    trigger.addEventListener('click', (e) => {
+      if (e.target.closest('.remove-tag-btn')) return;
+      toggleDropdown();
+    });
+
+    function toggleDropdown() {
+      const isOpen = !popover.classList.contains('hidden');
+      if (isOpen) closeDropdown();
+      else openDropdown();
+    }
+
+    function openDropdown() {
+      popover.classList.remove('hidden');
+      chevronIcon.classList.add('rotate-180');
+      setTimeout(() => searchInput.focus(), 50);
+    }
+
+    function closeDropdown() {
+      popover.classList.add('hidden');
+      chevronIcon.classList.remove('rotate-180');
+      searchInput.value = '';
+      filterCategories('');
+    }
+
+    function handleKeydown(e) {
+      if (e.key === 'Escape') closeDropdown();
+    }
+
+    // Fechar ao clicar fora do wrapper
+    document.addEventListener('click', (e) => {
+      const wrapper = document.getElementById('combobox-wrapper');
+      if (!wrapper.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    function toggleCategory(cat, e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      if (selectedCategories.includes(cat)) {
+        selectedCategories = selectedCategories.filter(c => c !== cat);
+      } else {
+        selectedCategories.push(cat);
+      }
+      updateUI();
+    }
+
+    function removeCategory(cat, e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      selectedCategories = selectedCategories.filter(c => c !== cat);
+      updateUI();
+    }
+
+    function clearAllSelected() {
+      selectedCategories = [];
+      updateUI();
+    }
+
+    function updateUI() {
+      // 1. Atualizar Gatilho Fechado
+      if (selectedCategories.length === 0) {
+        triggerContent.innerHTML = '<span class="text-zinc-400">Categorias</span>';
+        trigger.classList.remove('border-zinc-700', 'bg-zinc-800/30', 'text-zinc-100');
+        trigger.classList.add('border-white/[0.08]', 'bg-transparent', 'text-zinc-300');
+        globalResetBtn.classList.add('hidden');
+      } else {
+        trigger.classList.add('border-zinc-700', 'bg-zinc-800/30', 'text-zinc-100');
+        trigger.classList.remove('border-white/[0.08]', 'bg-transparent', 'text-zinc-300');
+        globalResetBtn.classList.remove('hidden');
+
+        const visibleCount = 1;
+        const visibleTags = selectedCategories.slice(0, visibleCount);
+        const remainingCount = selectedCategories.length - visibleCount;
+
+        let html = '';
+        visibleTags.forEach(cat => {
+          html += `
+            <span class="inline-flex items-center gap-1.5 pl-2.5 pr-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium">
+              <span>${cat}</span>
+              <span onclick="removeCategory('${cat}', event)" class="remove-tag-btn p-0.5 hover:text-white text-zinc-400 cursor-pointer">
+                <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </span>
+            </span>
+          `;
+        });
+
+        if (remainingCount > 0) {
+          html += `<span class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 text-xs font-medium">+${remainingCount}</span>`;
+        }
+
+        triggerContent.innerHTML = html;
+      }
+
+      // 2. Atualizar Área Selecionada no Topo do Popover
+      if (selectedCategories.length === 0) {
+        popoverSelectedArea.classList.add('hidden');
+      } else {
+        popoverSelectedArea.classList.remove('hidden');
+        let badgesHtml = '';
+        selectedCategories.forEach(cat => {
+          badgesHtml += `
+            <span class="inline-flex items-center gap-1.5 pl-2.5 pr-2 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs font-medium">
+              <span>${cat}</span>
+              <span onclick="removeCategory('${cat}', event)" class="p-0.5 hover:text-white hover:bg-zinc-800 rounded text-zinc-400 cursor-pointer">
+                <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </span>
+            </span>
+          `;
+        });
+        popoverBadges.innerHTML = badgesHtml;
+      }
+
+      // 3. Atualizar Estado dos Checkboxes da Lista SEM fechar o Popover
+      renderCategoriesList(searchInput.value);
+
+      // 4. Filtrar Cards
+      applyFilterCards();
+    }
+
+    function renderCategoriesList(query = '') {
+      const q = query.toLowerCase().trim();
+      let matchCount = 0;
+      let html = '';
+
+      ALL_CATEGORIES.forEach(cat => {
+        const isSelected = selectedCategories.includes(cat);
+        const matches = !q || cat.toLowerCase().includes(q);
+
+        if (matches) {
+          matchCount++;
+          html += `
+            <button 
+              type="button"
+              onclick="toggleCategory('${cat}', event)" 
+              class="w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between transition-colors cursor-pointer ${
+                isSelected 
+                  ? 'bg-zinc-800/80 text-zinc-100 font-medium' 
+                  : 'text-zinc-300 hover:bg-zinc-800/40 hover:text-zinc-100'
+              }"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-4 h-4 rounded border flex items-center justify-center transition-colors ${
+                  isSelected ? 'border-zinc-400 bg-zinc-200 text-zinc-900' : 'border-zinc-700 bg-transparent'
+                }">
+                  ${isSelected ? '<svg style="width: 12px; height: 12px;" class="stroke-[3]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+                </div>
+                <span>${cat}</span>
+              </div>
+            </button>
+          `;
+        }
+      });
+
+      categoriesList.innerHTML = html;
+
+      if (matchCount === 0 && q) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+    }
+
+    function filterCategories(query) {
+      renderCategoriesList(query);
+    }
+
+    function applyFilterCards() {
+      const cards = document.querySelectorAll('.channel-card');
+      cards.forEach(card => {
+        const cats = JSON.parse(card.getAttribute('data-categories') || '[]');
+        if (selectedCategories.length === 0) {
+          card.classList.remove('hidden');
+        } else {
+          const hasMatch = selectedCategories.some(c => cats.includes(c));
+          if (hasMatch) card.classList.remove('hidden');
+          else card.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

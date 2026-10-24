@@ -1,0 +1,677 @@
+{
+  "Lupin": {
+    "name": "Lupin",
+    "url": "https://www.netflix.com/title/80994082",
+    "langs": [
+      "french",
+      "german",
+      "spanish",
+      "russian",
+      "portuguese",
+      "arabic"
+    ]
+  },
+  "Dix pour cent (Call My Agent!)": {
+    "name": "Dix pour cent (Call My Agent!)",
+    "url": "https://www.netflix.com/title/80133335",
+    "langs": [
+      "french"
+    ]
+  },
+  "A Very Secret Service (Au service de la France)": {
+    "name": "A Very Secret Service (Au service de la France)",
+    "url": "https://www.netflix.com/title/80097771",
+    "langs": [
+      "french"
+    ]
+  },
+  "La Trêve (The Break)": {
+    "name": "La Trêve (The Break)",
+    "url": "https://www.netflix.com/title/80134910",
+    "langs": [
+      "french"
+    ]
+  },
+  "Marianne": {
+    "name": "Marianne",
+    "url": "https://www.netflix.com/title/80217779",
+    "langs": [
+      "french"
+    ]
+  },
+  "Zone Blanche (Black Spot)": {
+    "name": "Zone Blanche (Black Spot)",
+    "url": "https://www.netflix.com/title/81079044",
+    "langs": [
+      "french"
+    ]
+  },
+  "Plan Cœur (The Hook Up Plan)": {
+    "name": "Plan Cœur (The Hook Up Plan)",
+    "url": "https://www.netflix.com/title/80190086",
+    "langs": [
+      "french"
+    ]
+  },
+  "Family Business": {
+    "name": "Family Business",
+    "url": "https://www.netflix.com/title/81010818",
+    "langs": [
+      "french"
+    ]
+  },
+  "Into the Night": {
+    "name": "Into the Night",
+    "url": "https://www.netflix.com/title/81008221",
+    "langs": [
+      "french"
+    ]
+  },
+  "Mortel": {
+    "name": "Mortel",
+    "url": "https://www.netflix.com/title/80241539",
+    "langs": [
+      "french"
+    ]
+  },
+  "Modern Family": {
+    "name": "Modern Family",
+    "url": "https://www.netflix.com/title/70143860",
+    "langs": [
+      "english",
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "Sherlock Holmes BBC": {
+    "name": "Sherlock Holmes BBC",
+    "url": "https://www.netflix.com/title/70202589",
+    "langs": [
+      "english",
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "Carmen Sandiego": {
+    "name": "Carmen Sandiego",
+    "url": "https://www.netflix.com/title/80167821",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "arabic"
+    ]
+  },
+  "Explained: Our Brain/Mind": {
+    "name": "Explained: Our Brain/Mind",
+    "url": "https://www.netflix.com/title/80218134",
+    "langs": [
+      "english",
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "Jurassic World: New Adventures": {
+    "name": "Jurassic World: New Adventures",
+    "url": "https://www.netflix.com/title/81005126",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "arabic"
+    ]
+  },
+  "We Bare Bears": {
+    "name": "We Bare Bears",
+    "url": "https://www.netflix.com/title/80081155",
+    "langs": [
+      "english"
+    ]
+  },
+  "Disenchantment": {
+    "name": "Disenchantment",
+    "url": "https://www.netflix.com/title/80095603",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "DC Titans": {
+    "name": "DC Titans",
+    "url": "https://www.netflix.com/title/80218200",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "The Crown": {
+    "name": "The Crown",
+    "url": "https://www.netflix.com/title/80025678",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Cobra Kai": {
+    "name": "Cobra Kai",
+    "url": "https://www.netflix.com/title/81002370",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Warrior Nun": {
+    "name": "Warrior Nun",
+    "url": "https://www.netflix.com/title/80242724",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "The Queen's Gambit": {
+    "name": "The Queen's Gambit",
+    "url": "https://www.netflix.com/title/80234304",
+    "langs": [
+      "english",
+      "spanish",
+      "italian",
+      "russian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Umbrella Academy": {
+    "name": "Umbrella Academy",
+    "url": "https://www.netflix.com/title/80186863",
+    "langs": [
+      "english",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Atypical": {
+    "name": "Atypical",
+    "url": "https://www.netflix.com/title/80117540",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Star Trek Discovery": {
+    "name": "Star Trek Discovery",
+    "url": "https://www.netflix.com/title/80126024",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "polish"
+    ]
+  },
+  "Avatar: The Legend of Korra": {
+    "name": "Avatar: The Legend of Korra",
+    "url": "https://www.netflix.com/title/80027957",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "portuguese",
+      "polish",
+      "arabic"
+    ]
+  },
+  "Community": {
+    "name": "Community",
+    "url": "https://www.netflix.com/title/70155589",
+    "langs": [
+      "english",
+      "spanish",
+      "italian",
+      "russian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Avatar: The Legend of Aang": {
+    "name": "Avatar: The Legend of Aang",
+    "url": "https://www.netflix.com/title/70142405",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "portuguese",
+      "polish",
+      "arabic"
+    ]
+  },
+  "The Good Place": {
+    "name": "The Good Place",
+    "url": "https://www.netflix.com/title/80113701",
+    "langs": [
+      "english",
+      "spanish",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Peaky Blinders": {
+    "name": "Peaky Blinders",
+    "url": "https://www.netflix.com/title/80002479",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Lost in Space": {
+    "name": "Lost in Space",
+    "url": "https://www.netflix.com/title/80104198",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Spongebob Squarepants": {
+    "name": "Spongebob Squarepants",
+    "url": "https://www.netflix.com/title/70153369",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "portuguese",
+      "polish",
+      "arabic"
+    ]
+  },
+  "Star Trek: Deep Space Nine": {
+    "name": "Star Trek: Deep Space Nine",
+    "url": "https://www.netflix.com/title/70158329",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Rick and Morty": {
+    "name": "Rick and Morty",
+    "url": "https://www.netflix.com/title/80014749",
+    "langs": [
+      "english",
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "Breaking Bad": {
+    "name": "Breaking Bad",
+    "url": "https://www.netflix.com/title/70143836",
+    "langs": [
+      "english",
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "Stranger Things": {
+    "name": "Stranger Things",
+    "url": "https://www.netflix.com/title/80057281",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Trollhunters: Tales of Arcadia": {
+    "name": "Trollhunters: Tales of Arcadia",
+    "url": "https://www.netflix.com/title/80073207",
+    "langs": [
+      "english"
+    ]
+  },
+  "Wizards - Tales from Arcadia": {
+    "name": "Wizards - Tales from Arcadia",
+    "url": "https://www.netflix.com/title/81005881",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish",
+      "arabic"
+    ]
+  },
+  "3 Below: Tales from Arcadia": {
+    "name": "3 Below: Tales from Arcadia",
+    "url": "https://www.netflix.com/title/80221348",
+    "langs": [
+      "english",
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish",
+      "arabic"
+    ]
+  },
+  "Brooklyn Nine-Nine": {
+    "name": "Brooklyn Nine-Nine",
+    "url": "https://www.netflix.com/title/70281561",
+    "langs": [
+      "english",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Ultraman": {
+    "name": "Ultraman",
+    "url": "https://www.google.com/search?q=Ultraman%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese"
+    ]
+  },
+  "Ursos Sem Curso": {
+    "name": "Ursos Sem Curso",
+    "url": "https://www.google.com/search?q=Ursos%20Sem%20Curso%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese"
+    ]
+  },
+  "Sword Art Online": {
+    "name": "Sword Art Online",
+    "url": "https://www.google.com/search?q=Sword%20Art%20Online%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "russian",
+      "japanese"
+    ]
+  },
+  "Wir sind die Welle": {
+    "name": "Wir sind die Welle",
+    "url": "https://www.google.com/search?q=Wir%20sind%20die%20Welle%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "polish"
+    ]
+  },
+  "Better than Us": {
+    "name": "Better than Us",
+    "url": "https://www.netflix.com/search?q=russian&jbv=81026915",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "polish"
+    ]
+  },
+  "How to Sell Drugs Online (Fast)": {
+    "name": "How to Sell Drugs Online (Fast)",
+    "url": "https://www.google.com/search?q=How%20to%20Sell%20Drugs%20Online%20(Fast)%20netflix",
+    "langs": [
+      "german",
+      "german",
+      "spanish",
+      "spanish",
+      "italian",
+      "italian",
+      "portuguese",
+      "portuguese",
+      "polish",
+      "polish"
+    ]
+  },
+  "Zeit Der Geheimnisse": {
+    "name": "Zeit Der Geheimnisse",
+    "url": "https://www.google.com/search?q=Zeit%20Der%20Geheimnisse%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Criminal Deutschland": {
+    "name": "Criminal Deutschland",
+    "url": "https://www.google.com/search?q=Criminal%20Deutschland%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Dark": {
+    "name": "Dark",
+    "url": "https://www.google.com/search?q=Dark%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Luna Nera": {
+    "name": "Luna Nera",
+    "url": "https://www.google.com/search?q=Luna%20Nera%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "La Casa de Papel": {
+    "name": "La Casa de Papel",
+    "url": "https://www.google.com/search?q=La%20Casa%20de%20Papel%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Violet Evergarden": {
+    "name": "Violet Evergarden",
+    "url": "https://www.google.com/search?q=Violet%20Evergarden%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "japanese",
+      "portuguese"
+    ]
+  },
+  "Criminal: Deutschland": {
+    "name": "Criminal: Deutschland",
+    "url": "https://www.google.com/search?q=Criminal%3A%20Deutschland%20%E2%80%93%20Netflix%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Biohackers": {
+    "name": "Biohackers",
+    "url": "https://www.google.com/search?q=Biohackers%20%E2%80%93%20Netflix%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Barbaren": {
+    "name": "Barbaren",
+    "url": "https://www.google.com/search?q=Barbaren%20%E2%80%93%20Netflix%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese",
+      "polish"
+    ]
+  },
+  "Trolljäger: Geschichten aus Arcadia": {
+    "name": "Trolljäger: Geschichten aus Arcadia",
+    "url": "https://www.google.com/search?q=Trollj%C3%A4ger%3A%20Geschichten%20aus%20Arcadia%20%E2%80%93%20Netflix%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "russian",
+      "japanese",
+      "portuguese",
+      "polish",
+      "arabic"
+    ]
+  },
+  "La cocinera de Castamar": {
+    "name": "La cocinera de Castamar",
+    "url": "https://www.google.com/search?q=La%20cocinera%20de%20Castamar%20%E2%80%93%20Netflix%20netflix",
+    "langs": [
+      "german",
+      "spanish",
+      "italian",
+      "portuguese"
+    ]
+  },
+  "Il Processo": {
+    "name": "Il Processo",
+    "url": "https://www.google.com/search?q=Il%20Processo%20netflix",
+    "langs": [
+      "spanish",
+      "italian",
+      "portuguese"
+    ]
+  },
+  "Omnipresent": {
+    "name": "Omnipresent",
+    "url": "https://www.google.com/search?q=Omnipresent%20netflix",
+    "langs": [
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "The Square": {
+    "name": "The Square",
+    "url": "https://www.google.com/search?q=The%20Square%20netflix",
+    "langs": [
+      "spanish",
+      "portuguese",
+      "arabic"
+    ]
+  },
+  "Girls From Ipanema": {
+    "name": "Girls From Ipanema",
+    "url": "https://www.google.com/search?q=Girls%20From%20Ipanema%20netflix",
+    "langs": [
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "3%": {
+    "name": "3%",
+    "url": "https://www.google.com/search?q=3%25%20netflix",
+    "langs": [
+      "spanish",
+      "portuguese"
+    ]
+  },
+  "La Trêve": {
+    "name": "La Trêve",
+    "url": "https://www.google.com/search?q=La%20Tr%C3%AAve%20netflix",
+    "langs": [
+      "spanish",
+      "italian",
+      "portuguese"
+    ]
+  }
+}

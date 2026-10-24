@@ -3,27 +3,41 @@
 ## 1. Visão Geral do Produto
 - **Nome:** Biblioteca Infinita
 - **Ecossistema:** Mago dos Idiomas
-- **Propósito:** Substituir os catálogos legados não estilizados do Notion por uma plataforma de descoberta e curadoria de conteúdo autêntico de imersão para estudantes de idiomas.
-- **Público-alvo:** Estudantes poliglotas e alunos do método Mago dos Idiomas que buscam materiais reais (vídeos do YouTube, podcasts, séries e sites) adequados ao seu nível, velocidade de fala e interesses.
+- **Propósito:** Plataforma de alta curadoria e descoberta de conteúdo para estudantes de idiomas, substituindo bancos de dados despadronizados por uma experiência de navegação rápida, acessível e focada em imersão real.
+- **Público-alvo:** Estudantes poliglotas e alunos do método Mago dos Idiomas que buscam materiais adequados aos seus objetivos, sejam canais nativos ou orientações pedagógicas de professores.
 
-## 2. Conteúdo e Mídias
-- **Idiomas Suportados:** Francês, Russo, Inglês, Alemão, Italiano, Espanhol, Japonês.
-- **Formatos de Mídia (Abas de Navegação):**
-  1. `YouTube` (foco principal inicial: canais autênticos)
-  2. `Podcasts`
-  3. `Séries & Filmes`
-  4. `Sites`
+---
 
-## 3. Metadados Essenciais por Canal
-- **Identificação:** Nome do canal, URL oficial do YouTube, Avatar em alta resolução (`og:image`).
-- **Resumo:** Bio/descrição autêntica limitada a 2 linhas (`line-clamp-2`).
-- **Temas (Tags):** Cultura, História, Humor, Linguística, Cotidiano, Cinema, etc.
-- **Suporte Técnico (Facetas):**
-  - **Legendas:** `Legendas CC`, `Legendas fixas` (no vídeo), `Legendas bilíngues`, `Sem legendas`.
-  - **Velocidade da fala:** `Fala pausada`, `Fala natural`, `Fala rápida`.
-- **Ações do Aluno:** Salvar nos Favoritos (coração interativo com toggle local/persistente).
+## 2. Taxonomia de Conteúdo & Abas Escaláveis
+O catálogo separa claramente conteúdos de **imersão nativa autêntica** de conteúdos de **instrução direta (professores)** para que a intenção do estudante nunca seja confundida:
 
-## 4. Filosofia de UX & Produto
-- **Operate / Experience:** Foco total no catálogo. Zero distrações, zero marketing piegas dentro da ferramenta.
-- **Anti-slop:** Sem cards genéricos com sombras neon, sem "AI tells", sem textos redundantes.
-- **Microcopy:** Baseada em `/ux-writing` — verbos imperativos (`Limpar filtros`), ausência de textos decorativos.
+1. **`YouTube` (Imersão Nativa):** Canais em que nativos falam para nativos sobre seus próprios interesses (ciência, tecnologia, história, vlogs, humor, cultura).
+2. **`Professores` (Instrução & Dicas):** Canais dedicados ao ensino do idioma (explicações gramaticais, "como usar XYZ", pronúncia guiada, dicas de vocabulário).
+3. **`Podcasts`:** Programas de áudio nativos e mesas-redondas para escuta passiva e ativa.
+4. **`Séries`:** Produções seriadas em formato pôster vertical (`2:3`), sem sinopse no card, com indicação de onde assistir (`Netflix`, `YouTube`, `Disney+`, `Prime Video`, `Apple TV+`, `Max`), áudio original vs. dublado (`Original em ...`) e `Legendado [CC]`.
+5. **`Filmes`:** Longas-metragens separados de `Séries` em aba própria, compartilhando a mesma arquitetura de pôster vertical `2:3`.
+6. **`Sites`:** Jornais, leituras graduadas, ferramentas e comunidades.
+
+---
+
+## 3. Extração & Autenticidade dos Dados
+- **Zero Síntese Artificial:** Proibido inventar descrições genéricas por IA.
+- **Automação Oficial do YouTube:** O sistema extrai diretamente da fonte oficial do YouTube:
+  - Nome exato do canal.
+  - Avatar oficial em alta resolução (`og:image` / `channel avatar`).
+  - Bio/descrição autêntica do canal.
+- **Campos Adicionados pela Curadoria Mago:**
+  - `beginnerFriendly` (booleano: `true` se acessível para iniciantes; desabilitado para a categoria `Professores`).
+  - `subtitlesAvailable` (booleano: `true` se possui legendas manuais confiáveis em vídeos).
+  - `transcriptUrl` (opcional, exclusivo para `Podcasts`: link clicável para transcrições).
+  - `avgDuration` (opcional, exclusivo para `Podcasts`: duração média dos episódios extraída via RSS, ex: `~30 min`).
+  - `platform` (exclusivo para `Séries` e `Filmes`: plataforma de streaming inferida automaticamente do link).
+  - `originalLanguage` e `originalLanguageLabel` (exclusivos para `Séries` e `Filmes`: detectados automaticamente via APIs públicas TVMaze / iTunes Search + JSON-LD; se diferente do idioma da aba atual, sinaliza automaticamente `Dublado` + `Original em [Idioma]`).
+  - `tags` / `topics` (temas atômicos canônicos validados via `app/src/constants/tags.ts`).
+
+---
+
+## 4. Filosofia de UX & Microcopy
+- **Operate / Experience:** A interface não compete com o conteúdo. Zero slogans de autoelogio (*"catálogo atualizado"*, *"100% autêntico"*).
+- **Acessibilidade Universal:** Contraste mínimo WCAG AA em todos os textos, piso tipográfico de 12px para tags e 14px para inputs de busca e leitura.
+- **Ações Diretas:** `Limpar filtros`, `Abrir ↗`, `Favoritar`.

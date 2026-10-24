@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Novo conteúdo — preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background:#09090b; color:#f4f4f5; font:14px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  :focus-visible { outline:2px solid #a1a1aa; outline-offset:2px; }
+  .bar { border-bottom:1px solid #1f1f23; background:#09090b; position:sticky; top:0; z-index:40; }
+  .bar-row { max-width:1180px; margin:0 auto; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; }
+  .bar a.brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:#f4f4f5; text-decoration:none; }
+  .layout { display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; max-width:1120px; margin:0 auto; padding:24px 24px 0; align-items:start; }
+  @media (max-width:1023px){ .layout { grid-template-columns:1fr; } }
+  h1 { font-size:18px; font-weight:700; margin-bottom:16px; }
+  .field { margin-bottom:16px; }
+  label.f { display:block; font-size:13px; font-weight:500; color:#d4d4d8; margin-bottom:6px; }
+  .field-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .field-head label.f { margin-bottom:0; }
+  .btn-subtle { background:none; border:0; color:#a1a1aa; font-size:12px; cursor:pointer; padding:0; }
+  .btn-subtle:hover { color:#f4f4f5; text-decoration:underline; }
+  .txt { width:100%; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#fafafa; font:inherit; font-size:14px; }
+  select.txt { cursor:pointer; }
+  textarea.txt { resize:vertical; line-height:1.45; }
+  .txt::placeholder { color:#71717a; }
+  .row-2col { display:grid; grid-template-columns:1.35fr 0.65fr; gap:16px; align-items:start; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { background:#18181b; border:1px solid #3f3f46; color:#d4d4d8; border-radius:8px; padding:5px 11px; font-size:12.5px; font-weight:500; }
+  .chip:hover:not(:disabled) { border-color:#71717a; }
+  .chip[aria-pressed=true] { background:#f4f4f5; color:#09090b; border-color:#f4f4f5; font-weight:600; }
+  .chip:disabled { opacity:.35; cursor:not-allowed; }
+  .chip.opt[aria-pressed=true]::before { content: "✓ "; font-weight: bold; }
+  .tags { position:relative; }
+  .tagbox { display:flex; flex-wrap:wrap; gap:6px; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:6px 8px; min-height:38px; }
+  .tagbox input { flex:1; min-width:120px; background:none; border:0; outline:0; color:#fafafa; font:inherit; font-size:13.5px; padding:2px 4px; }
+  .tag { background:#18181b; border:1px solid #3f3f46; border-radius:6px; padding:1px 7px; font-size:12px; font-weight:500; color:#d4d4d8; display:inline-flex; gap:5px; align-items:center; }
+  .tag button { background:none; border:0; color:#a1a1aa; font-size:13px; line-height:1; }
+  .actions { padding-top:16px; display:flex; align-items:center; gap:14px; }
+  .save { background:#f4f4f5; color:#09090b; border:0; border-radius:8px; padding:8px 16px; font-weight:600; font-size:13.5px; }
+  .save:disabled { opacity:.35; cursor:not-allowed; }
+  .kbd { font-size:12px; color:#a1a1aa; font-weight:normal; }
+
+  aside { position:sticky; top:20px; }
+  .aside-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; max-width:340px; }
+  aside .lbl { font-size:13px; font-weight:500; color:#a1a1aa; }
+
+  /* Card Canal (YouTube / Professor / Site) */
+  .card { width:100%; max-width:340px; min-height:260px; background:#111114; border:1px solid #27272a; border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; }
+  .head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .av { width:44px; height:44px; border-radius:50%; background:#27272a; border:1px solid #3f3f46; display:grid; place-items:center; font-weight:700; font-size:12px; color:#a1a1aa; flex:none; overflow:hidden; }
+  .av img { width:100%; height:100%; object-fit:cover; }
+  .card h3 { font-size:16px; font-weight:700; color:#f4f4f5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card p { font-size:14px; line-height:1.6; color:#d4d4d8; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:20px; }
+  .meta, .tg { display:flex; flex-wrap:wrap; gap:6px; }
+  .meta { margin-bottom:8px; }
+  .b { font-size:12px; font-weight:600; padding:4px 10px; border-radius:6px; }
+  .b.i { background:rgba(59,130,246,.15); color:#93c5fd; border:1px solid rgba(96,165,250,.3); }
+  .b.l { background:rgba(16,185,129,.15); color:#6ee7b7; border:1px solid rgba(52,211,153,.3); }
+  .b.d { background:rgba(245,158,11,.2); color:#fde68a; border:1px solid rgba(251,191,36,.3); }
+  .b.cc { background:rgba(24,24,27,.9); color:#e4e4e7; border:1px solid rgba(63,63,70,.8); }
+  .b.t { background:rgba(39,39,42,.8); color:#d4d4d8; border:1px solid rgba(63,63,70,.5); font-weight:500; }
+
+  /* Card Pôster 2:3 (Série / Filme) */
+  .poster-card { position:relative; width:100%; max-width:340px; aspect-ratio:2/3; border-radius:16px; overflow:hidden; background:#111114; border:1px solid #27272a; display:flex; flex-direction:column; justify-content:space-between; }
+  .poster-card img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .poster-grad { position:absolute; inset:0; background:linear-gradient(to top, #09090b 0%, rgba(9,9,11,0.95) 22%, rgba(9,9,11,0.65) 42%, rgba(9,9,11,0.12) 68%, rgba(9,9,11,0.05) 100%); pointer-events:none; }
+  .poster-top { position:relative; z-index:2; padding:16px; display:flex; justify-content:space-between; }
+  .plat-pill { padding:4px 10px; border-radius:8px; background:rgba(9,9,11,0.85); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15); font-size:12px; font-weight:600; color:#f4f4f5; }
+  .poster-bottom { position:relative; z-index:2; padding:20px; display:flex; flex-direction:column; gap:12px; }
+  .poster-bottom h3 { font-size:18px; font-weight:700; color:#fff; line-height:1.3; }
+  .poster-sub { font-size:12px; font-weight:500; color:#d4d4d8; margin-top:4px; }
+
+  /* Dock flutuante discreto no rodapé para o Simulador (fora do formulário!) */
+  .sim-dock {
+    position: fixed;
+    bottom: 16px;
+    left: 24px;
+    z-index: 50;
+    background: #111114;
+    border: 1px solid #27272a;
+    border-radius: 10px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #a1a1aa;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+  .sim-dock button {
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    color: #e4e4e7;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: border-color 0.15s;
+  }
+  .sim-dock button:hover {
+    border-color: #71717a;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-row">
+    <a href="preview-series-filmes.html" class="brand">
+      <span>🧙🏻‍♂️</span>
+      <span>Biblioteca Infinita</span>
+    </a>
+    <nav style="display:flex; align-items:center; gap:6px;">
+      <a href="preview-series-filmes.html" style="font-size:13px; color:#a1a1aa; padding:6px 12px; border-radius:6px; text-decoration:none;">Conteúdos</a>
+      <a href="preview-admin-series.html" style="font-size:13px; font-weight:600; color:#f4f4f5; background:#18181b; padding:6px 12px; border-radius:6px; text-decoration:none; border:1px solid #27272a;">+ Novo conteúdo</a>
+      <a href="#" style="font-size:13px; color:#a1a1aa; padding:6px 12px; border-radius:6px; text-decoration:none;">Idiomas</a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+  <section>
+    <h1>Novo conteúdo</h1>
+
+    <!-- Campo único universal de Link (Sem links de simulação pendurados embaixo!) -->
+    <div class="field">
+      <label class="f" for="url">Link</label>
+      <input id="url" class="txt" type="url" placeholder="Cole qualquer link (YouTube, Spotify, Netflix, Site...)" autofocus>
+    </div>
+
+    <div id="fields">
+      <!-- Linha 1: Título + Idioma -->
+      <div style="display:grid; grid-template-columns:1fr 180px; gap:12px; margin-bottom:16px;">
+        <div>
+          <div class="field-head">
+            <label class="f" for="title">Título</label>
+            <button type="button" class="btn-subtle" onclick="render()">Refazer busca</button>
+          </div>
+          <input id="title" class="txt" oninput="render()">
+        </div>
+
+        <div>
+          <label class="f" for="langSelect">Idioma</label>
+          <select id="langSelect" class="txt" onchange="render()">
+            <option value="english">🇺🇸 Inglês</option>
+            <option value="german">🇩🇪 Alemão</option>
+            <option value="french">🇫🇷 Francês</option>
+            <option value="spanish">🇪🇸 Espanhol</option>
+            <option value="italian">🇮🇹 Italiano</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Linha 2: Formato + Opções -->
+      <div class="row-2col field">
+        <div>
+          <label class="f">Formato</label>
+          <div class="chips" id="fmtChips">
+            <button type="button" class="chip" data-fmt="youtube" aria-pressed="false" onclick="setFmt('youtube')">YouTube</button>
+            <button type="button" class="chip" data-fmt="professores" aria-pressed="false" onclick="setFmt('professores')">Professor</button>
+            <button type="button" class="chip" data-fmt="podcasts" aria-pressed="false" onclick="setFmt('podcasts')">Podcast</button>
+            <button type="button" class="chip" data-fmt="series" aria-pressed="true" onclick="setFmt('series')">Série</button>
+            <button type="button" class="chip" data-fmt="movies" aria-pressed="false" onclick="setFmt('movies')">Filme</button>
+            <button type="button" class="chip" data-fmt="sites" aria-pressed="false" onclick="setFmt('sites')">Site</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="f">Opções</label>
+          <div class="chips">
+            <button type="button" class="chip opt" id="cIni" aria-pressed="true" onclick="toggleChip(this)">Iniciante</button>
+            <button type="button" class="chip opt" id="cLeg" aria-pressed="true" onclick="toggleChip(this)">Legendado</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha 3: Tags -->
+      <div class="field">
+        <div class="field-head">
+          <label class="f" for="tagin">Tags</label>
+        </div>
+        <div class="tags">
+          <div class="tagbox" id="tagbox">
+            <input id="tagin" placeholder="Adicionar tag..." autocomplete="off" onkeydown="handleTagKey(event)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha 4: Descrição (Oculta automaticamente para Série e Filme) -->
+      <div class="field" id="descField" style="display:none;">
+        <div class="field-head">
+          <label class="f" for="desc">Descrição</label>
+        </div>
+        <textarea id="desc" class="txt" rows="3" oninput="render()"></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="save" id="save">Salvar conteúdo</button>
+      <span class="kbd">Ctrl + Enter</span>
+    </div>
+  </section>
+
+  <aside>
+    <div class="aside-head">
+      <div class="lbl">Preview</div>
+      <button type="button" class="btn-subtle" id="btnReAvatar">Recarregar capa</button>
+    </div>
+    <div id="previewContainer"></div>
+  </aside>
+</div>
+
+<!-- SIMULADOR REPOSICIONADO NO RODAPÉ ESQUERDO (Fora do fluxo do formulário) -->
+<div class="sim-dock">
+  <span>Simular link colado:</span>
+  <button type="button" onclick="loadSample('friends')">Netflix Série (Friends)</button>
+  <button type="button" onclick="loadSample('dark')">Série Dublada (Dark)</button>
+  <button type="button" onclick="loadSample('klaus')">Netflix Filme (Klaus)</button>
+  <button type="button" onclick="loadSample('yt')">Canal YouTube</button>
+</div>
+
+<script>
+const SAMPLES = {
+  friends: {
+    url: 'https://www.netflix.com/title/70153404',
+    title: 'Friends',
+    lang: 'english',
+    originalLangKey: 'english',
+    originalLangLabel: 'Inglês',
+    fmt: 'series',
+    ini: true,
+    leg: true,
+    tags: ['Sitcom', 'Cotidiano'],
+    desc: '',
+    poster: 'https://image.tmdb.org/t/p/w780/f496cm9enuEsZkSPzCwnTESEK5s.jpg'
+  },
+  dark: {
+    url: 'https://www.netflix.com/title/80100172',
+    title: 'Dark',
+    lang: 'english',
+    originalLangKey: 'german',
+    originalLangLabel: 'Alemão',
+    fmt: 'series',
+    ini: false,
+    leg: true,
+    tags: ['Ficção Científica', 'Suspense'],
+    desc: '',
+    poster: 'https://image.tmdb.org/t/p/w780/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg'
+  },
+  klaus: {
+    url: 'https://www.netflix.com/title/80183187',
+    title: 'Klaus',
+    lang: 'english',
+    originalLangKey: 'english',
+    originalLangLabel: 'Inglês',
+    fmt: 'movies',
+    ini: true,
+    leg: true,
+    tags: ['Animação', 'Humor'],
+    desc: '',
+    poster: 'https://image.tmdb.org/t/p/w780/q125RHUDgR4gjwh1QkfYuJLYkL.jpg'
+  },
+  yt: {
+    url: 'https://www.youtube.com/@AliAbdaal',
+    title: 'Ali Abdaal',
+    lang: 'english',
+    originalLangKey: 'english',
+    originalLangLabel: 'Inglês',
+    fmt: 'youtube',
+    ini: true,
+    leg: true,
+    tags: ['Produtividade'],
+    desc: "I'm Ali - doctor turned entrepreneur, YouTuber, and author of Feel-Good Productivity.",
+    poster: 'https://yt3.googleusercontent.com/ytc/AIdro_m2xx6mCZwsyjARnkwBKJxEv0FqGxGS2NwWNkjWH__Smw=s900-c-k-c0x00ffffff-no-rj'
+  }
+};
+
+let currentFmt = 'series';
+let currentTags = ['Sitcom', 'Cotidiano'];
+let currentPoster = SAMPLES.friends.poster;
+let detectedOriginalLangKey = 'english';
+let detectedOriginalLangLabel = 'Inglês';
+
+function loadSample(key) {
+  const s = SAMPLES[key];
+  document.getElementById('url').value = s.url;
+  document.getElementById('title').value = s.title;
+  document.getElementById('langSelect').value = s.lang;
+  document.getElementById('desc').value = s.desc;
+  document.getElementById('cIni').setAttribute('aria-pressed', String(s.ini));
+  document.getElementById('cLeg').setAttribute('aria-pressed', String(s.leg));
+  currentTags = [...s.tags];
+  currentPoster = s.poster;
+  detectedOriginalLangKey = s.originalLangKey;
+  detectedOriginalLangLabel = s.originalLangLabel;
+  setFmt(s.fmt);
+  renderTags();
+  render();
+}
+
+function setFmt(fmt) {
+  currentFmt = fmt;
+  document.querySelectorAll('#fmtChips .chip').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.getAttribute('data-fmt') === fmt));
+  });
+  const isPoster = fmt === 'series' || fmt === 'movies';
+  document.getElementById('descField').style.display = isPoster ? 'none' : 'block';
+  document.getElementById('btnReAvatar').textContent = isPoster ? 'Recarregar capa' : 'Recarregar ícone';
+  render();
+}
+
+function toggleChip(el) {
+  const next = el.getAttribute('aria-pressed') !== 'true';
+  el.setAttribute('aria-pressed', String(next));
+  render();
+}
+
+function renderTags() {
+  const box = document.getElementById('tagbox');
+  const input = document.getElementById('tagin');
+  box.querySelectorAll('.tag').forEach(n => n.remove());
+  currentTags.forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'tag';
+    s.innerHTML = `${t}<button type="button" onclick="removeTag('${t}')">✕</button>`;
+    box.insertBefore(s, input);
+  });
+}
+
+function removeTag(t) {
+  currentTags = currentTags.filter(x => x !== t);
+  renderTags();
+  render();
+}
+
+function handleTagKey(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const val = e.target.value.replace(',', '').trim();
+    if (val && !currentTags.includes(val)) {
+      currentTags.push(val);
+      e.target.value = '';
+      renderTags();
+      render();
+    }
+  }
+}
+
+function render() {
+  const title = document.getElementById('title').value || 'Sem título';
+  const url = document.getElementById('url').value || '';
+  const studyLang = document.getElementById('langSelect').value;
+  const ini = document.getElementById('cIni').getAttribute('aria-pressed') === 'true';
+  const leg = document.getElementById('cLeg').getAttribute('aria-pressed') === 'true';
+  const container = document.getElementById('previewContainer');
+
+  if (currentFmt === 'series' || currentFmt === 'movies') {
+    const platform = url.includes('youtube.com') || url.includes('youtu.be') ? 'YouTube' : 'Netflix';
+    const isOriginalAudio = studyLang === detectedOriginalLangKey;
+
+    const badges = [];
+    if (ini) badges.push('<span class="b i">Iniciante</span>');
+    if (isOriginalAudio) {
+      badges.push('<span class="b l">Áudio Original</span>');
+    } else {
+      badges.push('<span class="b d">Dublado</span>');
+    }
+    if (leg) badges.push('<span class="b cc">Legendado <span style="color:#a1a1aa;font-weight:700">[CC]</span></span>');
+
+    const genreLine = currentTags.join(' &middot; ') + (!isOriginalAudio ? ` &middot; <span style="color:#fcd34d;white-space:nowrap">Original em ${detectedOriginalLangLabel}</span>` : '');
+
+    container.innerHTML = `
+      <div class="poster-card">
+        <img src="${currentPoster}" alt="${title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+        <div class="poster-grad"></div>
+        <div class="poster-top">
+          <span class="plat-pill">${platform}</span>
+        </div>
+        <div class="poster-bottom">
+          <div>
+            <h3>${title}</h3>
+            <div class="poster-sub">${genreLine}</div>
+          </div>
+          <div class="meta" style="margin-bottom:0">${badges.join('')}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    const desc = document.getElementById('desc').value || 'Sem descrição.';
+    const badges = [];
+    if (currentFmt !== 'professores' && ini) badges.push('<span class="b i">Iniciante</span>');
+    if (leg) badges.push('<span class="b l">Legendado</span>');
+    const tagsHtml = currentTags.map(t => `<span class="b t">${t}</span>`).join('');
+
+    container.innerHTML = `
+      <div class="card">
+        <div>
+          <div class="head">
+            <div class="av"><img src="${currentPoster}" alt="${title}" referrerpolicy="no-referrer" onerror="this.style.display='none'"></div>
+            <h3>${title}</h3>
+          </div>
+          <p>${desc}</p>
+        </div>
+        <div>
+          ${badges.length ? `<div class="meta">${badges.join('')}</div>` : ''}
+          <div class="tg">${tagsHtml}</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+loadSample('friends');
+</script>
+</body>
+</html>

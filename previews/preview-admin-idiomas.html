@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gerenciar idiomas — preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background:#09090b; color:#f4f4f5; font:14px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  :focus-visible { outline:2px solid #a1a1aa; outline-offset:2px; }
+  .bar { border-bottom:1px solid #1f1f23; background:#09090b; position:sticky; top:0; z-index:40; }
+  .bar-row { max-width:1180px; margin:0 auto; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; }
+  .bar a.brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:#f4f4f5; text-decoration:none; }
+  main { max-width:680px; margin:0 auto; padding:28px 24px 80px; }
+  .header-row { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; }
+  h1 { font-size:20px; font-weight:700; }
+  .sub { font-size:13px; color:#a1a1aa; margin-top:2px; }
+  .btn-primary { background:#f4f4f5; color:#09090b; border:0; border-radius:8px; padding:7px 14px; font-weight:600; font-size:13px; }
+  .btn-primary:hover { background:#fff; }
+  
+  /* BARRA DE FILTRO E ORDENAÇÃO */
+  .toolbar { display:flex; gap:10px; margin-bottom:16px; align-items:center; }
+  .search-input { flex:1; background:#111114; border:1px solid #27272a; border-radius:8px; padding:8px 12px; color:#fafafa; font:inherit; font-size:13px; }
+  .search-input:focus { border-color:#3f3f46; outline:none; }
+  .sort-select { background:#111114; border:1px solid #27272a; border-radius:8px; padding:8px 10px; color:#d4d4d8; font:inherit; font-size:13px; cursor:pointer; }
+
+  /* DIALOG/FORMULÁRIO DE CATÁLOGO */
+  .catalog-box { background:#18181b; border:1px solid #3f3f46; border-radius:10px; padding:16px; margin-bottom:20px; display:none; }
+  .catalog-box.on { display:block; }
+  .cat-title { font-size:13px; font-weight:600; color:#f4f4f5; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+  .catalog-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:6px; max-height:220px; overflow-y:auto; padding:4px 0; }
+  .cat-pill { background:#111114; border:1px solid #27272a; border-radius:6px; padding:6px 10px; font-size:12.5px; color:#d4d4d8; text-align:left; display:flex; align-items:center; gap:8px; transition:all .15s; }
+  .cat-pill:hover { border-color:#3f3f46; background:#1f1f23; color:#fff; }
+  .cat-pill.added { opacity:.4; cursor:default; border-style:dashed; }
+  .custom-row { border-top:1px solid #27272a; padding-top:12px; margin-top:12px; display:flex; gap:8px; }
+  .custom-row input { background:#111114; border:1px solid #27272a; border-radius:6px; padding:6px 10px; font-size:12.5px; color:#fff; }
+
+  .card-box { background:#111114; border:1px solid #27272a; border-radius:12px; overflow:hidden; }
+  .lang-item { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #1f1f23; }
+  .lang-item:last-child { border-bottom:0; }
+  .lang-left { display:flex; align-items:center; gap:12px; }
+  .flag { font-size:18px; width:24px; text-align:center; }
+  .name { font-weight:600; color:#f4f4f5; font-size:14px; }
+  .slug { font-size:12px; color:#a1a1aa; font-family:monospace; margin-left:6px; }
+  .count { font-size:12px; color:#a1a1aa; background:#18181b; border:1px solid #27272a; border-radius:6px; padding:2px 8px; }
+  .lang-actions { display:flex; align-items:center; gap:12px; }
+  .btn-ghost { background:none; border:0; color:#a1a1aa; font-size:12px; }
+  .btn-ghost:hover { color:#f4f4f5; text-decoration:underline; }
+  .toggle { position:relative; width:34px; height:20px; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .slider { position:absolute; inset:0; background:#27272a; border-radius:20px; cursor:pointer; transition:.15s; }
+  .slider:before { position:absolute; content:""; height:14px; width:14px; left:3px; bottom:3px; background:#a1a1aa; border-radius:50%; transition:.15s; }
+  .toggle input:checked + .slider { background:#2563eb; }
+  .toggle input:checked + .slider:before { transform:translateX(14px); background:#fff; }
+  .empty { padding:24px; text-align:center; color:#a1a1aa; font-size:13px; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-row">
+    <a href="preview-admin-navegacao.html" class="brand">
+      <span>🧙🏻‍♂️</span>
+      <span>Biblioteca Infinita</span>
+    </a>
+    <nav style="display:flex; align-items:center; gap:6px;">
+      <a href="preview-admin-navegacao.html" style="font-size:13px; color:#a1a1aa; padding:6px 12px; border-radius:6px; text-decoration:none;">Conteúdos</a>
+      <a href="preview-admin-novo.html" style="font-size:13px; color:#a1a1aa; padding:6px 12px; border-radius:6px; text-decoration:none;">+ Novo conteúdo</a>
+      <a href="preview-admin-idiomas.html" style="font-size:13px; font-weight:600; color:#f4f4f5; background:#18181b; padding:6px 12px; border-radius:6px; text-decoration:none; border:1px solid #27272a;">Idiomas</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="header-row">
+    <div>
+      <h1>Idiomas</h1>
+      <div class="sub">Gerencie quais idiomas aparecem no seletor e na navegação.</div>
+    </div>
+    <button class="btn-primary" id="btnToggleCatalog">+ Adicionar idioma</button>
+  </div>
+
+  <!-- CATÁLOGO PREDEFINIDO DE ~30 IDIOMAS PARA ATIVAÇÃO DIRETA -->
+  <div class="catalog-box" id="catalogBox">
+    <div class="cat-title">
+      <span>Idiomas disponíveis para ativação imediata:</span>
+      <button id="btnCloseCat" style="background:none; border:0; color:#a1a1aa; font-size:12px;">Fechar ✕</button>
+    </div>
+    <div class="catalog-grid" id="catalogGrid"></div>
+    <div class="custom-row">
+      <input id="cFlag" placeholder="🏳️" maxlength="4" style="width:44px; text-align:center;">
+      <input id="cName" placeholder="Outro idioma (ex: Esperanto)" style="flex:1;">
+      <input id="cSlug" placeholder="slug (ex: esperanto)" style="width:140px;">
+      <button class="btn-primary" id="btnSaveCustom" style="padding:6px 12px; font-size:12px;">Adicionar</button>
+    </div>
+  </div>
+
+  <!-- TOOLBAR COM BUSCA E ORDENAÇÃO -->
+  <div class="toolbar">
+    <input class="search-input" id="searchIn" placeholder="Buscar idioma por nome ou slug...">
+    <select class="sort-select" id="sortSelect" aria-label="Ordenar idiomas">
+      <option value="default">Inglês no topo + A-Z (Padrão)</option>
+      <option value="az">100% Ordem alfabética (A-Z)</option>
+      <option value="count">Mais conteúdos primeiro</option>
+      <option value="active">Ativos primeiro</option>
+    </select>
+  </div>
+
+  <div class="card-box" id="list"></div>
+</main>
+
+<script>
+// CATÁLOGO MUNDIAL PREDEFINIDO PRONTO PARA ATIVAR
+const PRESET_CATALOG = [
+  { id: "korean", name: "Coreano", flag: "🇰🇷" },
+  { id: "chinese", name: "Mandarim", flag: "🇨🇳" },
+  { id: "dutch", name: "Holandês", flag: "🇳🇱" },
+  { id: "swedish", name: "Sueco", flag: "🇸🇪" },
+  { id: "norwegian", name: "Norueguês", flag: "🇳🇴" },
+  { id: "danish", name: "Dinamarquês", flag: "🇩🇰" },
+  { id: "finnish", name: "Finlandês", flag: "🇫🇮" },
+  { id: "turkish", name: "Turco", flag: "🇹🇷" },
+  { id: "greek", name: "Grego", flag: "🇬🇷" },
+  { id: "hebrew", name: "Hebraico", flag: "🇮🇱" },
+  { id: "hindi", name: "Hindi", flag: "🇮🇳" },
+  { id: "vietnamese", name: "Vietnamita", flag: "🇻🇳" },
+  { id: "thai", name: "Tailandês", flag: "🇹🇭" },
+  { id: "indonesian", name: "Indonésio", flag: "🇮🇩" },
+  { id: "czech", name: "Tcheco", flag: "🇨🇿" },
+  { id: "hungarian", name: "Húngaro", flag: "🇭🇺" },
+  { id: "romanian", name: "Romeno", flag: "🇷🇴" },
+  { id: "catalan", name: "Catalão", flag: "🏴󠁥󠁳󠁣󠁴󠁿" },
+  { id: "croatian", name: "Croata", flag: "🇭🇷" },
+  { id: "esperanto", name: "Esperanto", flag: "🟢" }
+];
+
+const INITIAL_LANGS = [
+  { id: "english", name: "Inglês", flag: "🇺🇸", count: 48, active: true },
+  { id: "german", name: "Alemão", flag: "🇩🇪", count: 24, active: true },
+  { id: "french", name: "Francês", flag: "🇫🇷", count: 32, active: true },
+  { id: "spanish", name: "Espanhol", flag: "🇪🇸", count: 29, active: true },
+  { id: "italian", name: "Italiano", flag: "🇮🇹", count: 18, active: true },
+  { id: "russian", name: "Russo", flag: "🇷🇺", count: 14, active: true },
+  { id: "japanese", name: "Japonês", flag: "🇯🇵", count: 21, active: true },
+  { id: "portuguese", name: "Português", flag: "🇧🇷", count: 12, active: true },
+  { id: "polish", name: "Polonês", flag: "🇵🇱", count: 8, active: false },
+  { id: "ukrainian", name: "Ucraniano", flag: "🇺🇦", count: 6, active: false },
+  { id: "arabic", name: "Árabe", flag: "🇸🇦", count: 5, active: false },
+  { id: "latin", name: "Latim", flag: "🏛️", count: 3, active: false }
+];
+
+let langs = [...INITIAL_LANGS];
+
+function getSortedAndFiltered(){
+  const q = document.getElementById('searchIn').value.trim().toLowerCase();
+  const sortMode = document.getElementById('sortSelect').value;
+  
+  let list = langs.filter(l => l.name.toLowerCase().includes(q) || l.id.toLowerCase().includes(q));
+
+  if(sortMode === 'default'){
+    list.sort((a,b) => {
+      if(a.id === 'english') return -1;
+      if(b.id === 'english') return 1;
+      return a.name.localeCompare(b.name, 'pt-BR');
+    });
+  } else if(sortMode === 'az'){
+    list.sort((a,b) => a.name.localeCompare(b.name, 'pt-BR'));
+  } else if(sortMode === 'count'){
+    list.sort((a,b) => b.count - a.count);
+  } else if(sortMode === 'active'){
+    list.sort((a,b) => (b.active === a.active) ? a.name.localeCompare(b.name, 'pt-BR') : (b.active ? 1 : -1));
+  }
+  return list;
+}
+
+function render(){
+  const container = document.getElementById('list');
+  const items = getSortedAndFiltered();
+
+  if(items.length === 0){
+    container.innerHTML = `<div class="empty">Nenhum idioma encontrado para o filtro.</div>`;
+    return;
+  }
+
+  container.innerHTML = items.map(l => `
+    <div class="lang-item">
+      <div class="lang-left">
+        <span class="flag">${l.flag}</span>
+        <div>
+          <span class="name">${l.name}</span>
+          <span class="slug">${l.id}</span>
+        </div>
+      </div>
+      <div class="lang-actions">
+        <span class="count">${l.count} canais</span>
+        <label class="toggle" title="${l.active ? 'Ativo no catálogo' : 'Oculto no catálogo'}">
+          <input type="checkbox" ${l.active ? 'checked' : ''} onchange="toggleActive('${l.id}')">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  `).join('');
+
+  renderCatalog();
+}
+
+function renderCatalog(){
+  const grid = document.getElementById('catalogGrid');
+  grid.innerHTML = PRESET_CATALOG.map(p => {
+    const isAdded = langs.some(l => l.id === p.id);
+    return `
+      <button class="cat-pill ${isAdded ? 'added' : ''}" ${isAdded ? 'disabled' : ''} onclick="addFromPreset('${p.id}')">
+        <span>${p.flag}</span>
+        <span>${p.name}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+function addFromPreset(id){
+  const found = PRESET_CATALOG.find(p => p.id === id);
+  if(!found || langs.some(l => l.id === id)) return;
+  langs.push({ id: found.id, name: found.name, flag: found.flag, count: 0, active: true });
+  render();
+}
+
+function toggleActive(id){
+  const item = langs.find(x => x.id === id);
+  if(item) item.active = !item.active;
+}
+
+document.getElementById('searchIn').addEventListener('input', render);
+document.getElementById('sortSelect').addEventListener('change', render);
+
+document.getElementById('btnToggleCatalog').onclick = () => {
+  document.getElementById('catalogBox').classList.toggle('on');
+};
+document.getElementById('btnCloseCat').onclick = () => {
+  document.getElementById('catalogBox').classList.remove('on');
+};
+
+document.getElementById('btnSaveCustom').onclick = () => {
+  const flag = document.getElementById('cFlag').value.trim() || '🌐';
+  const name = document.getElementById('cName').value.trim();
+  const slug = document.getElementById('cSlug').value.trim() || name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if(!name) return;
+  langs.push({ id: slug, name, flag, count: 0, active: true });
+  document.getElementById('cFlag').value = '';
+  document.getElementById('cName').value = '';
+  document.getElementById('cSlug').value = '';
+  document.getElementById('catalogBox').classList.remove('on');
+  render();
+};
+
+render();
+</script>
+</body>
+</html>

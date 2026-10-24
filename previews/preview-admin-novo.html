@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Novo conteúdo — preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background:#09090b; color:#f4f4f5; font:14px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  :focus-visible { outline:2px solid #a1a1aa; outline-offset:2px; }
+  .bar { border-bottom:1px solid #1f1f23; background:#09090b; position:sticky; top:0; z-index:40; }
+  .bar-row { max-width:1180px; margin:0 auto; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; }
+  .bar a.brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:#f4f4f5; text-decoration:none; }
+  .layout { display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; max-width:1120px; margin:0 auto; padding:20px 24px 0; align-items:start; }
+  @media (max-width:1023px){ .layout { grid-template-columns:1fr; } }
+  h1 { font-size:18px; font-weight:700; margin-bottom:14px; }
+  .field { margin-bottom:14px; }
+  label.f { display:block; font-size:13px; font-weight:500; color:#d4d4d8; margin-bottom:6px; }
+  .field-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .field-head label.f { margin-bottom:0; }
+  .btn-subtle { background:none; border:0; color:#a1a1aa; font-size:12px; cursor:pointer; padding:0; }
+  .btn-subtle:hover { color:#f4f4f5; text-decoration:underline; }
+  .txt { width:100%; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#fafafa; font:inherit; font-size:14px; }
+  select.txt { cursor:pointer; }
+  textarea.txt { resize:vertical; line-height:1.45; }
+  .txt::placeholder { color:#a1a1aa; }
+  .demo { margin-top:6px; font-size:12px; color:#a1a1aa; }
+  .demo button { background:none; border:0; color:#e4e4e7; text-decoration:underline; font-size:12px; margin-right:12px; }
+  .warn { margin-top:8px; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#d4d4d8; display:none; align-items:center; justify-content:space-between; gap:12px; font-size:13px; }
+  .warn.on { display:flex; }
+  .warn button { background:#18181b; border:1px solid #3f3f46; border-radius:6px; padding:4px 10px; font-size:12px; }
+  #fields[hidden] { display:none; }
+  .row-2col { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { background:#18181b; border:1px solid #3f3f46; color:#d4d4d8; border-radius:8px; padding:5px 11px; font-size:12.5px; font-weight:500; }
+  .chip:hover:not(:disabled) { border-color:#71717a; }
+  .chip[aria-pressed=true] { background:#f4f4f5; color:#09090b; border-color:#f4f4f5; }
+  .chip:disabled { opacity:.35; cursor:not-allowed; }
+  .chip.opt[aria-pressed=true]::before { content: "✓ "; font-weight: bold; }
+  .tags { position:relative; }
+  .tagbox { display:flex; flex-wrap:wrap; gap:6px; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:6px 8px; min-height:38px; }
+  .tagbox input { flex:1; min-width:120px; background:none; border:0; outline:0; color:#fafafa; font:inherit; font-size:13.5px; padding:2px 4px; }
+  .tag { background:#18181b; border:1px solid #3f3f46; border-radius:6px; padding:1px 7px; font-size:12px; font-weight:500; color:#d4d4d8; display:inline-flex; gap:5px; align-items:center; }
+  .tag button { background:none; border:0; color:#a1a1aa; font-size:13px; line-height:1; }
+  .menu { position:absolute; left:0; right:0; bottom:calc(100% + 4px); background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:3px; z-index:20; display:none; box-shadow: 0 -4px 16px rgba(0,0,0,0.5); }
+  .menu.on { display:block; }
+  .menu button { display:block; width:100%; text-align:left; background:none; border:0; padding:6px 8px; border-radius:5px; color:#e4e4e7; font-size:13px; }
+  .menu button:hover { background:#18181b; }
+  .actions { padding-top:16px; display:flex; align-items:center; gap:14px; }
+  .save { background:#f4f4f5; color:#09090b; border:0; border-radius:8px; padding:8px 16px; font-weight:600; font-size:13.5px; }
+  .save:disabled { opacity:.35; cursor:not-allowed; }
+  .kbd { font-size:12px; color:#a1a1aa; font-weight:normal; }
+
+  aside { position:sticky; top:20px; }
+  .aside-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; max-width:380px; }
+  aside .lbl { font-size:13px; font-weight:500; color:#a1a1aa; }
+  .card { width:100%; max-width:380px; min-height:260px; background:#111114; border:1px solid #27272a; border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; }
+  .card.empty .sk { background:#18181b; border-radius:6px; }
+  .head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .av { width:44px; height:44px; border-radius:50%; background:#27272a; border:1px solid #3f3f46; display:grid; place-items:center; font-weight:700; font-size:12px; color:#a1a1aa; flex:none; }
+  .card h3 { font-size:16px; font-weight:700; color:#f4f4f5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card p { font-size:14px; line-height:1.6; color:#d4d4d8; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:20px; }
+  .meta, .tg { display:flex; flex-wrap:wrap; gap:6px; }
+  .meta { margin-bottom:8px; }
+  .b { font-size:12px; font-weight:600; padding:4px 10px; border-radius:6px; }
+  .b.i { background:rgba(59,130,246,.1); color:#60a5fa; border:1px solid rgba(59,130,246,.2); }
+  .b.l { background:rgba(16,185,129,.1); color:#34d399; border:1px solid rgba(16,185,129,.2); }
+  .b.t { background:rgba(39,39,42,.8); color:#d4d4d8; border:1px solid rgba(63,63,70,.5); font-weight:500; }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#18181b; border:1px solid #3f3f46; border-radius:10px; padding:10px 16px; display:none; gap:16px; align-items:center; }
+  .toast.on { display:flex; }
+  .toast button { background:none; border:0; text-decoration:underline; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-row">
+    <a href="preview-admin-navegacao.html" class="brand">
+      <span>🧙🏻‍♂️</span>
+      <span>Biblioteca Infinita</span>
+    </a>
+    <nav style="display:flex; align-items:center; gap:6px;">
+      <a href="preview-admin-navegacao.html" style="font-size:13px; color:#a1a1aa; padding:6px 12px; border-radius:6px; text-decoration:none;">Conteúdos</a>
+      <a href="preview-admin-novo.html" style="font-size:13px; font-weight:600; color:#f4f4f5; background:#18181b; padding:6px 12px; border-radius:6px; text-decoration:none; border:1px solid #27272a;">+ Novo conteúdo</a>
+      <a href="preview-admin-idiomas.html" style="font-size:13px; color:#a1a1aa; padding:6px 12px; border-radius:6px; text-decoration:none;">Idiomas</a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+  <section>
+    <h1 id="pageTitle">Novo conteúdo</h1>
+    <div class="field">
+      <label class="f" for="url">Link do canal</label>
+      <input id="url" class="txt" type="url" placeholder="https://www.youtube.com/@canal" autofocus>
+      <div class="demo">Simular: <button id="d1">colar canal novo</button><button id="d2">colar canal já cadastrado</button></div>
+      <div class="warn" id="warn"><span>Já cadastrado: <b>Easy German</b></span><button id="btnEditExisting">Editar este canal</button></div>
+    </div>
+
+    <div id="fields" hidden>
+      <div class="field">
+        <div class="field-head">
+          <label class="f" for="title">Título</label>
+          <button type="button" class="btn-subtle" id="btnReTitle" title="Buscar título original do YouTube">Buscar do YouTube</button>
+        </div>
+        <input id="title" class="txt">
+      </div>
+      <div class="field">
+        <div class="field-head">
+          <label class="f" for="desc">Descrição</label>
+          <button type="button" class="btn-subtle" id="btnReDesc" title="Buscar descrição original do YouTube">Buscar do YouTube</button>
+        </div>
+        <textarea id="desc" class="txt" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label class="f" for="langSelect">Idioma</label>
+        <select id="langSelect" class="txt">
+          <option value="english">🇺🇸 Inglês</option>
+          <option value="german">🇩🇪 Alemão</option>
+          <option value="french">🇫🇷 Francês</option>
+          <option value="spanish">🇪🇸 Espanhol</option>
+          <option value="italian">🇮🇹 Italiano</option>
+          <option value="russian">🇷🇺 Russo</option>
+          <option value="japanese">🇯🇵 Japonês</option>
+        </select>
+      </div>
+      <div class="row-2col" id="chips">
+        <div class="field">
+          <label class="f" id="lblTipo">Tipo</label>
+          <div class="chips" role="radiogroup" aria-labelledby="lblTipo">
+            <button class="chip" aria-pressed="true" data-solo>Imersão</button>
+            <button class="chip" aria-pressed="false" data-solo>Professor</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="f" id="lblOpt">Opções</label>
+          <div class="chips" aria-labelledby="lblOpt">
+            <button class="chip opt" id="cIni" aria-pressed="false">Iniciante</button>
+            <button class="chip opt" id="cLeg" aria-pressed="false">Legendado</button>
+            <button class="chip opt" id="cNN" aria-pressed="false">Não-nativo</button>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-head">
+          <label class="f" for="tagin">Tags</label>
+          <span class="btn-subtle" id="tagReq" style="cursor:default; color:#a1a1aa;">Obrigatório (mínimo 1)</span>
+        </div>
+        <div class="tags">
+          <div class="tagbox" id="tagbox"><input id="tagin" placeholder="Adicionar tag (obrigatório)" autocomplete="off" role="combobox" aria-expanded="false"></div>
+          <div class="menu" id="menu" role="listbox"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="save" id="save" disabled>Salvar canal</button>
+      <button id="cancelEdit" style="display:none; background:none; border:0; color:#a1a1aa; font-size:13px; text-decoration:underline;">Cancelar edição</button>
+      <span class="kbd">Ctrl + Enter</span>
+    </div>
+  </section>
+
+  <aside>
+    <div class="aside-head">
+      <div class="lbl">Preview</div>
+      <button type="button" class="btn-subtle" id="btnReAvatar" style="display:none;" title="Recarregar foto do canal">Recarregar ícone</button>
+    </div>
+    <div class="card empty" id="card">
+      <div>
+        <div class="head"><div class="av sk"></div><div class="sk" style="height:18px;width:55%"></div></div>
+        <div class="sk" style="height:14px;margin-bottom:8px"></div>
+        <div class="sk" style="height:14px;margin-bottom:8px"></div>
+        <div class="sk" style="height:14px;width:70%"></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"><span>Canal salvo.</span><button id="undo">Desfazer</button></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const VOCAB = ["Cultura","Culinária","Notícias","Tecnologia","Viagem","Humor","Ciência","História","Vlog","Música","Esportes","Educação"];
+let tags = [], loaded = false;
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const on = el => el.getAttribute('aria-pressed') === 'true';
+const isTeacher = () => on($('#chips').querySelectorAll('[data-solo]')[1]);
+
+function render(){
+  const c = $('#card');
+  if(!loaded){ return; }
+  c.className = 'card';
+  const t = $('#title').value || 'Sem título';
+  const meta = [];
+  if(!isTeacher() && on($('#cIni'))) meta.push('<span class="b i">Iniciante</span>');
+  if(on($('#cLeg'))) meta.push('<span class="b l">Legendado</span>');
+  c.innerHTML = `<div>
+    <div class="head"><div class="av">${esc(t.slice(0,2).toUpperCase())}</div><h3>${esc(t)}</h3></div>
+    <p>${esc($('#desc').value)}</p></div>
+    <div>${meta.length ? `<div class="meta">${meta.join('')}</div>` : ''}
+    <div class="tg">${tags.map(x=>`<span class="b t">${esc(x)}</span>`).join('')}</div></div>`;
+}
+const mockExisting = {
+  title: 'Easy German',
+  desc: 'Aprenda alemão com entrevistas reais de rua em Berlim e diálogos autênticos.',
+  type: 'Imersão',
+  beginner: true,
+  subtitles: true,
+  nonNative: false,
+  tags: ['Cultura', 'Entrevistas']
+};
+
+let isEditingExisting = false;
+
+function editExisting(){
+  isEditingExisting = true;
+  $('#pageTitle').textContent = 'Editar canal';
+  $('#save').textContent = 'Salvar alterações';
+  $('#cancelEdit').style.display = 'inline-block';
+  $('#warn').classList.remove('on');
+  
+  loaded = true;
+  $('#fields').hidden = false;
+  $('#save').disabled = false;
+  
+  $('#title').value = mockExisting.title;
+  $('#desc').value = mockExisting.desc;
+  
+  const typeBtns = $('#chips').querySelectorAll('[data-solo]');
+  typeBtns[0].setAttribute('aria-pressed', mockExisting.type === 'Imersão');
+  typeBtns[1].setAttribute('aria-pressed', mockExisting.type === 'Professor');
+  
+  $('#cIni').disabled = mockExisting.type === 'Professor';
+  $('#cIni').setAttribute('aria-pressed', mockExisting.beginner && mockExisting.type !== 'Professor');
+  $('#cLeg').setAttribute('aria-pressed', mockExisting.subtitles);
+  $('#cNN').setAttribute('aria-pressed', mockExisting.nonNative);
+  
+  tags = [...mockExisting.tags];
+  $('#langSelect').value = 'german';
+  renderTags();
+  render();
+}
+
+function show(k){
+  isEditingExisting = false;
+  $('#pageTitle').textContent = 'Novo conteúdo';
+  $('#save').textContent = 'Salvar canal';
+  $('#cancelEdit').style.display = 'none';
+  $('#warn').classList.toggle('on', k==='dup');
+  loaded = k==='new';
+  $('#fields').hidden = !loaded;
+  $('#save').disabled = !loaded;
+  if(k==='new'){
+    $('#url').value = 'https://www.youtube.com/@NovoCanal';
+    $('#title').value = 'Novo Canal';
+    $('#desc').value = 'Learn German with real street interviews. Subtitled in German and English so you can follow along at your own pace.';
+    $('#langSelect').value = 'english';
+    const typeBtns = $('#chips').querySelectorAll('[data-solo]');
+    typeBtns[0].setAttribute('aria-pressed', 'true');
+    typeBtns[1].setAttribute('aria-pressed', 'false');
+    $('#cIni').disabled = false;
+    $('#cIni').setAttribute('aria-pressed', 'false');
+    $('#cLeg').setAttribute('aria-pressed', 'false');
+    $('#cNN').setAttribute('aria-pressed', 'false');
+    tags = [];
+    renderTags();
+  }
+  if(k==='dup'){
+    $('#url').value = 'https://www.youtube.com/@EasyGerman';
+    $('#card').className='card';
+    $('#card').innerHTML = `<div><div class="head"><div class="av">EG</div><h3>Easy German</h3></div><p>Aprenda alemão com entrevistas reais de rua em Berlim e diálogos autênticos.</p></div><div><div class="meta"><span class="b i">Iniciante</span><span class="b l">Legendado</span></div><div class="tg"><span class="b t">Cultura</span><span class="b t">Entrevistas</span></div></div>`;
+  }
+  if(k==='new') render();
+}
+function reset(){
+  isEditingExisting = false;
+  $('#pageTitle').textContent = 'Novo conteúdo';
+  $('#save').textContent = 'Salvar canal';
+  $('#cancelEdit').style.display = 'none';
+  loaded=false; tags=[]; renderTags(); $('#fields').hidden=true; $('#save').disabled=true; $('#warn').classList.remove('on');
+  $('#url').value=''; $('#card').className='card empty';
+  $('#card').innerHTML='<div><div class="head"><div class="av sk"></div><div class="sk" style="height:18px;width:55%"></div></div><div class="sk" style="height:14px;margin-bottom:8px"></div><div class="sk" style="height:14px;margin-bottom:8px"></div><div class="sk" style="height:14px;width:70%"></div></div>';
+  $('#url').focus();
+}
+function toggleMetaButtons(show){
+  $('#btnReAvatar').style.display = show ? 'inline-block' : 'none';
+}
+
+$('#btnReTitle').onclick = () => {
+  const original = 'Easy German - Learn German with Real Street Videos';
+  $('#title').value = original;
+  render();
+};
+
+$('#btnReDesc').onclick = () => {
+  const original = 'Welcome to Easy German! We produce street interviews and conversations in Berlin to help you learn real, authentic spoken German.';
+  $('#desc').value = original;
+  render();
+};
+
+$('#btnReAvatar').onclick = () => {
+  const b = $('#btnReAvatar');
+  b.textContent = 'Buscando...';
+  setTimeout(() => {
+    b.textContent = 'Recarregar ícone';
+    const av = $('#card .av');
+    if(av) {
+      av.style.background = '#2563eb';
+      av.style.color = '#fff';
+      av.textContent = '✓';
+      setTimeout(() => { av.textContent = ($('#title').value || 'EG').slice(0,2).toUpperCase(); av.style.background = '#27272a'; }, 1000);
+    }
+  }, 400);
+};
+
+$('#d1').onclick = () => { show('new'); toggleMetaButtons(true); };
+$('#d2').onclick = () => { show('dup'); toggleMetaButtons(false); };
+$('#btnEditExisting').onclick = () => { editExisting(); toggleMetaButtons(true); };
+$('#cancelEdit').onclick = () => { reset(); toggleMetaButtons(false); };
+$('#url').addEventListener('paste', () => setTimeout(()=>{ show('new'); toggleMetaButtons(true); },0));
+['#title','#desc'].forEach(s => $(s).addEventListener('input', render));
+
+$('#chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b || b.disabled) return;
+  if(b.hasAttribute('data-solo')){
+    $('#chips').querySelectorAll('[data-solo]').forEach(x=>x.setAttribute('aria-pressed', x===b));
+    const t = isTeacher();
+    $('#cIni').disabled = t;
+    if(t) $('#cIni').setAttribute('aria-pressed','false');
+  } else b.setAttribute('aria-pressed', !on(b));
+  render();
+});
+
+function renderTags(){
+  document.querySelectorAll('.tag').forEach(t=>t.remove());
+  tags.forEach(t=>{
+    const s=document.createElement('span'); s.className='tag';
+    s.innerHTML=`${esc(t)}<button aria-label="Remover ${esc(t)}">×</button>`;
+    s.querySelector('button').onclick=()=>{tags=tags.filter(x=>x!==t);renderTags();render();};
+    $('#tagbox').insertBefore(s,$('#tagin'));
+  });
+  if(loaded) {
+    $('#save').disabled = tags.length === 0;
+  }
+  const tagReq = $('#tagReq');
+  if(tagReq) tagReq.style.display = tags.length > 0 ? 'none' : 'inline';
+}
+function openMenu(){
+  const q=$('#tagin').value.trim().toLowerCase();
+  const list=VOCAB.filter(v=>!tags.includes(v)&&v.toLowerCase().includes(q)).slice(0,6);
+  $('#menu').innerHTML=list.map(v=>`<button>${v}</button>`).join('');
+  $('#menu').classList.toggle('on', list.length>0 && document.activeElement===$('#tagin'));
+  $('#menu').querySelectorAll('button').forEach(b=>b.onmousedown=e=>{e.preventDefault();add(b.textContent)});
+}
+function add(t){ if(tags.length<4 && t && !tags.includes(t)) tags.push(t); $('#tagin').value=''; renderTags(); openMenu(); render(); }
+$('#tagin').addEventListener('input',openMenu);
+$('#tagin').addEventListener('focus',openMenu);
+$('#tagin').addEventListener('blur',()=>$('#menu').classList.remove('on'));
+$('#tagin').addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !e.ctrlKey){ e.preventDefault();
+    const first=$('#menu button'), v=$('#tagin').value.trim();
+    add(first ? first.textContent : v.charAt(0).toUpperCase()+v.slice(1));
+  }
+  if(e.key==='Backspace' && !$('#tagin').value && tags.length){tags.pop();renderTags();render();}
+});
+
+let tt;
+function save(){
+  if(!loaded || tags.length === 0) return;
+  reset();
+  $('#toast').classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>$('#toast').classList.remove('on'),6000);
+}
+$('#save').onclick=save;
+$('#undo').onclick=()=>{$('#toast').classList.remove('on');show('new');};
+document.addEventListener('keydown',e=>{ if(e.ctrlKey&&e.key==='Enter') save(); });
+</script>
+</body>
+</html>

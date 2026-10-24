@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin: Cadastro de Podcasts — preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background:#09090b; color:#f4f4f5; font:14px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  :focus-visible { outline:2px solid #a1a1aa; outline-offset:2px; }
+  .bar { border-bottom:1px solid #1f1f23; background:#09090b; position:sticky; top:0; z-index:40; }
+  .bar-row { max-width:1180px; margin:0 auto; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; }
+  .bar a.brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:#f4f4f5; text-decoration:none; }
+  .layout { display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; max-width:1120px; margin:0 auto; padding:20px 24px 0; align-items:start; }
+  @media (max-width:1023px){ .layout { grid-template-columns:1fr; } }
+  h1 { font-size:18px; font-weight:700; margin-bottom:14px; }
+  .field { margin-bottom:14px; }
+  label.f { display:block; font-size:13px; font-weight:500; color:#d4d4d8; margin-bottom:6px; }
+  .field-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .field-head label.f { margin-bottom:0; }
+  .btn-subtle { background:none; border:0; color:#a1a1aa; font-size:12px; cursor:pointer; padding:0; }
+  .btn-subtle:hover { color:#f4f4f5; text-decoration:underline; }
+  .txt { width:100%; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#fafafa; font:inherit; font-size:14px; }
+  select.txt { cursor:pointer; }
+  textarea.txt { resize:vertical; line-height:1.45; }
+  .txt::placeholder { color:#71717a; }
+  .demo { margin-top:6px; font-size:12px; color:#a1a1aa; }
+  .demo button { background:none; border:0; color:#e4e4e7; text-decoration:underline; font-size:12px; margin-right:12px; }
+  .warn { margin-top:8px; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#d4d4d8; display:none; align-items:center; justify-content:space-between; gap:12px; font-size:13px; }
+  .warn.on { display:flex; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { background:#18181b; border:1px solid #3f3f46; color:#d4d4d8; border-radius:8px; padding:5px 11px; font-size:12.5px; font-weight:500; }
+  .chip:hover:not(:disabled) { border-color:#71717a; }
+  .chip[aria-pressed=true] { background:#f4f4f5; color:#09090b; border-color:#f4f4f5; font-weight:600; }
+  .chip:disabled { opacity:.35; cursor:not-allowed; }
+  .tags { position:relative; }
+  .tagbox { display:flex; flex-wrap:wrap; gap:6px; background:#111114; border:1px solid #3f3f46; border-radius:8px; padding:6px 8px; min-height:38px; }
+  .tagbox input { flex:1; min-width:120px; background:none; border:0; outline:0; color:#fafafa; font:inherit; font-size:13.5px; padding:2px 4px; }
+  .tag { background:#18181b; border:1px solid #3f3f46; border-radius:6px; padding:1px 7px; font-size:12px; font-weight:500; color:#d4d4d8; display:inline-flex; gap:5px; align-items:center; }
+  .tag button { background:none; border:0; color:#a1a1aa; font-size:13px; line-height:1; }
+  .actions { padding-top:16px; display:flex; align-items:center; gap:14px; }
+  .save { background:#f4f4f5; color:#09090b; border:0; border-radius:8px; padding:8px 16px; font-weight:600; font-size:13.5px; }
+  .save:disabled { opacity:.35; cursor:not-allowed; }
+  .kbd { font-size:12px; color:#a1a1aa; }
+
+  aside { position:sticky; top:20px; }
+  .aside-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; max-width:380px; }
+  aside .lbl { font-size:13px; font-weight:500; color:#a1a1aa; }
+  .card { width:100%; max-width:380px; min-height:270px; background:#111114; border:1px solid #27272a; border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; }
+  .card.empty .sk { background:#18181b; border-radius:6px; }
+  .head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .av { width:44px; height:44px; border-radius:50%; background:#27272a; border:1px solid #3f3f46; display:grid; place-items:center; font-weight:700; font-size:12px; color:#a1a1aa; flex:none; }
+  .card h3 { font-size:16px; font-weight:700; color:#f4f4f5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card p { font-size:14px; line-height:1.6; color:#d4d4d8; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:20px; }
+  
+  /* Badges no preview */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .b-ini { font-size:12px; font-weight:600; padding:3px 9px; border-radius:6px; background:rgba(59,130,246,.1); color:#60a5fa; border:1px solid rgba(59,130,246,.2); }
+  .b-sub { font-size:12px; font-weight:600; padding:3px 9px; border-radius:6px; background:rgba(16,185,129,.1); color:#34d399; border:1px solid rgba(16,185,129,.2); }
+  .b-trans { font-size:12px; font-weight:600; padding:3px 9px; border-radius:6px; background:rgba(168,85,247,.15); color:#d8b4fe; border:1px solid rgba(168,85,247,.3); display:inline-flex; align-items:center; gap:4px; text-decoration:none; }
+  .b-tag { font-size:12px; font-weight:500; padding:3px 9px; border-radius:6px; background:rgba(39,39,42,.8); color:#d4d4d8; border:1px solid rgba(63,63,70,.5); }
+  .duration-text { font-size:12px; color:#a1a1aa; display:flex; align-items:center; gap:5px; margin-top:8px; }
+
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#18181b; border:1px solid #3f3f46; border-radius:10px; padding:10px 16px; display:none; gap:16px; align-items:center; z-index:50; }
+  .toast.on { display:flex; }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-row">
+    <a href="#" class="brand">
+      <span>🧙🏻‍♂️</span>
+      <span>Biblioteca Infinita — Admin</span>
+    </a>
+    <span style="font-size:12px; color:#a1a1aa; font-family:monospace;">Preview: Suporte a Podcasts</span>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- FORMULÁRIO -->
+  <section>
+    <h1 id="pageTitle">Novo conteúdo</h1>
+
+    <!-- 1. Campo de URL inteligente (YouTube ou Spotify) -->
+    <div class="field">
+      <label class="f" for="url">Link do canal ou podcast</label>
+      <input id="url" class="txt" type="url" placeholder="https://www.youtube.com/@canal ou https://open.spotify.com/show/..." autofocus>
+      <div class="demo">
+        Simular: 
+        <button id="simYt">colar YouTube</button>
+        <button id="simSpotify">colar Spotify (innerFrench)</button>
+        <button id="simShort">colar Spotify curto (3 min)</button>
+        <button id="btnOpenDrawer" style="color:#c084fc; font-weight:600; margin-left:12px;">⚡ Abrir Drawer Lateral de Edição</button>
+      </div>
+    </div>
+
+    <!-- Campos dinâmicos após carregar -->
+    <div id="fields" style="display:none;">
+      
+      <!-- Linha 1: Título e Idioma lado a lado (Identidade Rápida) -->
+      <div style="display:grid; grid-template-columns:1fr 180px; gap:12px; margin-bottom:14px;">
+        <div>
+          <div class="field-head">
+            <label class="f" for="title">Título</label>
+            <button type="button" class="btn-subtle" id="btnReTitle">Refazer busca</button>
+          </div>
+          <input id="title" class="txt">
+        </div>
+
+        <div>
+          <label class="f" for="langSelect">Idioma</label>
+          <select id="langSelect" class="txt">
+            <option value="french">🇫🇷 Francês</option>
+            <option value="english">🇺🇸 Inglês</option>
+            <option value="spanish">🇪🇸 Espanhol</option>
+            <option value="german">🇩🇪 Alemão</option>
+            <option value="italian">🇮🇹 Italiano</option>
+            <option value="russian">🇷🇺 Russo</option>
+            <option value="japanese">🇯🇵 Japonês</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Linha 2: Formato e Classificação (Decisão Rápida) -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+        <div>
+          <label class="f">Formato</label>
+          <div class="chips" id="catChips">
+            <button type="button" class="chip" data-cat="youtube">YouTube</button>
+            <button type="button" class="chip" data-cat="podcasts">Podcast</button>
+            <button type="button" class="chip" data-cat="professores">Professor</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="f">Classificação</label>
+          <div class="chips">
+            <button type="button" class="chip" id="btnBeginner" aria-pressed="false">Iniciante</button>
+            <button type="button" class="chip" id="btnNonNative" aria-pressed="false">Não-nativo</button>
+            <button type="button" class="chip" id="btnSubtitles" aria-pressed="false">Legendado (CC)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha 3: Campos Específicos de Podcast (Condicional) -->
+      <div id="podcastFields" style="display:none; background:#141418; border:1px solid #27272a; border-radius:10px; padding:12px; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:600; color:#d4d4d8; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+          <span>🎙️</span>
+          <span>Configurações do Podcast</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.3fr 0.7fr; gap:12px;">
+          <div>
+            <label class="f" for="transcriptUrl">Link da Transcrição (opcional)</label>
+            <input id="transcriptUrl" class="txt" type="url" placeholder="https://site.com/transcripts...">
+          </div>
+          <div>
+            <div class="field-head">
+              <label class="f" for="avgDuration">Duração média</label>
+              <span style="font-size:11px; color:#a1a1aa;">via RSS</span>
+            </div>
+            <input id="avgDuration" class="txt" type="text" placeholder="ex: ~30 min">
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha 4: Tags de Assunto (Área de Trabalho Ativa Obrigatória) -->
+      <div class="field">
+        <div class="field-head">
+          <label class="f">Tags de Assunto</label>
+          <span style="font-size:12px; color:#a1a1aa;">Mínimo 1 obrigatória</span>
+        </div>
+        <div class="tags">
+          <div class="tagbox" id="tagbox">
+            <span class="tag">Cultura <button type="button" onclick="this.parentElement.remove(); render();">×</button></span>
+            <span class="tag">Sociedade <button type="button" onclick="this.parentElement.remove(); render();">×</button></span>
+            <input id="tagin" placeholder="Adicionar tag..." autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha 5: Descrição Oficial (Fica na base, inspeção sem poluir) -->
+      <div class="field">
+        <div class="field-head">
+          <label class="f" for="desc">Descrição oficial (automática)</label>
+          <button type="button" class="btn-subtle" id="btnReDesc">Refazer busca</button>
+        </div>
+        <textarea id="desc" class="txt" rows="2" style="font-size:13px;"></textarea>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="save" id="btnSave" disabled>Salvar conteúdo</button>
+      <span class="kbd">Ctrl + Enter</span>
+    </div>
+  </section>
+
+  <!-- PREVIEW AO VIVO À DIREITA (FIDELIDADE 1:1) -->
+  <aside>
+    <div class="aside-head">
+      <div class="lbl">Preview ao vivo</div>
+    </div>
+    <div class="card empty" id="cardPreview">
+      <div>
+        <div class="head">
+          <div class="av sk"></div>
+          <div class="sk" style="height:18px;width:55%"></div>
+        </div>
+        <div class="sk" style="height:14px;margin-bottom:8px"></div>
+        <div class="sk" style="height:14px;margin-bottom:8px"></div>
+        <div class="sk" style="height:14px;width:70%"></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"><span>Conteúdo salvo com sucesso!</span></div>
+
+<script>
+  const $ = s => document.querySelector(s);
+  let currentCategory = 'youtube';
+  let isLoaded = false;
+
+  function setCategory(cat) {
+    currentCategory = cat;
+    document.querySelectorAll('#catChips button').forEach(b => {
+      b.setAttribute('aria-pressed', b.dataset.cat === cat ? 'true' : 'false');
+    });
+
+    // Se for podcast, mostra campos de podcast e esconde CC
+    const isPodcast = cat === 'podcasts';
+    $('#podcastFields').style.display = isPodcast ? 'block' : 'none';
+    $('#btnSubtitles').style.display = isPodcast ? 'none' : 'inline-block';
+    render();
+  }
+
+  document.querySelectorAll('#catChips button').forEach(b => {
+    b.addEventListener('click', () => setCategory(b.dataset.cat));
+  });
+
+  $('#btnBeginner').addEventListener('click', function() {
+    this.setAttribute('aria-pressed', this.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    render();
+  });
+  $('#btnSubtitles').addEventListener('click', function() {
+    this.setAttribute('aria-pressed', this.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    render();
+  });
+
+  ['title', 'desc', 'transcriptUrl', 'avgDuration'].forEach(id => {
+    $('#' + id).addEventListener('input', render);
+  });
+
+  function render() {
+    if (!isLoaded) return;
+    const c = $('#cardPreview');
+    c.className = 'card';
+    const t = $('#title').value || 'Sem título';
+    const d = $('#desc').value || 'Sem descrição';
+    const isBeginner = $('#btnBeginner').getAttribute('aria-pressed') === 'true';
+    const hasCC = $('#btnSubtitles').getAttribute('aria-pressed') === 'true';
+    const transcriptUrl = $('#transcriptUrl').value.trim();
+    const avgDuration = $('#avgDuration').value.trim();
+
+    // Linha 1: Metadados Funcionais
+    let line1 = '';
+    if (isBeginner) line1 += '<span class="b-ini">Iniciante</span>';
+    if (currentCategory === 'podcasts' && transcriptUrl) {
+      line1 += `<a href="${transcriptUrl}" target="_blank" class="b-trans" onclick="event.stopPropagation()">
+        <span>Transcrição</span>
+        <svg style="width:12px;height:12px;stroke-width:2.2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+      </a>`;
+    } else if (currentCategory === 'youtube' && hasCC) {
+      line1 += '<span class="b-sub">Legendado (CC)</span>';
+    }
+
+    // Linha 2: Tags de Assunto
+    const tagElements = Array.from(document.querySelectorAll('#tagbox .tag'))
+      .map(el => el.textContent.replace('×', '').trim())
+      .filter(Boolean);
+    const line2 = tagElements.map(tag => `<span class="b-tag">${tag}</span>`).join('');
+
+    // Linha 3: Duração Editorial (apenas para podcast com duração)
+    let line3 = '';
+    if (currentCategory === 'podcasts' && avgDuration) {
+      line3 = `<div class="duration-text">
+        <svg style="width:13px;height:13px;stroke:currentColor;stroke-width:2;" fill="none" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 15 14"/>
+        </svg>
+        <span>Episódios de ${avgDuration}</span>
+      </div>`;
+    }
+
+    c.innerHTML = `
+      <div>
+        <div class="head">
+          <div class="av">${t.slice(0, 2).toUpperCase()}</div>
+          <h3>${t}</h3>
+        </div>
+        <p>${d}</p>
+      </div>
+      <div>
+        ${line1 ? `<div class="badge-row">${line1}</div>` : ''}
+        ${line2 ? `<div class="badge-row">${line2}</div>` : ''}
+        ${line3}
+      </div>
+    `;
+  }
+
+  // Simulações de teste
+  $('#simSpotify').addEventListener('click', () => {
+    isLoaded = true;
+    $('#fields').style.display = 'block';
+    $('#btnSave').disabled = false;
+    $('#url').value = 'https://open.spotify.com/show/00h8GrMQbmSAfiNWYPLvhx';
+    $('#title').value = 'innerFrench';
+    $('#desc').value = 'Aprenda francês sem estresse através de temas estimulantes sobre sociedade, filosofia e história, falados em ritmo acessível e natural.';
+    $('#transcriptUrl').value = 'https://innerfrench.com/transcripts';
+    $('#avgDuration').value = '~30 min';
+    $('#btnBeginner').setAttribute('aria-pressed', 'true');
+    setCategory('podcasts');
+  });
+
+  $('#simShort').addEventListener('click', () => {
+    isLoaded = true;
+    $('#fields').style.display = 'block';
+    $('#btnSave').disabled = false;
+    $('#url').value = 'https://open.spotify.com/show/3AL8eKPHOUINc6usVSbRo3';
+    $('#title').value = 'Choses à Savoir';
+    $('#desc').value = 'Pílulas diárias de cultura geral e curiosidades científicas explicadas de forma concisa e didática em 3 minutos.';
+    $('#transcriptUrl').value = 'https://chosesasavoir.com';
+    $('#avgDuration').value = '~3 min';
+    $('#btnBeginner').setAttribute('aria-pressed', 'true');
+    setCategory('podcasts');
+  });
+
+  // Drawer lateral de edição
+  $('#btnOpenDrawer').addEventListener('click', () => {
+    $('#editBackdrop').style.display = 'block';
+    $('#editDrawer').style.display = 'flex';
+  });
+
+  function closeDrawer() {
+    $('#editBackdrop').style.display = 'none';
+    $('#editDrawer').style.display = 'none';
+  }
+
+  $('#btnCloseDrawer').addEventListener('click', closeDrawer);
+  $('#editBackdrop').addEventListener('click', closeDrawer);
+  $('#btnCancelDrawer').addEventListener('click', closeDrawer);
+
+  document.querySelectorAll('#drawerCatChips button').forEach(b => {
+    b.addEventListener('click', function() {
+      document.querySelectorAll('#drawerCatChips button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+      this.setAttribute('aria-pressed', 'true');
+      const isPod = this.dataset.cat === 'podcasts';
+      $('#drawerPodFields').style.display = isPod ? 'block' : 'none';
+      $('#drawerSubtitlesBtn').style.display = isPod ? 'none' : 'inline-block';
+    });
+  });
+
+  $('#btnSaveDrawer').addEventListener('click', () => {
+    closeDrawer();
+    $('#toast').classList.add('on');
+    setTimeout(() => $('#toast').classList.remove('on'), 2500);
+  });
+</script>
+
+<!-- BACKDROP DO DRAWER -->
+<div id="editBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(3px); z-index:90; cursor:pointer;"></div>
+
+<!-- DRAWER LATERAL DE EDIÇÃO -->
+<div id="editDrawer" style="display:none; position:fixed; top:0; right:0; bottom:0; width:460px; max-width:92vw; background:#111114; border-left:1px solid #27272a; z-index:100; flex-direction:column; box-shadow:-8px 0 32px rgba(0,0,0,0.5);">
+  <!-- Topo -->
+  <div style="padding:16px 20px; border-bottom:1px solid #1f1f23; display:flex; justify-content:space-between; align-items:center;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <h2 style="font-size:16px; font-weight:700; color:#f4f4f5;">Editar conteúdo</h2>
+      <a href="https://open.spotify.com/show/00h8GrMQbmSAfiNWYPLvhx" target="_blank" style="color:#a1a1aa; font-size:12px; text-decoration:none;">↗</a>
+    </div>
+    <button type="button" id="btnCloseDrawer" style="background:none; border:0; color:#a1a1aa; font-size:18px; cursor:pointer;">✕</button>
+  </div>
+
+  <!-- Corpo com Scroll -->
+  <div style="padding:20px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:14px;">
+    <!-- Avatar Preview -->
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px; border-radius:8px; background:#18181b; border:1px solid #27272a;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:40px; height:40px; border-radius:50%; background:#27272a; border:1px solid #3f3f46; display:grid; place-items:center; font-weight:700; font-size:12px; color:#d4d4d8;">
+          IF
+        </div>
+        <div style="font-size:12px; color:#a1a1aa;">
+          <div style="font-weight:600; color:#f4f4f5;">innerFrench</div>
+          <div>Capa do Podcast (Spotify)</div>
+        </div>
+      </div>
+      <button type="button" class="btn-subtle">Recarregar</button>
+    </div>
+
+    <!-- Link -->
+    <div>
+      <label class="f">Link</label>
+      <input class="txt" value="https://open.spotify.com/show/00h8GrMQbmSAfiNWYPLvhx">
+    </div>
+
+    <!-- Título e Idioma lado a lado -->
+    <div style="display:grid; grid-template-columns:1fr 140px; gap:12px;">
+      <div>
+        <div class="field-head">
+          <label class="f">Título</label>
+          <button type="button" class="btn-subtle">Buscar do Spotify</button>
+        </div>
+        <input class="txt" value="innerFrench">
+      </div>
+
+      <div>
+        <label class="f">Idioma</label>
+        <select class="txt">
+          <option>🇫🇷 Francês</option>
+          <option>🇺🇸 Inglês</option>
+          <option>🇪🇸 Espanhol</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Formato / Tipo -->
+    <div>
+      <label class="f">Formato</label>
+      <div class="chips" id="drawerCatChips">
+        <button type="button" class="chip" data-cat="youtube" aria-pressed="false">YouTube</button>
+        <button type="button" class="chip" data-cat="podcasts" aria-pressed="true">Podcast</button>
+        <button type="button" class="chip" data-cat="professores" aria-pressed="false">Professor</button>
+      </div>
+    </div>
+
+    <!-- CAMPOS ESPECÍFICOS DE PODCAST NO DRAWER -->
+    <div id="drawerPodFields" style="background:#141418; border:1px solid #27272a; border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:10px;">
+      <div style="font-size:12px; font-weight:600; color:#d4d4d8; display:flex; align-items:center; gap:6px;">
+        <span>🎙️</span>
+        <span>Configurações do Podcast</span>
+      </div>
+
+      <div>
+        <label class="f">Link da Transcrição (opcional)</label>
+        <input class="txt" value="https://innerfrench.com/transcripts" placeholder="https://innerfrench.com/transcripts">
+      </div>
+
+      <div>
+        <label class="f">Duração média dos episódios (opcional)</label>
+        <input class="txt" value="~30 min" placeholder="ex: ~30 min">
+      </div>
+    </div>
+
+    <!-- Opções -->
+    <div>
+      <label class="f">Opções</label>
+      <div class="chips">
+        <button type="button" class="chip" aria-pressed="true">✓ Iniciante</button>
+        <button type="button" class="chip" aria-pressed="false">Não-nativo</button>
+        <button type="button" class="chip" id="drawerSubtitlesBtn" aria-pressed="false" style="display:none;">Legendado</button>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div>
+      <label class="f">Tags de Assunto</label>
+      <input class="txt" value="Cultura, Sociedade">
+    </div>
+
+    <!-- Descrição (na base) -->
+    <div>
+      <div class="field-head">
+        <label class="f">Descrição oficial</label>
+        <button type="button" class="btn-subtle">Buscar do Spotify</button>
+      </div>
+      <textarea class="txt" rows="2" style="font-size:13px;">Aprenda francês sem estresse através de temas estimulantes sobre sociedade, filosofia e história, falados em ritmo acessível e natural.</textarea>
+    </div>
+  </div>
+
+  <!-- Rodapé com Ações -->
+  <div style="padding:16px 20px; border-top:1px solid #1f1f23; display:flex; justify-content:space-between; align-items:center;">
+    <button type="button" id="btnCancelDrawer" style="background:none; border:0; color:#ef4444; font-size:13px; cursor:pointer;">Excluir</button>
+    <button type="button" id="btnSaveDrawer" class="save">Salvar alterações</button>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview: Séries com 3 por Linha (Sem Altura Excessiva)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #09090b; color: #fafafa; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .badge-base {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      border-radius: 0.375rem;
+      border-width: 1px;
+      padding: 0.12rem 0.5rem;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1rem;
+      user-select: none;
+    }
+    .badge-theme {
+      border-color: rgba(88, 28, 135, 0.4);
+      background-color: #1e1528;
+      color: rgba(216, 180, 254, 0.95);
+    }
+    .badge-default {
+      border-color: #27272a;
+      background-color: #18181b;
+      color: #a1a1aa;
+    }
+    .badge-orig-flag {
+      border-color: rgba(147, 51, 234, 0.35);
+      background-color: #171220;
+      color: #e9d5ff;
+    }
+  </style>
+</head>
+<body class="p-4 sm:p-8 md:p-12 max-w-6xl mx-auto space-y-12">
+
+  <header class="space-y-2 border-b border-zinc-800 pb-5">
+    <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-purple-950/70 border border-purple-800/40 text-purple-300 text-xs font-semibold">
+      <span>🎯 3 Séries por Row</span>
+      <span class="text-zinc-600">•</span>
+      <span>Controle de Altura & Sem Mesh</span>
+    </div>
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-100 tracking-tight">
+      Como Manter 3 por Linha sem Ficar Alto Demais
+    </h1>
+    <p class="text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed">
+      Em 3 colunas, um pôster vertical <code class="text-purple-300">2:3</code> puro atingia quase 500px só de imagem. Veja 3 soluções elegantes para manter exatamente <strong class="text-zinc-100">3 por linha</strong> com altura controlada e confortável:
+    </p>
+  </header>
+
+  <!-- SOLUÇÃO A: ENQUADRAMENTO 4:3 / 16:10 COM OBJETO-TOP -->
+  <section class="space-y-3">
+    <div class="flex items-center justify-between">
+      <div>
+        <span class="text-xs px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-semibold border border-purple-800/40">Solução A (Recomendada)</span>
+        <h2 class="text-base font-bold text-zinc-200 mt-1">Topo com Altura Controlada (Aspect 16:10 / ~210px de imagem)</h2>
+        <p class="text-xs text-zinc-400">Preenche toda a largura da coluna, mas limita a altura em 16:10. Foca no topo/centro da arte sem esticar o card verticalmente.</p>
+      </div>
+      <span class="text-xs text-zinc-500 font-mono hidden sm:inline">Altura total card: ~360px</span>
+    </div>
+
+    <div class="w-full border sm:border border-zinc-800 rounded-xl bg-[#09090b] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 overflow-hidden shadow-xl">
+      
+      <!-- Card Lupin -->
+      <article class="channel-card group relative hover:bg-zinc-900/40 transition-colors flex flex-col justify-between border-b border-zinc-800 md:border-r border-zinc-800">
+        <a href="https://www.netflix.com/title/80994082" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+        <div class="w-full aspect-[16/10] bg-zinc-950 overflow-hidden border-b border-zinc-800/80 flex-shrink-0 relative z-10 pointer-events-none">
+          <img src="https://static.tvmaze.com/uploads/images/original_untouched/289/724905.jpg" alt="Lupin" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <div class="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-[#09090b]">
+          <div class="space-y-1.5 relative z-10 pointer-events-none">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="font-bold text-base text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-1 flex-1">Lupin</h3>
+              <button class="w-7 h-7 rounded-md border border-zinc-800 bg-zinc-900/50 text-zinc-400 flex items-center justify-center flex-shrink-0 pointer-events-auto">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+            </div>
+            <p class="text-xs sm:text-[13px] text-zinc-400 line-clamp-2 leading-relaxed">
+              Inspirado pelas aventuras de Arsène Lupin, o ladrão Assane busca vingar o pai por uma injustiça.
+            </p>
+          </div>
+          <div class="pt-3 space-y-1.5 relative z-10 pointer-events-none">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge-base badge-orig-flag"><span>🇫🇷</span><span>Áudio: Francês</span></span>
+              <span class="badge-base badge-theme">Mistério</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge-base badge-default">Netflix</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card Dark -->
+      <article class="channel-card group relative hover:bg-zinc-900/40 transition-colors flex flex-col justify-between border-b border-zinc-800 lg:border-r border-zinc-800">
+        <a href="https://www.netflix.com/title/80100172" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+        <div class="w-full aspect-[16/10] bg-zinc-950 overflow-hidden border-b border-zinc-800/80 flex-shrink-0 relative z-10 pointer-events-none">
+          <img src="https://static.tvmaze.com/uploads/images/original_untouched/504/1262352.jpg" alt="Dark" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <div class="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-[#09090b]">
+          <div class="space-y-1.5 relative z-10 pointer-events-none">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="font-bold text-base text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-1 flex-1">Dark</h3>
+              <button class="w-7 h-7 rounded-md border border-zinc-800 bg-zinc-900/50 text-zinc-400 flex items-center justify-center flex-shrink-0 pointer-events-auto">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+            </div>
+            <p class="text-xs sm:text-[13px] text-zinc-400 line-clamp-2 leading-relaxed">
+              O desaparecimento de duas crianças em uma cidade alemã expõe segredos sombrios entre quatro famílias.
+            </p>
+          </div>
+          <div class="pt-3 space-y-1.5 relative z-10 pointer-events-none">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge-base badge-orig-flag"><span>🇩🇪</span><span>Áudio: Alemão</span></span>
+              <span class="badge-base badge-theme">Ficção Científica</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge-base badge-default">Netflix</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card Modern Family -->
+      <article class="channel-card group relative hover:bg-zinc-900/40 transition-colors flex flex-col justify-between border-b border-zinc-800">
+        <a href="https://www.netflix.com/title/70143860" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+        <div class="w-full aspect-[16/10] bg-zinc-950 overflow-hidden border-b border-zinc-800/80 flex-shrink-0 relative z-10 pointer-events-none">
+          <img src="https://static.tvmaze.com/uploads/images/original_untouched/359/898320.jpg" alt="Modern Family" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <div class="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-[#09090b]">
+          <div class="space-y-1.5 relative z-10 pointer-events-none">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="font-bold text-base text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-1 flex-1">Modern Family</h3>
+              <button class="w-7 h-7 rounded-md border border-zinc-800 bg-zinc-900/50 text-zinc-400 flex items-center justify-center flex-shrink-0 pointer-events-auto">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+            </div>
+            <p class="text-xs sm:text-[13px] text-zinc-400 line-clamp-2 leading-relaxed">
+              Três famílias contemporâneas em Los Angeles enfrentam as alegrias e desafios do cotidiano.
+            </p>
+          </div>
+          <div class="pt-3 space-y-1.5 relative z-10 pointer-events-none">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge-base badge-orig-flag"><span>🇺🇸</span><span>Áudio: Inglês</span></span>
+              <span class="badge-base badge-theme">Comédia</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge-base badge-default">Netflix</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SOLUÇÃO B: PÔSTER LATERAL VERTICAL (ZERO CORTE, CARD SUPER COMPACTO) -->
+  <section class="space-y-3">
+    <div class="flex items-center justify-between">
+      <div>
+        <span class="text-xs px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-semibold border border-blue-800/40">Solução B (Pôster Lateral)</span>
+        <h2 class="text-base font-bold text-zinc-200 mt-1">Pôster Vertical à Esquerda (Zero Corte + Altura Super Baixa)</h2>
+        <p class="text-xs text-zinc-400">O pôster fica na lateral esquerda sem cortar 1 pixel sequer. O card todo fica com apenas ~160px de altura.</p>
+      </div>
+      <span class="text-xs text-zinc-500 font-mono hidden sm:inline">Altura total card: ~165px</span>
+    </div>
+
+    <div class="w-full border sm:border border-zinc-800 rounded-xl bg-[#09090b] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 overflow-hidden shadow-xl">
+      
+      <!-- Card Lupin Split -->
+      <article class="channel-card group relative hover:bg-zinc-900/40 transition-colors flex border-b border-zinc-800 md:border-r border-zinc-800 p-4 gap-3.5">
+        <a href="https://www.netflix.com/title/80994082" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+        <!-- Poster vertical 2:3 fixo na esquerda -->
+        <div class="w-20 sm:w-24 aspect-[2/3] rounded-lg bg-zinc-950 overflow-hidden border border-zinc-800/80 flex-shrink-0 relative z-10 pointer-events-none shadow-md">
+          <img src="https://static.tvmaze.com/uploads/images/original_untouched/289/724905.jpg" alt="Lupin" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <div class="flex flex-col justify-between flex-1 min-w-0">
+          <div class="space-y-1 relative z-10 pointer-events-none">
+            <div class="flex items-start justify-between gap-1.5">
+              <h3 class="font-bold text-sm text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-1 flex-1">Lupin</h3>
+              <button class="w-6 h-6 rounded border border-zinc-800 bg-zinc-900/50 text-zinc-400 flex items-center justify-center flex-shrink-0 pointer-events-auto">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+            </div>
+            <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+              Inspirado por Arsène Lupin, Assane busca vingar o pai por uma injustiça.
+            </p>
+          </div>
+          <div class="pt-2 space-y-1 relative z-10 pointer-events-none">
+            <div class="flex flex-wrap items-center gap-1">
+              <span class="badge-base badge-orig-flag"><span>🇫🇷</span><span>Francês</span></span>
+              <span class="badge-base badge-theme">Mistério</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card Dark Split -->
+      <article class="channel-card group relative hover:bg-zinc-900/40 transition-colors flex border-b border-zinc-800 lg:border-r border-zinc-800 p-4 gap-3.5">
+        <a href="https://www.netflix.com/title/80100172" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+        <div class="w-20 sm:w-24 aspect-[2/3] rounded-lg bg-zinc-950 overflow-hidden border border-zinc-800/80 flex-shrink-0 relative z-10 pointer-events-none shadow-md">
+          <img src="https://static.tvmaze.com/uploads/images/original_untouched/504/1262352.jpg" alt="Dark" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <div class="flex flex-col justify-between flex-1 min-w-0">
+          <div class="space-y-1 relative z-10 pointer-events-none">
+            <div class="flex items-start justify-between gap-1.5">
+              <h3 class="font-bold text-sm text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-1 flex-1">Dark</h3>
+              <button class="w-6 h-6 rounded border border-zinc-800 bg-zinc-900/50 text-zinc-400 flex items-center justify-center flex-shrink-0 pointer-events-auto">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+            </div>
+            <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+              O desaparecimento de duas crianças em uma cidade alemã expõe segredos sombrios.
+            </p>
+          </div>
+          <div class="pt-2 space-y-1 relative z-10 pointer-events-none">
+            <div class="flex flex-wrap items-center gap-1">
+              <span class="badge-base badge-orig-flag"><span>🇩🇪</span><span>Alemão</span></span>
+              <span class="badge-base badge-theme">Sci-Fi</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card Modern Family Split -->
+      <article class="channel-card group relative hover:bg-zinc-900/40 transition-colors flex border-b border-zinc-800 p-4 gap-3.5">
+        <a href="https://www.netflix.com/title/70143860" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+        <div class="w-20 sm:w-24 aspect-[2/3] rounded-lg bg-zinc-950 overflow-hidden border border-zinc-800/80 flex-shrink-0 relative z-10 pointer-events-none shadow-md">
+          <img src="https://static.tvmaze.com/uploads/images/original_untouched/359/898320.jpg" alt="Modern Family" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <div class="flex flex-col justify-between flex-1 min-w-0">
+          <div class="space-y-1 relative z-10 pointer-events-none">
+            <div class="flex items-start justify-between gap-1.5">
+              <h3 class="font-bold text-sm text-zinc-100 group-hover:text-purple-300 transition-colors line-clamp-1 flex-1">Modern Family</h3>
+              <button class="w-6 h-6 rounded border border-zinc-800 bg-zinc-900/50 text-zinc-400 flex items-center justify-center flex-shrink-0 pointer-events-auto">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+            </div>
+            <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+              Três famílias em Los Angeles enfrentam as confusões e alegrias do cotidiano.
+            </p>
+          </div>
+          <div class="pt-2 space-y-1 relative z-10 pointer-events-none">
+            <div class="flex flex-wrap items-center gap-1">
+              <span class="badge-base badge-orig-flag"><span>🇺🇸</span><span>Inglês</span></span>
+              <span class="badge-base badge-theme">Comédia</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+</body>
+</html>

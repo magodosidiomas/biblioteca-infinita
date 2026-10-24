@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview de Design — 3 Arquétipos de Card (Inglês)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#09090b',
+            card: '#121215',
+            cardHover: '#16161a',
+            borderSubtle: '#27272a',
+            plumBg: '#1e1528',
+            plumBorder: 'rgba(147, 51, 234, 0.25)',
+            plumText: '#d8b4fe',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-20">
+
+  <!-- TOP HEADER -->
+  <header class="border-b border-[#27272a] bg-[#09090b]/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-xl">🧙🏻‍♂️</span>
+        <span class="font-bold text-base tracking-tight text-zinc-100">Biblioteca Infinita</span>
+        <span class="hidden sm:inline-block text-xs px-2 py-0.5 rounded-full bg-purple-950/60 border border-purple-800/40 text-purple-300 font-medium">Design Preview</span>
+      </div>
+
+      <!-- Controls Right -->
+      <div class="flex items-center gap-3">
+        <!-- Language indicator -->
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#121215] border border-[#27272a] text-xs font-semibold text-zinc-300">
+          <span>🇬🇧</span>
+          <span>English</span>
+        </div>
+
+        <!-- Format Selector Tabs -->
+        <div class="hidden md:flex items-center rounded-lg bg-[#121215] p-1 border border-[#27272a] text-xs font-medium">
+          <button class="px-3 py-1 rounded-md bg-[#27272a] text-zinc-100 font-semibold shadow-sm">YouTube</button>
+          <button class="px-3 py-1 rounded-md text-zinc-400 hover:text-zinc-200 opacity-50 cursor-not-allowed" title="Em breve">Podcasts</button>
+          <button class="px-3 py-1 rounded-md text-zinc-400 hover:text-zinc-200 opacity-50 cursor-not-allowed" title="Em breve">Séries</button>
+          <button class="px-3 py-1 rounded-md text-zinc-400 hover:text-zinc-200 opacity-50 cursor-not-allowed" title="Em breve">Sites</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ARCHETYPE SWITCHER BAR -->
+  <div class="bg-[#121215] border-b border-[#27272a] px-4 py-3 sticky top-16 z-40">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xs uppercase tracking-wider font-bold text-zinc-500">Escolha o Arquétipo:</span>
+        <div class="inline-flex rounded-lg bg-[#18181b] p-1 border border-[#27272a]">
+          <button onclick="setArchetype('archetype-1')" id="btn-arch-1" class="px-3 py-1 text-xs font-semibold rounded-md bg-purple-600 text-white transition-all shadow-sm">
+            1. Imerso Classic (Linear)
+          </button>
+          <button onclick="setArchetype('archetype-2')" id="btn-arch-2" class="px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all">
+            2. Rich Media (Banner)
+          </button>
+          <button onclick="setArchetype('archetype-3')" id="btn-arch-3" class="px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all">
+            3. Compact Index (Linhas)
+          </button>
+          <button onclick="setArchetype('archetype-compare')" id="btn-arch-compare" class="px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all">
+            ⚖️ Lado a Lado
+          </button>
+        </div>
+      </div>
+
+      <div class="text-xs text-zinc-400 flex items-center gap-2">
+        <span>Mostrando: <strong id="item-count" class="text-zinc-200">15 canais</strong></span>
+        <span>•</span>
+        <span class="text-emerald-400">● 100% canais reais verificados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE FILTER BAR -->
+  <main class="max-w-6xl mx-auto px-4 pt-6">
+    <section class="mb-6 space-y-3">
+      <!-- Search Input -->
+      <div class="relative w-full">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input 
+          id="search-input"
+          type="text" 
+          placeholder="Buscar por canal, tema ou palavra-chave..." 
+          class="w-full pl-10 pr-4 py-2.5 bg-[#121215] border border-[#27272a] rounded-xl text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-500/80 transition-all"
+          oninput="renderCards()"
+        >
+      </div>
+
+      <!-- Quick Toggles & Pills Row -->
+      <div class="flex flex-wrap items-center gap-2 pt-1">
+        <!-- Beginner Friendly Toggle -->
+        <button 
+          id="toggle-beginner" 
+          onclick="toggleFilter('beginner')" 
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200"
+        >
+          <span>🌱</span>
+          <span>Iniciantes</span>
+        </button>
+
+        <!-- Subtitles Toggle -->
+        <button 
+          id="toggle-subs" 
+          onclick="toggleFilter('subs')" 
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200"
+        >
+          <span>💬</span>
+          <span>Com legendas</span>
+        </button>
+
+        <!-- Favorites Toggle -->
+        <button 
+          id="toggle-favs" 
+          onclick="toggleFilter('favs')" 
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200"
+        >
+          <svg class="w-3.5 h-3.5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          <span>Favoritos</span>
+        </button>
+
+        <!-- Topic Dropdown -->
+        <select 
+          id="topic-select" 
+          onchange="renderCards()" 
+          class="px-3 py-1.5 bg-[#121215] border border-[#27272a] rounded-lg text-xs font-medium text-zinc-300 focus:outline-none focus:border-purple-500/80 cursor-pointer"
+        >
+          <option value="">Todos os temas</option>
+          <option value="Ciência">Ciência</option>
+          <option value="Produtividade">Produtividade</option>
+          <option value="Conversação">Conversação</option>
+          <option value="Pronúncia">Pronúncia</option>
+          <option value="Geopolítica">Geopolítica</option>
+          <option value="Tecnologia">Tecnologia</option>
+          <option value="Humor">Humor</option>
+          <option value="Cinema">Cinema</option>
+          <option value="Cotidiano">Cotidiano</option>
+          <option value="Logística">Logística</option>
+        </select>
+
+        <!-- Reset Button (hidden when clean) -->
+        <button 
+          id="reset-btn" 
+          onclick="resetAllFilters()" 
+          class="hidden text-xs text-purple-400 hover:text-purple-300 font-semibold px-2 py-1 transition-all"
+        >
+          Limpar filtros ✕
+        </button>
+      </div>
+    </section>
+
+    <!-- CONTAINER FOR THE SELECTED ARCHETYPE -->
+    <section id="cards-container"></section>
+
+    <!-- EMPTY STATE -->
+    <div id="empty-state" class="hidden py-24 text-center max-w-sm mx-auto">
+      <div class="text-3xl mb-3">🔍</div>
+      <h3 class="text-base font-bold text-zinc-200 mb-1">Nenhum canal encontrado</h3>
+      <p class="text-xs text-zinc-400 mb-4">Tente buscar por outro termo ou remova os filtros selecionados.</p>
+      <button onclick="resetAllFilters()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-lg transition-all">
+        Limpar filtros
+      </button>
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT DATA & INTERACTION -->
+  <script>
+    const CHANNELS = [
+      {
+        id: "kurzgesagt",
+        title: "Kurzgesagt – In a Nutshell",
+        url: "https://www.youtube.com/@kurzgesagt",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_kH1yQzC6YhB6Wb8rZ-k3N1xW1_B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "KZ",
+        description: "Animações vislumbrantes sobre ciência, espaço, biologia e crises existenciais, com narração nítida e cadenciada.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British / Int.",
+        topics: ["Ciência", "Filosofia", "Animação"]
+      },
+      {
+        id: "keith-speaking",
+        title: "English Speaking Success",
+        url: "https://www.youtube.com/@KeithSpeakingAcademy",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_l-8WvVzW9gY7zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "ES",
+        description: "Lições estruturadas para desenvolver fluência natural, vocabulário ativo e confiança para falar inglês sem travar.",
+        beginnerFriendly: true,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Vocabulário", "Pronúncia", "Conversação"]
+      },
+      {
+        id: "bbc-learning",
+        title: "BBC Learning English",
+        url: "https://www.youtube.com/@bbclearningenglish",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_m9_XwY1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "BBC",
+        description: "Conteúdos curtos e didáticos da BBC com foco em expressões cotidianas, notícias explicadas e pronúncia britânica padrão.",
+        beginnerFriendly: true,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Cotidiano", "Pronúncia", "Conversação"]
+      },
+      {
+        id: "johnny-harris",
+        title: "Johnny Harris",
+        url: "https://www.youtube.com/@johnnyharris",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k2P1yQzC6YhB6Wb8rZ-k3N1xW1_B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "JH",
+        description: "Documentários dinâmicos com mapas visuais incríveis sobre fronteiras, história global e grandes conflitos geopolíticos.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Geopolítica", "História"]
+      },
+      {
+        id: "ali-abdaal",
+        title: "Ali Abdaal",
+        url: "https://www.youtube.com/@aliabdaal",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k5Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "AA",
+        description: "Ex-médico de Cambridge compartilhando estratégias práticas de produtividade, livros e hábitos em tom acolhedor e articulado.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Produtividade", "Cotidiano"]
+      },
+      {
+        id: "tom-scott",
+        title: "Tom Scott",
+        url: "https://www.youtube.com/@TomScottGo",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k7Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "TS",
+        description: "Vídeos objetivos de 5 minutos sobre fatos extraordinários de computação, engenharia, linguística e lugares inusitados.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Tecnologia", "Ciência"]
+      },
+      {
+        id: "vox",
+        title: "Vox",
+        url: "https://www.youtube.com/@Vox",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k8Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "VX",
+        description: "Vídeo-ensaios explicativos de alto nível sobre como o mundo funciona, fenômenos sociais, design e tendências globais.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Ciência", "Geopolítica", "Cotidiano"]
+      },
+      {
+        id: "bob-canadian",
+        title: "Bob the Canadian",
+        url: "https://www.youtube.com/@BobtheCanadian",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_k9Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "BC",
+        description: "Professor canadense ensina inglês do dia a dia passeando por fazendas, lojas e ruas com fala calma e acolhedora.",
+        beginnerFriendly: true,
+        subtitlesAvailable: true,
+        accent: "Canadian",
+        topics: ["Cotidiano", "Conversação", "Vocabulário"]
+      },
+      {
+        id: "veritasium",
+        title: "Veritasium",
+        url: "https://www.youtube.com/@veritasium",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j1Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "VT",
+        description: "Derek Muller desvenda paradoxos da física, experimentos científicos impressionantes e reflexões provocativas.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Ciência"]
+      },
+      {
+        id: "the-daily-show",
+        title: "The Daily Show",
+        url: "https://www.youtube.com/@TheDailyShow",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j2Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "DS",
+        description: "Humor ácido e sátira inteligente sobre as principais notícias e absurdos da política e cultura contemporânea.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Humor", "Geopolítica"]
+      },
+      {
+        id: "ted-ed",
+        title: "TED-Ed",
+        url: "https://www.youtube.com/@TEDEd",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j3Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "TE",
+        description: "Curtas animados repletos de enigmas lógicos, mitologia, conceitos filosóficos e mistérios científicos narrados com clareza.",
+        beginnerFriendly: true,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Ciência", "Animação"]
+      },
+      {
+        id: "nerdwriter1",
+        title: "Nerdwriter1",
+        url: "https://www.youtube.com/@Nerdwriter1",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j4Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "NW",
+        description: "Evan Puschak analisa em detalhes obras-primas da pintura, filmes clássicos, discursos e narrativas modernas.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Cinema", "Filosofia"]
+      },
+      {
+        id: "mark-rober",
+        title: "Mark Rober",
+        url: "https://www.youtube.com/@MarkRober",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j5Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "MR",
+        description: "Ex-engenheiro da NASA constrói engenhocas insanas, armadilhas anti-ladrão e experimentos virais em grande escala.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Ciência", "Humor"]
+      },
+      {
+        id: "english-lucy",
+        title: "English with Lucy",
+        url: "https://www.youtube.com/@EnglishwithLucy",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j6Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "EL",
+        description: "Conteúdo focado em pronúncia britânica sofisticada, correções de erros comuns e expressões para conversação fluida.",
+        beginnerFriendly: true,
+        subtitlesAvailable: true,
+        accent: "British",
+        topics: ["Pronúncia", "Conversação", "Vocabulário"]
+      },
+      {
+        id: "wendover",
+        title: "Wendover Productions",
+        url: "https://www.youtube.com/@Wendoverproductions",
+        avatar: "https://yt3.googleusercontent.com/ytc/AIdro_j7Y1zB6xV_K3n1w1B1z0xY2a=s176-c-k-c0x00ffffff-no-rj",
+        initials: "WP",
+        description: "Mergulhos aprofundados na fascinante logística global, rotas de companhias aéreas, trens e infraestrutura mundial.",
+        beginnerFriendly: false,
+        subtitlesAvailable: true,
+        accent: "American",
+        topics: ["Logística", "Geopolítica"]
+      }
+    ];
+
+    let currentArchetype = 'archetype-1';
+    let filterBeginner = false;
+    let filterSubs = false;
+    let filterFavs = false;
+    let favorites = new Set();
+
+    function setArchetype(arch) {
+      currentArchetype = arch;
+      ['btn-arch-1', 'btn-arch-2', 'btn-arch-3', 'btn-arch-compare'].forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all";
+      });
+      const activeBtnMap = {
+        'archetype-1': 'btn-arch-1',
+        'archetype-2': 'btn-arch-2',
+        'archetype-3': 'btn-arch-3',
+        'archetype-compare': 'btn-arch-compare'
+      };
+      document.getElementById(activeBtnMap[arch]).className = "px-3 py-1 text-xs font-semibold rounded-md bg-purple-600 text-white shadow-sm transition-all";
+      renderCards();
+    }
+
+    function toggleFilter(type) {
+      if (type === 'beginner') {
+        filterBeginner = !filterBeginner;
+        const btn = document.getElementById('toggle-beginner');
+        btn.className = filterBeginner 
+          ? "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all bg-emerald-950/60 border-emerald-700/60 text-emerald-300"
+          : "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200";
+      } else if (type === 'subs') {
+        filterSubs = !filterSubs;
+        const btn = document.getElementById('toggle-subs');
+        btn.className = filterSubs 
+          ? "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all bg-purple-950/60 border-purple-700/60 text-purple-200"
+          : "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200";
+      } else if (type === 'favs') {
+        filterFavs = !filterFavs;
+        const btn = document.getElementById('toggle-favs');
+        btn.className = filterFavs 
+          ? "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all bg-rose-950/50 border-rose-800/60 text-rose-300"
+          : "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200";
+      }
+      renderCards();
+    }
+
+    function toggleFavorite(id, e) {
+      e.stopPropagation();
+      if (favorites.has(id)) {
+        favorites.delete(id);
+      } else {
+        favorites.add(id);
+      }
+      renderCards();
+    }
+
+    function resetAllFilters() {
+      filterBeginner = false;
+      filterSubs = false;
+      filterFavs = false;
+      document.getElementById('search-input').value = '';
+      document.getElementById('topic-select').value = '';
+      
+      document.getElementById('toggle-beginner').className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200";
+      document.getElementById('toggle-subs').className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200";
+      document.getElementById('toggle-favs').className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200";
+      
+      renderCards();
+    }
+
+    function filterData() {
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      const topic = document.getElementById('topic-select').value;
+
+      const isFiltering = q || topic || filterBeginner || filterSubs || filterFavs;
+      document.getElementById('reset-btn').classList.toggle('hidden', !isFiltering);
+
+      return CHANNELS.filter(c => {
+        if (q && !c.title.toLowerCase().includes(q) && !c.description.toLowerCase().includes(q) && !c.topics.some(t => t.toLowerCase().includes(q))) {
+          return false;
+        }
+        if (topic && !c.topics.includes(topic)) return false;
+        if (filterBeginner && !c.beginnerFriendly) return false;
+        if (filterSubs && !c.subtitlesAvailable) return false;
+        if (filterFavs && !favorites.has(c.id)) return false;
+        return true;
+      });
+    }
+
+    // ARCHETYPE 1: IMERSO CLASSIC / LINEAR CONNECTED GRID
+    function renderArchetype1(items) {
+      return `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border border-[#27272a] rounded-xl overflow-hidden bg-[#121215]">
+          ${items.map(c => {
+            const isFav = favorites.has(c.id);
+            return `
+              <div class="p-5 border-b md:border-r border-[#27272a] hover:bg-[#16161a] transition-colors relative flex flex-col justify-between group">
+                <!-- Top row: Avatar + Title + Outbound + Heart -->
+                <div>
+                  <div class="flex items-start justify-between gap-3 mb-2.5">
+                    <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group/link min-w-0">
+                      <div class="w-11 h-11 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-purple-300">
+                        <img src="${c.avatar}" alt="${c.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerText='${c.initials}'">
+                      </div>
+                      <div class="min-w-0">
+                        <h4 class="text-sm font-bold text-zinc-100 group-hover/link:text-purple-300 transition-colors truncate flex items-center gap-1">
+                          ${c.title}
+                          <span class="text-xs text-zinc-500 group-hover/link:text-purple-400">↗</span>
+                        </h4>
+                        ${c.accent ? `<span class="text-[11px] text-zinc-500 font-medium">${c.accent}</span>` : ''}
+                      </div>
+                    </a>
+
+                    <button onclick="toggleFavorite('${c.id}', event)" class="p-1.5 rounded-lg hover:bg-zinc-800/60 transition-colors flex-shrink-0" title="Favoritar">
+                      <svg class="w-4 h-4 transition-transform active:scale-125 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-zinc-600 hover:text-zinc-400'}" viewBox="0 0 24 24" stroke="currentColor" fill="${isFav ? 'currentColor' : 'none'}">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Bio -->
+                  <p class="text-xs leading-relaxed text-zinc-400 line-clamp-2 mb-4 h-8">${c.description}</p>
+                </div>
+
+                <!-- Badges bottom -->
+                <div class="space-y-2 pt-2 border-t border-zinc-800/40">
+                  <!-- Meta tags: Beginner + Subtitles -->
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    ${c.beginnerFriendly 
+                      ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">🌱 Para Iniciantes</span>` 
+                      : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800">⚡ Nativo Autêntico</span>`
+                    }
+                    ${c.subtitlesAvailable 
+                      ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-900 text-zinc-400 border border-zinc-800">💬 Legendas disp.</span>` 
+                      : ''
+                    }
+                  </div>
+
+                  <!-- Topic Pills -->
+                  <div class="flex flex-wrap items-center gap-1">
+                    ${c.topics.map(t => `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[#1e1528] text-purple-300/90 border border-purple-900/30">${t}</span>`).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // ARCHETYPE 2: RICH MEDIA / BANNER CARD
+    function renderArchetype2(items) {
+      return `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          ${items.map(c => {
+            const isFav = favorites.has(c.id);
+            return `
+              <div class="rounded-xl border border-[#27272a] bg-[#121215] overflow-hidden hover:border-purple-800/50 transition-all flex flex-col justify-between group shadow-lg">
+                <!-- Banner gradient with Floating Avatar -->
+                <div class="h-16 bg-gradient-to-r from-purple-950/40 via-zinc-900 to-indigo-950/40 relative p-3 flex justify-between items-start">
+                  <div class="absolute -bottom-5 left-4">
+                    <div class="w-12 h-12 rounded-full bg-[#121215] p-0.5 border-2 border-[#27272a] overflow-hidden flex items-center justify-center font-bold text-xs text-purple-300 shadow-md">
+                      <img src="${c.avatar}" alt="${c.title}" class="w-full h-full rounded-full object-cover" onerror="this.onerror=null; this.parentElement.innerText='${c.initials}'">
+                    </div>
+                  </div>
+
+                  <div class="ml-auto">
+                    <button onclick="toggleFavorite('${c.id}', event)" class="p-1.5 rounded-full bg-zinc-900/80 backdrop-blur border border-zinc-700/50 transition-colors" title="Favoritar">
+                      <svg class="w-3.5 h-3.5 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-zinc-400'}" viewBox="0 0 24 24" stroke="currentColor" fill="${isFav ? 'currentColor' : 'none'}">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="pt-7 px-4 pb-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                      <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="font-bold text-sm text-zinc-100 group-hover:text-purple-300 transition-colors truncate">
+                        ${c.title}
+                      </a>
+                      ${c.accent ? `<span class="text-[10px] text-zinc-500 font-semibold uppercase">${c.accent}</span>` : ''}
+                    </div>
+
+                    <p class="text-xs text-zinc-400 line-clamp-2 leading-relaxed mb-3 h-8">${c.description}</p>
+                  </div>
+
+                  <div class="space-y-2.5 pt-2 border-t border-zinc-800/60">
+                    <div class="flex items-center gap-1.5">
+                      ${c.beginnerFriendly 
+                        ? `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">🌱 Para Iniciantes</span>` 
+                        : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800">⚡ Nativo Autêntico</span>`
+                      }
+                      ${c.subtitlesAvailable ? `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-900 text-zinc-400 border border-zinc-800">💬 Legendas</span>` : ''}
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-1">
+                        ${c.topics.slice(0, 2).map(t => `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[#1e1528] text-purple-300/90 border border-purple-900/30">${t}</span>`).join('')}
+                      </div>
+
+                      <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="text-xs text-purple-400 hover:text-purple-300 font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                        Assistir ↗
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // ARCHETYPE 3: COMPACT INDEX / HIGH-DENSITY ROWS
+    function renderArchetype3(items) {
+      return `
+        <div class="border border-[#27272a] rounded-xl overflow-hidden bg-[#121215] divide-y divide-[#27272a]">
+          ${items.map(c => {
+            const isFav = favorites.has(c.id);
+            return `
+              <div class="px-4 py-3 hover:bg-[#16161a] transition-colors flex items-center justify-between gap-4 group">
+                <!-- Left: Avatar + Title + Bio snippet -->
+                <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                  <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-purple-300">
+                    <img src="${c.avatar}" alt="${c.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerText='${c.initials}'">
+                  </div>
+
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2">
+                      <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="font-bold text-sm text-zinc-100 hover:text-purple-300 transition-colors truncate">
+                        ${c.title}
+                      </a>
+                      ${c.beginnerFriendly ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-950/70 text-emerald-300 border border-emerald-800/40">🌱 INICIANTE</span>` : ''}
+                      ${c.accent ? `<span class="hidden sm:inline text-[10px] text-zinc-500">${c.accent}</span>` : ''}
+                    </div>
+                    <p class="text-xs text-zinc-400 truncate max-w-xl">${c.description}</p>
+                  </div>
+                </div>
+
+                <!-- Right: Tags + Actions -->
+                <div class="flex items-center gap-3 flex-shrink-0">
+                  <div class="hidden md:flex items-center gap-1">
+                    ${c.topics.slice(0, 2).map(t => `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[#1e1528] text-purple-300 border border-purple-900/30">${t}</span>`).join('')}
+                  </div>
+
+                  <button onclick="toggleFavorite('${c.id}', event)" class="p-1.5 rounded-lg hover:bg-zinc-800/80 transition-colors" title="Favoritar">
+                    <svg class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-zinc-600 hover:text-zinc-400'}" viewBox="0 0 24 24" stroke="currentColor" fill="${isFav ? 'currentColor' : 'none'}">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
+
+                  <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 bg-zinc-800 hover:bg-purple-600 text-zinc-200 hover:text-white rounded-lg text-xs font-semibold transition-all">
+                    Abrir ↗
+                  </a>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // ARCHETYPE COMPARE (SIDE BY SIDE 1 ITEM)
+    function renderCompare(items) {
+      const sample = items[0] || CHANNELS[0];
+      return `
+        <div class="space-y-8">
+          <div class="p-4 rounded-xl bg-purple-950/20 border border-purple-800/40 text-xs text-purple-200">
+            <strong>Modo Comparação Direta:</strong> Veja o mesmo canal (<em>${sample.title}</em>) renderizado nos 3 arquétipos de design lado a lado para avaliar densidade, legibilidade e apelo estético.
+          </div>
+
+          <div class="space-y-6">
+            <div>
+              <span class="text-xs uppercase font-bold text-zinc-500 mb-2 block">Opção 1: Imerso Classic (Linear Connected)</span>
+              ${renderArchetype1([sample, items[1] || CHANNELS[1]])}
+            </div>
+
+            <div>
+              <span class="text-xs uppercase font-bold text-zinc-500 mb-2 block">Opção 2: Rich Media (Banner + Floating Avatar)</span>
+              ${renderArchetype2([sample, items[1] || CHANNELS[1]])}
+            </div>
+
+            <div>
+              <span class="text-xs uppercase font-bold text-zinc-500 mb-2 block">Opção 3: Compact Index (High-Density Row)</span>
+              ${renderArchetype3([sample, items[1] || CHANNELS[1]])}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCards() {
+      const filtered = filterData();
+      const container = document.getElementById('cards-container');
+      const emptyState = document.getElementById('empty-state');
+      document.getElementById('item-count').innerText = `${filtered.length} canais`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      if (currentArchetype === 'archetype-1') {
+        container.innerHTML = renderArchetype1(filtered);
+      } else if (currentArchetype === 'archetype-2') {
+        container.innerHTML = renderArchetype2(filtered);
+      } else if (currentArchetype === 'archetype-3') {
+        container.innerHTML = renderArchetype3(filtered);
+      } else if (currentArchetype === 'archetype-compare') {
+        container.innerHTML = renderCompare(filtered);
+      }
+    }
+
+    // Initial render
+    renderCards();
+  </script>
+</body>
+</html>

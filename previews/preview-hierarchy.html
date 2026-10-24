@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Versão Final Refinada — Immersion Library</title>
+  <style>
+    /* CSS 100% OFFLINE NATIVO */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 40px 24px 120px;
+      line-height: 1.5;
+    }
+    .wrapper {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .page-header {
+      margin-bottom: 36px;
+      border-bottom: 1px solid #27272a;
+      padding-bottom: 20px;
+    }
+    .lab-tag {
+      display: inline-block;
+      background: #18181b;
+      color: #a1a1aa;
+      border: 1px solid #3f3f46;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fafafa;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #a1a1aa;
+      font-size: 14px;
+    }
+
+    /* GRID ISOLADO COM RESPIRO */
+    .grid-isolated {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 1024px) {
+      .grid-isolated { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .grid-isolated { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background-color: #111114;
+      border: 1px solid #27272a;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 260px;
+      transition: border-color 0.15s ease;
+    }
+    .card:hover {
+      border-color: #3f3f46;
+    }
+
+    /* HEADER */
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .channel-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    /* AVATAR CIRCULAR */
+    .avatar-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%; /* Círculo perfeito */
+      background-color: #18181b;
+      border: 1px solid #3f3f46;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #e4e4e7;
+      flex-shrink: 0;
+    }
+
+    /* LINK COM SETA REFINADA SVG */
+    .channel-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      min-width: 0;
+      max-width: 100%;
+    }
+    .channel-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fafafa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.15s ease;
+    }
+    .channel-link:hover .channel-name {
+      color: #ffffff;
+    }
+    .external-icon {
+      color: #71717a;
+      flex-shrink: 0;
+      transition: color 0.15s ease, transform 0.15s ease;
+    }
+    .channel-link:hover .external-icon {
+      color: #e4e4e7;
+      transform: translate(1px, -1px);
+    }
+
+    /* BOTÃO DE CORAÇÃO INTERATIVO */
+    .heart-btn {
+      background: none;
+      border: none;
+      color: #52525b;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: color 0.15s ease, transform 0.1s ease;
+    }
+    .heart-btn:hover {
+      color: #f43f5e;
+      transform: scale(1.1);
+    }
+    .heart-btn.active {
+      color: #f43f5e;
+    }
+    .heart-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* BIO */
+    .card-bio {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #d4d4d8;
+      margin-bottom: 22px;
+    }
+
+    /* METADADOS E TAGS */
+    .meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .tag {
+      font-size: 12px;
+      font-weight: 500;
+      background-color: #18181b;
+      color: #d4d4d8;
+      border: 1px solid rgba(82, 82, 91, 0.4);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .badge-iniciante {
+      font-size: 12px;
+      font-weight: 600;
+      background-color: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .badge-legendado {
+      font-size: 12px;
+      font-weight: 600;
+      background-color: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="page-header">
+      <span class="lab-tag">Versão de Produção Refinada</span>
+      <h1>Cards com Avatar Circular, Coração Interativo e Seta Refinada</h1>
+      <p class="subtitle">Clique nos corações para testar o estado preenchido instantaneamente. A seta agora é o ícone oficial refinado (micro-interação ao passar o mouse).</p>
+    </div>
+
+    <div class="grid-isolated">
+
+      <!-- CARD 1: VSAUCE (Favoritado para demonstração) -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="channel-meta">
+              <div class="avatar-circle">VS</div>
+              <div style="min-width:0; flex:1;">
+                <a href="#" class="channel-link">
+                  <span class="channel-name">Vsauce</span>
+                  <svg class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <!-- Coração Ativo -->
+            <button class="heart-btn active" onclick="toggleHeart(this)" title="Desfavoritar">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="card-bio">
+            Investigações científicas e filosóficas sobre perguntas aparentemente absurdas com vocabulário analítico rico.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="meta-line">
+            <span class="badge-legendado">Legendado</span>
+          </div>
+          <div class="meta-line">
+            <span class="tag">Science</span>
+            <span class="tag">Philosophy</span>
+            <span class="tag">Curiosities</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: KURZGESAGT (Iniciante + Legendado) -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="channel-meta">
+              <div class="avatar-circle">KG</div>
+              <div style="min-width:0; flex:1;">
+                <a href="#" class="channel-link">
+                  <span class="channel-name">Kurzgesagt – In a Nutshell</span>
+                  <svg class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <!-- Coração Inativo -->
+            <button class="heart-btn" onclick="toggleHeart(this)" title="Favoritar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="card-bio">
+            Animações sobre temas científicos e existenciais com narração britânica pausada e límpida.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="meta-line">
+            <span class="badge-iniciante">Iniciante</span>
+            <span class="badge-legendado">Legendado</span>
+          </div>
+          <div class="meta-line">
+            <span class="tag">Science</span>
+            <span class="tag">Space</span>
+            <span class="tag">Animation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: MKBHD -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="channel-meta">
+              <div class="avatar-circle">MK</div>
+              <div style="min-width:0; flex:1;">
+                <a href="#" class="channel-link">
+                  <span class="channel-name">MKBHD</span>
+                  <svg class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <button class="heart-btn" onclick="toggleHeart(this)" title="Favoritar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="card-bio">
+            Análises de produtos com ritmo conversacional natural e dicção americana contemporânea.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="meta-line">
+            <span class="tag">Tech</span>
+            <span class="tag">Gadgets</span>
+            <span class="tag">Reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: ALI ABDAAL -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="channel-meta">
+              <div class="avatar-circle">AA</div>
+              <div style="min-width:0; flex:1;">
+                <a href="#" class="channel-link">
+                  <span class="channel-name">Ali Abdaal</span>
+                  <svg class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <button class="heart-btn" onclick="toggleHeart(this)" title="Favoritar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="card-bio">
+            Vídeos sobre produtividade, negócios e hábitos com dicção britânica límpida e ritmo calmo.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="meta-line">
+            <span class="badge-legendado">Legendado</span>
+          </div>
+          <div class="meta-line">
+            <span class="tag">Productivity</span>
+            <span class="tag">Books</span>
+            <span class="tag">Business</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5: VERITASIUM -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="channel-meta">
+              <div class="avatar-circle">VP</div>
+              <div style="min-width:0; flex:1;">
+                <a href="#" class="channel-link">
+                  <span class="channel-name">Veritasium</span>
+                  <svg class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <button class="heart-btn" onclick="toggleHeart(this)" title="Favoritar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="card-bio">
+            Experimentos científicos surpreendentes e documentários investigativos com entrevistas e dicção límpida.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="meta-line">
+            <span class="badge-legendado">Legendado</span>
+          </div>
+          <div class="meta-line">
+            <span class="tag">Science</span>
+            <span class="tag">Physics</span>
+            <span class="tag">Experiments</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 6: CGP GREY -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="channel-meta">
+              <div class="avatar-circle">CG</div>
+              <div style="min-width:0; flex:1;">
+                <a href="#" class="channel-link">
+                  <span class="channel-name">CGP Grey</span>
+                  <svg class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <button class="heart-btn" onclick="toggleHeart(this)" title="Favoritar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="card-bio">
+            Ensaios curtos animados explicando sistemas políticos, geografia e logística com voz precisa e ritmada.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="meta-line">
+            <span class="badge-legendado">Legendado</span>
+          </div>
+          <div class="meta-line">
+            <span class="tag">Essays</span>
+            <span class="tag">Politics</span>
+            <span class="tag">Systems</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleHeart(btn) {
+      btn.classList.toggle('active');
+      const svg = btn.querySelector('svg');
+      if (btn.classList.contains('active')) {
+        svg.setAttribute('fill', 'currentColor');
+      } else {
+        svg.setAttribute('fill', 'none');
+      }
+    }
+  </script>
+</body>
+</html>

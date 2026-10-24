@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "ingest": "node ../scripts/ingest.js",
+    "validate:catalog": "node ../scripts/validate-catalog.js",
+    "build": "node ../scripts/validate-catalog.js && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview Final — Séries & Filmes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+      padding: 0;
+    }
+    ::selection {
+      background-color: rgba(168, 85, 247, 0.3);
+      color: #ffffff;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .netflix-gradient-clean {
+      background: linear-gradient(
+        to top,
+        #09090b 0%,
+        rgba(9, 9, 11, 0.95) 22%,
+        rgba(9, 9, 11, 0.65) 42%,
+        rgba(9, 9, 11, 0.12) 68%,
+        rgba(9, 9, 11, 0.05) 100%
+      );
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-28 text-zinc-100 bg-[#09090b]">
+
+  <!-- HEADER OFICIAL DA BIBLIOTECA INFINITA -->
+  <header class="border-b border-white/[0.08] bg-[#09090b] sticky top-0 z-50">
+    <div class="max-w-[1180px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <span class="text-xl">🧙🏻‍♂️</span>
+        <span class="font-bold text-base tracking-tight text-zinc-100">Biblioteca Infinita</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="preview-admin-series.html" class="h-9 px-3.5 rounded-lg bg-[#111114] border border-white/[0.08] hover:border-zinc-700 text-xs font-semibold text-zinc-200 transition-colors flex items-center gap-2 no-underline">
+          <span>Ver Preview do Admin ↗</span>
+        </a>
+        <button class="h-9 px-3.5 rounded-lg bg-[#111114] border border-white/[0.08] hover:border-zinc-700 text-xs font-semibold text-zinc-200 transition-colors flex items-center gap-2 cursor-pointer">
+          <span>🇬🇧</span>
+          <span>English</span>
+          <svg class="w-3.5 h-3.5 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- NAVEGAÇÃO HORIZONTAL -->
+    <nav class="border-t border-white/[0.06] bg-[#09090b]">
+      <div class="max-w-[1180px] mx-auto px-6 flex items-center gap-8 text-sm font-medium overflow-x-auto no-scrollbar whitespace-nowrap">
+        <button class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+          YouTube
+        </button>
+        <button class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+          Professores
+        </button>
+        <button class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+          Podcasts
+        </button>
+        <button onclick="setMediaTab('series')" id="tab-series" class="py-3.5 border-b-2 border-purple-500 text-zinc-100 font-semibold transition-colors cursor-pointer">
+          Séries
+        </button>
+        <button onclick="setMediaTab('movies')" id="tab-movies" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+          Filmes
+        </button>
+        <button class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+          Sites
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- FILTER BAR -->
+  <section class="bg-[#09090b] pt-5 pb-2 border-b border-white/[0.06]">
+    <div class="max-w-[1180px] mx-auto px-6 space-y-3 pb-3">
+      <div class="relative w-full">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input
+          id="search-input"
+          type="text"
+          oninput="renderAll()"
+          placeholder="Buscar por título, gênero ou plataforma..."
+          class="w-full pl-10 pr-4 h-10 bg-transparent border border-white/[0.08] focus:border-purple-500 rounded-lg text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none transition-all"
+        />
+      </div>
+
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="toggleQuickFilter('beginner')" id="qf-beginner" class="h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center cursor-pointer">
+            Para iniciantes
+          </button>
+          <button onclick="toggleQuickFilter('original')" id="qf-original" class="h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center cursor-pointer">
+            Apenas Áudio Original
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-[1180px] mx-auto px-6 pt-6">
+    <div class="mb-5 flex items-center justify-between">
+      <h2 id="title-section" class="text-base font-bold text-zinc-100">Séries</h2>
+      <span id="count-items" class="text-xs text-zinc-400">6 títulos</span>
+    </div>
+
+    <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <script>
+    const ITEMS = [
+      // SÉRIES
+      {
+        id: 'friends',
+        mediaType: 'series',
+        title: 'Friends',
+        url: 'https://www.netflix.com/title/70153404',
+        platform: 'Netflix',
+        beginnerFriendly: true,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Sitcom', 'Cotidiano'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/f496cm9enuEsZkSPzCwnTESEK5s.jpg',
+        fallbackBg: 'from-amber-950 via-zinc-900 to-zinc-950'
+      },
+      {
+        id: 'the-good-place',
+        mediaType: 'series',
+        title: 'The Good Place',
+        url: 'https://www.netflix.com/title/80113701',
+        platform: 'Netflix',
+        beginnerFriendly: true,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Sitcom', 'Fantasia'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/eFV0O3u0CbVdhEYIozea4iZRn3O.jpg',
+        fallbackBg: 'from-sky-950 via-emerald-950 to-zinc-950'
+      },
+      {
+        id: 'avatar',
+        mediaType: 'series',
+        title: 'Avatar: The Last Airbender',
+        url: 'https://www.netflix.com/title/70142405',
+        platform: 'Netflix',
+        beginnerFriendly: true,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Animação', 'Aventura'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/cHFZA8Tlv03nKTGXhLOYOLtqoSm.jpg',
+        fallbackBg: 'from-orange-950 via-amber-950 to-zinc-950'
+      },
+      {
+        id: 'stranger-things',
+        mediaType: 'series',
+        title: 'Stranger Things',
+        url: 'https://www.netflix.com/title/80057281',
+        platform: 'Netflix',
+        beginnerFriendly: false,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Ficção Científica', 'Mistério'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/49WJfeN0moxb9IPfGn8AIqMGskD.jpg',
+        fallbackBg: 'from-red-950 via-zinc-900 to-zinc-950'
+      },
+      {
+        id: 'dark-dubbed',
+        mediaType: 'series',
+        title: 'Dark',
+        url: 'https://www.netflix.com/title/80100172',
+        platform: 'Netflix',
+        beginnerFriendly: false,
+        audioStatus: 'dubbed',
+        originalLang: 'Alemão',
+        subtitlesCC: true,
+        genres: ['Ficção Científica', 'Suspense'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
+        fallbackBg: 'from-stone-900 via-zinc-900 to-zinc-950'
+      },
+      {
+        id: 'extra-english',
+        mediaType: 'series',
+        title: 'extr@ English',
+        url: 'https://www.youtube.com/playlist?list=PLdYSWqTrWP2jyqWIdjsATbrb11uN_BMrF',
+        platform: 'YouTube',
+        beginnerFriendly: true,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Sitcom', 'Humor'],
+        posterVertical: 'https://i.ytimg.com/vi/a339HHJ247U/hqdefault.jpg',
+        fallbackBg: 'from-indigo-950 via-purple-950 to-zinc-950'
+      },
+
+      // FILMES
+      {
+        id: 'klaus',
+        mediaType: 'movies',
+        title: 'Klaus',
+        url: 'https://www.netflix.com/title/80183187',
+        platform: 'Netflix',
+        beginnerFriendly: true,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Animação', 'Humor'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/q125RHUDgR4gjwh1QkfYuJLYkL.jpg',
+        fallbackBg: 'from-cyan-950 via-slate-900 to-zinc-950'
+      },
+      {
+        id: 'spider-verse',
+        mediaType: 'movies',
+        title: 'Spider-Man: Into the Spider-Verse',
+        url: 'https://www.netflix.com/title/81002747',
+        platform: 'Netflix',
+        beginnerFriendly: false,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Animação', 'Ação'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg',
+        fallbackBg: 'from-rose-950 via-indigo-950 to-zinc-950'
+      },
+      {
+        id: 'knives-out',
+        mediaType: 'movies',
+        title: 'Glass Onion: A Knives Out Mystery',
+        url: 'https://www.netflix.com/title/81458416',
+        platform: 'Netflix',
+        beginnerFriendly: false,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Mistério', 'Suspense'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg',
+        fallbackBg: 'from-amber-950 via-stone-900 to-zinc-950'
+      },
+      {
+        id: 'shrek',
+        mediaType: 'movies',
+        title: 'Shrek',
+        url: 'https://www.netflix.com/title/60020686',
+        platform: 'Netflix',
+        beginnerFriendly: true,
+        audioStatus: 'original',
+        originalLang: 'Inglês',
+        subtitlesCC: true,
+        genres: ['Animação', 'Fantasia'],
+        posterVertical: 'https://image.tmdb.org/t/p/w780/iB64vpL3dIObOtMZgX3RqdVdQDc.jpg',
+        fallbackBg: 'from-lime-950 via-emerald-950 to-zinc-950'
+      }
+    ];
+
+    let activeMediaTab = 'series';
+    let favIds = ['friends', 'klaus'];
+    let quickFilters = { beginner: false, original: false };
+
+    function setMediaTab(tab) {
+      activeMediaTab = tab;
+      document.getElementById('tab-series').className = tab === 'series'
+        ? 'py-3.5 border-b-2 border-purple-500 text-zinc-100 font-semibold transition-colors cursor-pointer'
+        : 'py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer';
+      document.getElementById('tab-movies').className = tab === 'movies'
+        ? 'py-3.5 border-b-2 border-purple-500 text-zinc-100 font-semibold transition-colors cursor-pointer'
+        : 'py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer';
+      renderAll();
+    }
+
+    function toggleQuickFilter(key) {
+      quickFilters[key] = !quickFilters[key];
+      const el = document.getElementById('qf-' + key);
+      el.className = quickFilters[key]
+        ? 'h-8 px-3 rounded-lg border border-purple-700/60 bg-purple-950/40 text-purple-200 text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer'
+        : 'h-8 px-3 rounded-lg border border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] text-xs font-medium transition-all inline-flex items-center gap-1.5 cursor-pointer';
+      renderAll();
+    }
+
+    function toggleFav(e, id) {
+      e.stopPropagation();
+      favIds = favIds.includes(id) ? favIds.filter(x => x !== id) : [...favIds, id];
+      renderAll();
+    }
+
+    function buildCardHTML(item) {
+      const isFav = favIds.includes(item.id);
+
+      const beginnerBadge = item.beginnerFriendly
+        ? `<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-sm">Iniciante</span>`
+        : '';
+
+      const audioBadge = item.audioStatus === 'original'
+        ? `<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">Áudio Original</span>`
+        : `<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-200 border border-amber-400/30 backdrop-blur-sm">Dublado</span>`;
+
+      const ccBadge = item.subtitlesCC
+        ? `<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-zinc-900/90 text-zinc-200 border border-zinc-700/80">Legendado <span class="text-zinc-400 font-bold">[CC]</span></span>`
+        : '';
+
+      const baseMeta = item.genres.join(' &middot; ');
+      const dubbedMeta = item.audioStatus === 'dubbed' && item.originalLang
+        ? ` &middot; <span class="text-amber-300 whitespace-nowrap">Original em ${item.originalLang}</span>`
+        : '';
+
+      return `
+        <div
+          onclick="window.open('${item.url}', '_blank', 'noopener,noreferrer')"
+          class="group relative aspect-[2/3] rounded-2xl overflow-hidden bg-gradient-to-br ${item.fallbackBg} border border-zinc-800 hover:border-zinc-600 transition-all duration-200 flex flex-col justify-between cursor-pointer select-none"
+        >
+          <!-- Pôster Oficial 2:3 -->
+          <img
+            src="${item.posterVertical}"
+            alt="${item.title}"
+            referrerpolicy="no-referrer"
+            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+            onerror="this.style.display='none'"
+          />
+
+          <!-- Gradiente Concentrado no Terço Inferior -->
+          <div class="absolute inset-0 netflix-gradient-clean pointer-events-none"></div>
+
+          <!-- Topo: Plataforma + Favorito -->
+          <div class="relative z-10 p-4 flex items-center justify-between gap-2">
+            <div class="inline-flex items-center px-2.5 py-1 rounded-lg bg-zinc-950/85 backdrop-blur-md border border-white/15 text-xs font-semibold text-zinc-100 shadow-sm">
+              <span>${item.platform}</span>
+            </div>
+
+            <button
+              type="button"
+              onclick="toggleFav(event, '${item.id}')"
+              title="${isFav ? 'Desfavoritar' : 'Favoritar'}"
+              class="w-9 h-9 rounded-lg bg-zinc-950/80 hover:bg-zinc-900 backdrop-blur-md border border-white/15 flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+            >
+              <svg class="w-[18px] h-[18px] transition-colors ${isFav ? 'fill-rose-500 text-rose-500' : 'text-zinc-300 hover:text-rose-400'}" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Base Limpa: Título + Subtítulo com · + 1 Linha de Badges -->
+          <div class="relative z-10 p-5 pt-14 flex flex-col justify-end gap-3">
+            <div>
+              <div class="inline-flex items-center gap-1.5 max-w-full">
+                <h3 class="text-lg font-bold text-white group-hover:text-purple-200 transition-colors leading-snug tracking-tight">
+                  ${item.title}
+                </h3>
+                <svg class="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+                </svg>
+              </div>
+              <p class="text-xs font-medium text-zinc-300 mt-1">
+                ${baseMeta}${dubbedMeta}
+              </p>
+            </div>
+
+            <!-- Linha Única de Badges -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              ${beginnerBadge}
+              ${audioBadge}
+              ${ccBadge}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAll() {
+      const q = (document.getElementById('search-input').value || '').toLowerCase().trim();
+      const filtered = ITEMS.filter(item => {
+        if (item.mediaType !== activeMediaTab) return false;
+        if (q && !item.title.toLowerCase().includes(q) && !item.platform.toLowerCase().includes(q) && !item.genres.some(g => g.toLowerCase().includes(q))) {
+          return false;
+        }
+        if (quickFilters.beginner && !item.beginnerFriendly) return false;
+        if (quickFilters.original && item.audioStatus !== 'original') return false;
+        return true;
+      });
+
+      document.getElementById('title-section').textContent = activeMediaTab === 'series' ? 'Séries' : 'Filmes';
+      document.getElementById('count-items').textContent = `${filtered.length} ${filtered.length === 1 ? 'título' : 'títulos'}`;
+      document.getElementById('cards-grid').innerHTML = filtered.map(item => buildCardHTML(item)).join('');
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>

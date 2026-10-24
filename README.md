@@ -13,6 +13,7 @@ Para garantir consistência e evitar retrabalho entre sessões e chats, toda a a
 | [**`INFRASTRUCTURE.md`**](file:///c:/Users/vitor/Desktop/AI/immersion-library/INFRASTRUCTURE.md) | Contas, GitHub (`magodosidiomas/biblioteca-infinita`), hospedagem (**Cloudflare Pages** `biblioteca-infinita.pages.dev`), comandos de build e deploy. |
 | [**`PRODUCT.md`**](file:///c:/Users/vitor/Desktop/AI/immersion-library/PRODUCT.md) | Visão geral do produto, público-alvo, idiomas, formatos de mídia e filosofia anti-slop. |
 | [**`DESIGN.md`**](file:///c:/Users/vitor/Desktop/AI/immersion-library/DESIGN.md) | Regras fechadas (Locked Rules) de UI/UX, tokens de cor Dark Mode, grids responsivos (desktop/mobile artcraft), tipografia e comportamento de popovers/bottom sheets. |
+| [**`CONTENT_GUIDE.md`**](file:///c:/Users/vitor/Desktop/AI/immersion-library/CONTENT_GUIDE.md) | Guia completo e conciso de como atualizar, adicionar itens nas 5 categorias, auditar e fazer deploy do acervo. |
 
 ---
 

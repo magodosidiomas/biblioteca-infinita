@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview Estrutural — TopNav & FilterBar (BaseUI / Tailwind)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#09090b',
+            surface: '#121215',
+            surfaceHover: '#18181c',
+            borderSubtle: '#27272a',
+            borderFocus: '#7c3aed',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-32">
+
+  <!-- TOP SWITCHER: CHOOSE NAVIGATION LAYOUT VARIATION -->
+  <aside class="bg-[#18181b] border-b border-[#27272a] px-4 py-2.5 sticky top-0 z-50 shadow-md">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-400">Layout do TopNav + FilterBar:</span>
+        <div class="inline-flex rounded-lg bg-[#121215] p-1 border border-[#27272a]">
+          <button onclick="setLayout('layout-a')" id="btn-layout-a" class="px-3 py-1 text-xs font-semibold rounded-md bg-purple-600 text-white transition-all shadow-sm">
+            Estrutura A: Linear Stacked
+          </button>
+          <button onclick="setLayout('layout-b')" id="btn-layout-b" class="px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all">
+            Estrutura B: Compact Command
+          </button>
+          <button onclick="setLayout('layout-c')" id="btn-layout-c" class="px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all">
+            Estrutura C: Underline Tabs + Pill Bar
+          </button>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-zinc-400">
+        Clique nos botões e dropdowns para testar a mecânica interativa
+      </div>
+    </div>
+  </aside>
+
+  <!-- DESCRIPTION BANNER -->
+  <div class="max-w-6xl mx-auto px-4 pt-6 pb-2">
+    <div id="layout-description" class="p-3.5 rounded-xl bg-purple-950/20 border border-purple-800/40 text-xs text-purple-200">
+      <!-- Injected via JS -->
+    </div>
+  </div>
+
+  <!-- NAVIGATION DEMO MOUNT AREA -->
+  <div id="nav-mount" class="mt-4">
+    <!-- Rendered dynamically -->
+  </div>
+
+  <!-- MOCK CONTENT CATALOG (TO TEST SCROLLING & PROPORTIONS) -->
+  <section class="max-w-6xl mx-auto px-4 mt-8">
+    <div class="flex items-center justify-between pb-3 border-b border-[#27272a] mb-4">
+      <div class="flex items-center gap-2">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Área do Catálogo (Mockup para escala)</h3>
+        <span class="text-xs text-zinc-500">• 15 canais disponíveis</span>
+      </div>
+      <span class="text-xs text-zinc-500">Grid Conectado</span>
+    </div>
+
+    <!-- 3 Sample Cards for visual proportion test -->
+    <div class="grid grid-cols-1 md:grid-cols-3 border border-[#27272a] rounded-xl overflow-hidden bg-[#121215]">
+      <!-- Card 1 -->
+      <div class="p-5 border-b md:border-r border-[#27272a] flex flex-col justify-between">
+        <div>
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-purple-950/80 border border-purple-800/50 flex items-center justify-center font-bold text-xs text-purple-200">
+                KZ
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-zinc-100 flex items-center gap-1">
+                  Kurzgesagt – In a Nutshell <span class="text-xs text-zinc-500">↗</span>
+                </h4>
+                <span class="text-[11px] text-zinc-500">British / Int.</span>
+              </div>
+            </div>
+            <span class="text-zinc-600">♡</span>
+          </div>
+          <p class="text-xs leading-relaxed text-zinc-400 mb-3">Animações vislumbrantes sobre ciência, espaço, biologia e crises existenciais, com narração nítida.</p>
+        </div>
+        <div class="flex flex-wrap gap-1 pt-2 border-t border-zinc-800/60">
+          <span class="px-2 py-0.5 rounded text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400">⚡ Nativo Autêntico</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400">💬 Legendas disp.</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-[#1e1528] text-purple-300 border border-purple-900/40">Ciência</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="p-5 border-b md:border-r border-[#27272a] flex flex-col justify-between">
+        <div>
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-emerald-950/80 border border-emerald-800/50 flex items-center justify-center font-bold text-xs text-emerald-200">
+                ES
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-zinc-100 flex items-center gap-1">
+                  English Speaking Success <span class="text-xs text-zinc-500">↗</span>
+                </h4>
+                <span class="text-[11px] text-zinc-500">British</span>
+              </div>
+            </div>
+            <span class="text-zinc-600">♡</span>
+          </div>
+          <p class="text-xs leading-relaxed text-zinc-400 mb-3">Lições estruturadas para desenvolver fluência natural, vocabulário ativo e confiança para falar inglês sem travar.</p>
+        </div>
+        <div class="flex flex-wrap gap-1 pt-2 border-t border-zinc-800/60">
+          <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">🌱 Para Iniciantes</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400">💬 Legendas disp.</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-[#1e1528] text-purple-300 border border-purple-900/40">Conversação</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-5 border-b border-[#27272a] flex flex-col justify-between">
+        <div>
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-indigo-950/80 border border-indigo-800/50 flex items-center justify-center font-bold text-xs text-indigo-200">
+                JH
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-zinc-100 flex items-center gap-1">
+                  Johnny Harris <span class="text-xs text-zinc-500">↗</span>
+                </h4>
+                <span class="text-[11px] text-zinc-500">American</span>
+              </div>
+            </div>
+            <span class="text-zinc-600">♡</span>
+          </div>
+          <p class="text-xs leading-relaxed text-zinc-400 mb-3">Documentários dinâmicos com mapas visuais incríveis sobre fronteiras, geopolítica e história global.</p>
+        </div>
+        <div class="flex flex-wrap gap-1 pt-2 border-t border-zinc-800/60">
+          <span class="px-2 py-0.5 rounded text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400">⚡ Nativo Autêntico</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400">💬 Legendas disp.</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-[#1e1528] text-purple-300 border border-purple-900/40">Geopolítica</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JAVASCRIPT LOGIC & INTERACTION -->
+  <script>
+    let activeLayout = 'layout-a';
+    let filterBeginner = false;
+    let filterSubs = false;
+    let filterFavs = false;
+    let activeTopic = '';
+    let searchQuery = '';
+
+    const DESCRIPTIONS = {
+      'layout-a': `
+        <strong>Estrutura A — Linear Stacked (2 Camadas Claras):</strong>
+        <br>• <strong>TopNav:</strong> Marca à esquerda, abas de formato encapsuladas como <em>segmented control</em> central/esquerdo, Seletor de Idioma e Favoritos no canto direito.
+        <br>• <strong>FilterBar:</strong> Barra adesiva com busca integrada na esquerda + pílulas de filtro direto (Iniciantes, Legendas, Tema dropdown) na direita.
+        <br><em>Vantagem:</em> Separação nítida entre escopo global (formato e idioma) e controles de exploração (filtros do catálogo).
+      `,
+      'layout-b': `
+        <strong>Estrutura B — Compact Command (Foco em Busca Rápida):</strong>
+        <br>• <strong>TopNav:</strong> Marca à esquerda, Barra de Busca ampla no centro (estilo Raycast / Linear Command), Idioma à direita.
+        <br>• <strong>FilterBar:</strong> Linha única e compacta de chips onde o primeiro segmento são as abas de formato, seguidas imediatamente pelos filtros (Iniciantes, Legendas, Tema).
+        <br><em>Vantagem:</em> Ultra-compacto verticalmente. A busca ganha destaque central imediato.
+      `,
+      'layout-c': `
+        <strong>Estrutura C — Underline Tabs + Pill Bar (Estilo Notion / GitHub):</strong>
+        <br>• <strong>TopNav:</strong> Marca limpa à esquerda, Seletor de Idioma e Favoritos à direita.
+        <br>• <strong>Format SubNav:</strong> Abas horizontais com sublinhado ativo indicador (estilo Notion/GitHub tabs) mostrando contadores reais: <code>YouTube (15)</code>, <code>Podcasts (0)</code>, <code>Séries (0)</code>.
+        <br>• <strong>FilterBar:</strong> Linha inferior dedicada com busca em input bordered + dropdowns de temas e pílulas de ação rápida.
+        <br><em>Vantagem:</em> Sensação de portal editorial espaçoso e muito fácil de navegar em telas maiores.
+      `
+    };
+
+    function setLayout(layoutId) {
+      activeLayout = layoutId;
+      ['btn-layout-a', 'btn-layout-b', 'btn-layout-c'].forEach(id => {
+        document.getElementById(id).className = "px-3 py-1 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition-all";
+      });
+      const activeBtn = {
+        'layout-a': 'btn-layout-a',
+        'layout-b': 'btn-layout-b',
+        'layout-c': 'btn-layout-c'
+      }[layoutId];
+      document.getElementById(activeBtn).className = "px-3 py-1 text-xs font-semibold rounded-md bg-purple-600 text-white shadow-sm transition-all";
+
+      document.getElementById('layout-description').innerHTML = DESCRIPTIONS[layoutId];
+      renderNavigation();
+    }
+
+    function toggleBeginner() {
+      filterBeginner = !filterBeginner;
+      renderNavigation();
+    }
+
+    function toggleSubs() {
+      filterSubs = !filterSubs;
+      renderNavigation();
+    }
+
+    function toggleFavs() {
+      filterFavs = !filterFavs;
+      renderNavigation();
+    }
+
+    function resetFilters() {
+      filterBeginner = false;
+      filterSubs = false;
+      filterFavs = false;
+      activeTopic = '';
+      searchQuery = '';
+      renderNavigation();
+    }
+
+    function handleTopicChange(val) {
+      activeTopic = val;
+      renderNavigation();
+    }
+
+    function handleSearchInput(val) {
+      searchQuery = val;
+      renderNavigation();
+    }
+
+    // RENDER LAYOUT A (LINEAR STACKED)
+    function renderLayoutA() {
+      const isFiltered = filterBeginner || filterSubs || filterFavs || activeTopic || searchQuery;
+
+      return `
+        <div class="border-y border-[#27272a] bg-[#09090b]">
+          <!-- Tier 1: Main TopNav -->
+          <header class="border-b border-[#27272a] bg-[#09090b]/95 backdrop-blur px-4">
+            <div class="max-w-6xl mx-auto h-16 flex items-center justify-between gap-4">
+              <!-- Left: Brand + Format Segmented Pill -->
+              <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">🧙🏻‍♂️</span>
+                  <span class="font-bold text-sm tracking-tight text-zinc-100">Biblioteca Infinita</span>
+                </div>
+
+                <!-- Format Segmented Control -->
+                <nav class="hidden sm:inline-flex rounded-lg bg-[#121215] p-1 border border-[#27272a] text-xs font-medium">
+                  <button class="px-3 py-1 rounded-md bg-[#27272a] text-zinc-100 font-semibold shadow-sm">YouTube</button>
+                  <button class="px-3 py-1 rounded-md text-zinc-500 hover:text-zinc-300 cursor-not-allowed" title="Em breve">Podcasts</button>
+                  <button class="px-3 py-1 rounded-md text-zinc-500 hover:text-zinc-300 cursor-not-allowed" title="Em breve">Séries</button>
+                  <button class="px-3 py-1 rounded-md text-zinc-500 hover:text-zinc-300 cursor-not-allowed" title="Em breve">Sites</button>
+                </nav>
+              </div>
+
+              <!-- Right: Language Dropdown + Favorites Button -->
+              <div class="flex items-center gap-2.5">
+                <!-- Language Selector -->
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#121215] border border-[#27272a] hover:border-zinc-700 text-xs font-semibold text-zinc-200 transition-colors">
+                  <span>🇬🇧</span>
+                  <span>English</span>
+                  <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+
+                <!-- Favorites Pill -->
+                <button onclick="toggleFavs()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${filterFavs ? 'bg-rose-950/50 border-rose-800 text-rose-300' : 'bg-[#121215] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  <svg class="w-3.5 h-3.5 ${filterFavs ? 'fill-rose-500 text-rose-500' : 'text-zinc-500'}" viewBox="0 0 24 24" stroke="currentColor" fill="${filterFavs ? 'currentColor' : 'none'}">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  <span class="hidden sm:inline">Favoritos</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <!-- Tier 2: Sticky FilterBar -->
+          <div class="bg-[#121215]/80 backdrop-blur px-4 py-3 border-b border-[#27272a]">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <!-- Left: Search input -->
+              <div class="relative flex-1 max-w-md">
+                <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input 
+                  type="text" 
+                  value="${searchQuery}"
+                  placeholder="Buscar canais por nome, tema ou bio..." 
+                  oninput="handleSearchInput(this.value)"
+                  class="w-full pl-9 pr-3 py-1.5 bg-[#09090b] border border-[#27272a] rounded-lg text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-purple-500/80 transition-all"
+                >
+              </div>
+
+              <!-- Right: Filter Toggles & Topic Select -->
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Beginner Toggle -->
+                <button onclick="toggleBeginner()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs transition-all ${filterBeginner ? 'font-semibold bg-emerald-950/60 border-emerald-700/60 text-emerald-300' : 'font-medium bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  <span>🌱</span>
+                  <span>Iniciantes</span>
+                </button>
+
+                <!-- Subtitles Toggle -->
+                <button onclick="toggleSubs()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs transition-all ${filterSubs ? 'font-semibold bg-purple-950/60 border-purple-700/60 text-purple-200' : 'font-medium bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  <span>💬</span>
+                  <span>Com legendas</span>
+                </button>
+
+                <!-- Topic Select Dropdown -->
+                <select onchange="handleTopicChange(this.value)" class="px-2.5 py-1.5 bg-[#18181b] border border-[#27272a] rounded-lg text-xs font-medium text-zinc-300 focus:outline-none focus:border-purple-500/80 cursor-pointer">
+                  <option value="" ${activeTopic === '' ? 'selected' : ''}>Todos os temas</option>
+                  <option value="Ciência" ${activeTopic === 'Ciência' ? 'selected' : ''}>Ciência</option>
+                  <option value="Produtividade" ${activeTopic === 'Produtividade' ? 'selected' : ''}>Produtividade</option>
+                  <option value="Conversação" ${activeTopic === 'Conversação' ? 'selected' : ''}>Conversação</option>
+                  <option value="Geopolítica" ${activeTopic === 'Geopolítica' ? 'selected' : ''}>Geopolítica</option>
+                  <option value="Humor" ${activeTopic === 'Humor' ? 'selected' : ''}>Humor</option>
+                </select>
+
+                <!-- Reset Button -->
+                ${isFiltered ? `
+                  <button onclick="resetFilters()" class="text-xs text-purple-400 hover:text-purple-300 font-semibold px-2 py-1 transition-all">
+                    Limpar filtros ✕
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // RENDER LAYOUT B (COMPACT COMMAND)
+    function renderLayoutB() {
+      const isFiltered = filterBeginner || filterSubs || filterFavs || activeTopic || searchQuery;
+
+      return `
+        <div class="border-y border-[#27272a] bg-[#09090b]">
+          <!-- Tier 1: Compact Command Bar -->
+          <header class="border-b border-[#27272a] bg-[#09090b] px-4">
+            <div class="max-w-6xl mx-auto h-14 flex items-center justify-between gap-4">
+              <!-- Left: Brand -->
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="text-lg">🧙🏻‍♂️</span>
+                <span class="font-bold text-sm tracking-tight text-zinc-100">Biblioteca Infinita</span>
+              </div>
+
+              <!-- Center: Wide Raycast-style Search Bar -->
+              <div class="relative flex-1 max-w-lg mx-2">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input 
+                  type="text" 
+                  value="${searchQuery}"
+                  placeholder="Pesquisar em inglês por canal, tema ou palavra..." 
+                  oninput="handleSearchInput(this.value)"
+                  class="w-full pl-9 pr-14 py-1.5 bg-[#121215] border border-[#27272a] rounded-lg text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-500/80 transition-all"
+                >
+                <kbd class="hidden sm:inline-block absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-zinc-500 bg-[#1e1e24] px-1.5 py-0.5 rounded border border-zinc-700/60">⌘K</kbd>
+              </div>
+
+              <!-- Right: Language Selector -->
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#121215] border border-[#27272a] text-xs font-semibold text-zinc-300">
+                  <span>🇬🇧</span>
+                  <span class="hidden sm:inline">English</span>
+                  <svg class="w-3 h-3 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <!-- Tier 2: Streamlined Horizontal Filter Chips (All in 1 Row) -->
+          <div class="bg-[#121215]/60 px-4 py-2.5 border-b border-[#27272a] overflow-x-auto">
+            <div class="max-w-6xl mx-auto flex items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <!-- Medium chips -->
+                <span class="px-2.5 py-1 rounded-md bg-purple-600 text-white font-semibold">YouTube</span>
+                <span class="px-2.5 py-1 rounded-md bg-[#18181b] text-zinc-500 hover:text-zinc-300 border border-[#27272a] cursor-not-allowed">Podcasts</span>
+                <span class="px-2.5 py-1 rounded-md bg-[#18181b] text-zinc-500 hover:text-zinc-300 border border-[#27272a] cursor-not-allowed">Séries</span>
+
+                <div class="h-4 w-px bg-zinc-800 mx-1"></div>
+
+                <!-- Feature chips -->
+                <button onclick="toggleBeginner()" class="px-2.5 py-1 rounded-md border transition-all ${filterBeginner ? 'font-semibold bg-emerald-950/60 border-emerald-700 text-emerald-300' : 'bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  🌱 Iniciantes
+                </button>
+                <button onclick="toggleSubs()" class="px-2.5 py-1 rounded-md border transition-all ${filterSubs ? 'font-semibold bg-purple-950/60 border-purple-700 text-purple-200' : 'bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  💬 Legendas
+                </button>
+                <button onclick="toggleFavs()" class="px-2.5 py-1 rounded-md border transition-all ${filterFavs ? 'font-semibold bg-rose-950/60 border-rose-800 text-rose-300' : 'bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  ❤️ Favoritos
+                </button>
+              </div>
+
+              <!-- Topic Dropdown Right -->
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <select onchange="handleTopicChange(this.value)" class="px-2 py-1 bg-[#18181b] border border-[#27272a] rounded-md text-xs text-zinc-300">
+                  <option value="" ${activeTopic === '' ? 'selected' : ''}>Todos os temas</option>
+                  <option value="Ciência" ${activeTopic === 'Ciência' ? 'selected' : ''}>Ciência</option>
+                  <option value="Produtividade" ${activeTopic === 'Produtividade' ? 'selected' : ''}>Produtividade</option>
+                  <option value="Conversação" ${activeTopic === 'Conversação' ? 'selected' : ''}>Conversação</option>
+                </select>
+
+                ${isFiltered ? `
+                  <button onclick="resetFilters()" class="text-xs text-purple-400 hover:text-purple-300 font-semibold">
+                    Limpar ✕
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // RENDER LAYOUT C (NOTION / GITHUB UNDERLINE TABS)
+    function renderLayoutC() {
+      const isFiltered = filterBeginner || filterSubs || filterFavs || activeTopic || searchQuery;
+
+      return `
+        <div class="border-y border-[#27272a] bg-[#09090b]">
+          <!-- Tier 1: Clean Brand Top Header -->
+          <header class="bg-[#09090b] px-4 pt-4 pb-2">
+            <div class="max-w-6xl mx-auto flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="text-xl">🧙🏻‍♂️</span>
+                <span class="font-bold text-base tracking-tight text-zinc-100">Biblioteca Infinita</span>
+              </div>
+
+              <!-- Language & Global Actions Right -->
+              <div class="flex items-center gap-2">
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#121215] border border-[#27272a] text-xs font-semibold text-zinc-200">
+                  <span>🇬🇧</span>
+                  <span>English</span>
+                  <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <!-- Tier 2: Horizontal Underline Navigation (Notion/GitHub Style) -->
+          <nav class="border-b border-[#27272a] px-4 bg-[#09090b]">
+            <div class="max-w-6xl mx-auto flex items-center gap-6 text-xs font-semibold">
+              <button class="flex items-center gap-2 py-3 border-b-2 border-purple-500 text-purple-200">
+                <span>YouTube</span>
+                <span class="px-1.5 py-0.2 rounded-full bg-purple-950/80 text-purple-300 border border-purple-800/40 text-[10px]">15</span>
+              </button>
+              <button class="flex items-center gap-2 py-3 border-b-2 border-transparent text-zinc-500 hover:text-zinc-300 cursor-not-allowed">
+                <span>Podcasts</span>
+                <span class="px-1.5 py-0.2 rounded-full bg-zinc-900 text-zinc-500 text-[10px]">0</span>
+              </button>
+              <button class="flex items-center gap-2 py-3 border-b-2 border-transparent text-zinc-500 hover:text-zinc-300 cursor-not-allowed">
+                <span>Séries & Filmes</span>
+                <span class="px-1.5 py-0.2 rounded-full bg-zinc-900 text-zinc-500 text-[10px]">0</span>
+              </button>
+              <button class="flex items-center gap-2 py-3 border-b-2 border-transparent text-zinc-500 hover:text-zinc-300 cursor-not-allowed">
+                <span>Sites</span>
+                <span class="px-1.5 py-0.2 rounded-full bg-zinc-900 text-zinc-500 text-[10px]">0</span>
+              </button>
+            </div>
+          </nav>
+
+          <!-- Tier 3: Dedicated Action & Filter Bar -->
+          <div class="bg-[#121215] px-4 py-3 border-b border-[#27272a]">
+            <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <!-- Search box -->
+              <div class="relative flex-1 max-w-sm">
+                <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input 
+                  type="text" 
+                  value="${searchQuery}"
+                  placeholder="Filtrar por nome ou assunto..." 
+                  oninput="handleSearchInput(this.value)"
+                  class="w-full pl-9 pr-3 py-1.5 bg-[#09090b] border border-[#27272a] rounded-lg text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-purple-500/80 transition-all"
+                >
+              </div>
+
+              <!-- Quick action chips -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <button onclick="toggleBeginner()" class="px-3 py-1.5 rounded-lg border text-xs transition-all ${filterBeginner ? 'font-semibold bg-emerald-950/60 border-emerald-700 text-emerald-300' : 'bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  🌱 Iniciantes
+                </button>
+                <button onclick="toggleSubs()" class="px-3 py-1.5 rounded-lg border text-xs transition-all ${filterSubs ? 'font-semibold bg-purple-950/60 border-purple-700 text-purple-200' : 'bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  💬 Com legendas
+                </button>
+                <button onclick="toggleFavs()" class="px-3 py-1.5 rounded-lg border text-xs transition-all ${filterFavs ? 'font-semibold bg-rose-950/60 border-rose-800 text-rose-300' : 'bg-[#18181b] border-[#27272a] text-zinc-400 hover:text-zinc-200'}">
+                  ❤️ Favoritos
+                </button>
+
+                <select onchange="handleTopicChange(this.value)" class="px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-lg text-xs text-zinc-300">
+                  <option value="" ${activeTopic === '' ? 'selected' : ''}>Todos os temas</option>
+                  <option value="Ciência" ${activeTopic === 'Ciência' ? 'selected' : ''}>Ciência</option>
+                  <option value="Produtividade" ${activeTopic === 'Produtividade' ? 'selected' : ''}>Produtividade</option>
+                  <option value="Conversação" ${activeTopic === 'Conversação' ? 'selected' : ''}>Conversação</option>
+                </select>
+
+                ${isFiltered ? `
+                  <button onclick="resetFilters()" class="text-xs text-purple-400 hover:text-purple-300 font-semibold px-2 py-1">
+                    Limpar filtros ✕
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNavigation() {
+      const mount = document.getElementById('nav-mount');
+      if (activeLayout === 'layout-a') {
+        mount.innerHTML = renderLayoutA();
+      } else if (activeLayout === 'layout-b') {
+        mount.innerHTML = renderLayoutB();
+      } else if (activeLayout === 'layout-c') {
+        mount.innerHTML = renderLayoutC();
+      }
+    }
+
+    // Initial render
+    setLayout('layout-a');
+  </script>
+</body>
+</html>
