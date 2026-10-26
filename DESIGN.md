@@ -25,6 +25,7 @@
   - Proibido enfiar `<hr>`, `border-t` ou `border-b` em rodapés de menus, dropdowns ou entre barras de controle e o grid. Se não for estruturalmente indispensável, **não use divisor**.
 - **Iconografia Oficial (lucide-react):**
   - Proibido caracteres de texto soltos (`↗`, `+`, `x`). Use sempre ícones SVG oficiais do `lucide-react`.
+  - Tamanho padrão `w-4 h-4` (16px) ou `size-[18px]` com `stroke-[1.5]` ou `stroke-[1.75]` e `shrink-0`. Evite `stroke-[2.5]` ou ícones deformados.
 - **Isolamento de Overflow (Mobile vs. Desktop):**
   - Nunca coloque `overflow-x-auto` ou `overflow-hidden` em containers pais que abrigam popovers flutuantes ou comboboxes. Scroll horizontal fica restrito ao mobile (`max-md:overflow-x-auto`), com `overflow-visible md:flex-wrap` no desktop.
 
@@ -53,7 +54,7 @@
   - ❌ BANIDO: *"100% autênticos e verificados"*, *"Explore os melhores canais"*, *"Catálogo atualizado"*, *"Imersão total"*.
   - A interface não faz propaganda de si mesma. Apenas dados úteis e navegação.
 - **Microcopy de Ações:**
-  - Verbo Imperativo + Objeto Direto: `Limpar filtros`, `Abrir ↗`, `Favoritar`.
+  - Verbo Imperativo + Objeto Direto (acompanhado de ícone SVG oficial do `lucide-react`, nunca caractere `↗`): `Limpar filtros`, `Abrir` + `<ExternalLink />`, `Favoritar`.
 
 ---
 
@@ -62,9 +63,9 @@
 - **Problema do Modelo Anterior:** Segmented controls encapsulados estreitos não escalam quando mais categorias são adicionadas (ficam pesados e quebram no mobile).
 - **Novo Padrão:** **Navegação Horizontal Descomplicada (Tabs com Respiro Editorial):**
   - Abas limpas no topo com espaçamento generoso e indicador sutil de estado ativo:
-    `YouTube` | `Professores` | `Podcasts` | `Séries` | `Filmes` | `Sites`
+    `YouTube` | `Professores` | `Podcasts` | `Séries` | `Filmes` | `Sites` | `Pronúncia`
   - Escala naturalmente para quantos formatos o catálogo precisar, sem caixas sufocantes.
-- **Seletor de Idioma:** TopNav superior direito, independente e claro (`🇬🇧 English ▾`).
+- **Seletor de Idioma:** TopNav superior direito, independente e claro, com ícone `<ChevronDown />` de `lucide-react`.
 
 ---
 

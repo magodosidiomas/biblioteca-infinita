@@ -4,9 +4,28 @@
 
 ---
 
-## 1. Regras Anti-Slop de Interface & Acessibilidade (Padrão Impeccable)
+## 0. Documentos Canônicos de Referência (A Tríade de Verdade)
+1. **`PRODUCT.md`:** Fonte canônica para escopo de produto, taxonomia das 7 abas e regras de negócio.
+2. **`DESIGN.md`:** Fonte oficial do Sistema de Design (tokens, superfícies, tipografia e iconografia).
+3. **`TASKS.md`:** Registro vivo de tarefas, decisões consolidadas e próximos passos.
 
-### 1.1. Tipografia & Legibilidade (Piso Rígido)
+---
+
+## 1. Regras Operacionais Inegociáveis & Desenvolvimento Passo a Passo
+
+### 1.0. Uso Obrigatório do /grill-me Interativo (`ask_question`) & 1 Bloco por Vez
+* **Desenvolvimento Incremental Estrito (1 Componente/Bloco por Vez):**
+  - Fazer SEMPRE de forma incremental: 1 componente/bloco por vez, testando e validando com o Vitor antes de avançar.
+  - Terminantemente proibido refatorações em lote, alterações simultâneas em múltiplos subsistemas ou construir várias telas de uma vez só.
+* **Uso Obrigatório do /grill-me Interativo (`ask_question`) em Toda Decisão:**
+  - Toda e qualquer decisão de produto, arquitetura, fluxo ou UI deve ser validada com o Vitor via modal interativo de múltipla escolha (`ask_question`), indicando a opção recomendada (`(Recommended)`), com linguagem clara, concisa e focada em design/produto (sem jargões densos de código).
+  - É proibido implementar código de design/arquitetura antes da resposta do modal.
+
+---
+
+## 2. Regras Anti-Slop de Interface & Acessibilidade (Padrão Impeccable)
+
+### 2.1. Tipografia & Legibilidade (Piso Rígido)
 - ❌ **PROIBIDO fontes minúsculas abaixo de 12px:**
   - Zero `text-[9px]`, `text-[10px]` ou `text-[11px]` em textos informativos ou funcionais.
   - **Controles Interativos, Botões e Filtros:** Mínimo obrigatório de **14px** (`text-sm font-medium`). É TERMINANTEMENTE PROIBIDO usar `text-xs` (12px) em botões de filtro, comboboxes, links de menu, dropdowns ou ações.
@@ -15,7 +34,7 @@
   - **Bios e descrições:** **13px a 14px** com entrelinha arejada (`leading-relaxed text-zinc-300`).
   - **Títulos:** **15px a 16px bold** (`text-zinc-100`).
 
-### 1.2. Contraste & Paleta Silenciosa (WCAG AA)
+### 2.2. Contraste & Paleta Silenciosa (WCAG AA)
 - ❌ **PROIBIDO texto cinza desbotado ou ilegível contra fundo escuro:**
   - Textos de leitura e placeholders devem ter contraste $\ge$ 4.5:1.
   - Superfície dos cards: `#111114` sobre canvas `#09090b`.
@@ -25,7 +44,7 @@
   - Sem emojis infantis soltos em tags (`🌱`, `💬`, `⚡`). Use texto refinado ou pequenos pontos geométricos.
   - ❌ **PROIBIDO truncar tags:** Nunca use `truncate` ou `max-w-[...]` que corte o texto de tags/badges (`topics`). Devem sempre quebrar em linha (`flex-wrap`) ou exibir o texto completo.
 
-### 1.3. Geometria, Dividers & Respiro Espacial
+### 2.3. Geometria, Dividers & Respiro Espacial
 - ❌ **PROIBIDO amontoamento de containers:**
   - Sem caixas aninhadas sem propósito ("cards dentro de cards dentro de boxes").
   - O respiro vertical entre título, bio e tags deve ser simétrico e perceptível (espaçamento de 12px a 16px).
@@ -33,41 +52,52 @@
   - Proibido enfiar `<hr>`, `border-t` ou `border-b` em rodapés de dropdowns, cabeçalhos de gavetas ou entre a barra de filtros e o grid de conteúdo. Se o divisor não tiver propósito estrutural indispensável, **NÃO USE DIVISOR**.
   - Qualquer divisor legítimo (`border-t`, `<hr>`) deve ter padding rigorosamente igual acima e abaixo.
 
-### 1.4. Iconografia Padronizada (Fim de Caracteres Inventados)
+### 2.4. Iconografia Padronizada (Fim de Caracteres Inventados)
 - ❌ **PROIBIDO caracteres de texto soltos como ícones:**
   - Terminantemente proibido usar `↗`, `->`, `+`, `x` em botões, links ou cabeçalhos.
   - Use SEMPRE os ícones SVG oficiais da biblioteca `lucide-react` (ex: `ExternalLink`, `ChevronDown`, `X`, `Plus`).
+  - **Tamanho e Traço:** Padrão `w-4 h-4` (16px) ou `size-[18px]` com `stroke-[1.5]` ou `stroke-[1.75]` e `shrink-0`. Evite strokes grossos de IA (`stroke-[2.5]`).
 
-### 1.5. Isolamento Arquitetural de Overflow (Mobile vs. Desktop)
+### 2.5. Isolamento Arquitetural de Overflow (Mobile vs. Desktop)
 - ❌ **PROIBIDO overflow quebrando menus e popovers flutuantes:**
   - NUNCA aplique `overflow-x-auto` ou `overflow-hidden` em containers que abrigam dropdowns, comboboxes ou menus com posicionamento absoluto.
   - O scroll horizontal de filtros no mobile deve ficar estritamente isolado no breakpoint mobile (`max-md:overflow-x-auto`), preservando `overflow-visible md:flex-wrap` no desktop para que popovers flutuantes nunca fiquem presos ou cortados.
 
 ---
 
-## 2. Navegação Escalável & Sem Peso Excessivo
+## 3. Lista Negra de Padrões Banidos (Negative Constraints)
+1. **Divisores sem Função Estrutural:** Banido `<hr>`, `border-t` ou `border-b` adicionados por reflexo em rodapés de menus ou abaixo de barras de busca/filtro.
+2. **Textos Minúsculos em Controles:** Banido `text-xs` (12px) em botões, links, dropdowns ou comboboxes.
+3. **Ícones em Caracteres de Texto:** Banido `↗`, `->`, `x`, `+` como texto solto.
+4. **Ícones com Stroke Pesado ou Deformados:** Banido `stroke-[2.2]` ou maior em ícones de navegação.
+5. **Overflow Destrutivo em Menus:** Banido `overflow-x-auto` em containers pais de popovers de desktop.
+6. **Emojis em Badges/Tags:** Banido `🌱`, `⚡` em tópicos de conteúdo.
+7. **Refatoração em Lote não Autorizada:** Banido alterar múltiplos subsistemas ou componentes não solicitados em uma única tacada.
+
+---
+
+## 4. Navegação Escalável & Sem Peso Excessivo
 
 - ❌ **PROIBIDO segmented controls estreitos estilo Linear:**
   - Abas encapsuladas não escalam quando mais categorias são criadas e quebram no mobile.
 - ✅ **Navegação Horizontal Descomplicada (Tabs com Respiro Editorial):**
-  - Abas limpas no topo com espaçamento generoso e indicador sutil:
-    `YouTube` | `Professores` | `Podcasts` | `Séries & Filmes` | `Sites`
-  - Seletor de idioma fica no TopNav à direita (`🇬🇧 English ▾`).
+  - Abas limpas no topo com espaçamento generoso e indicador sutil (ver [PRODUCT.md](file:///c:/Users/vitor/Desktop/AI/immersion-library/PRODUCT.md) para a lista completa das 7 abas: `YouTube` | `Professores` | `Podcasts` | `Séries` | `Filmes` | `Sites` | `Pronúncia`).
+  - Seletor de idioma fica no TopNav à direita com ícone SVG (`ChevronDown`).
 
 ---
 
-## 3. Regras de Conteúdo & Automação
+## 5. Regras de Conteúdo & Automação
 
-### 3.1. Separação de Conteúdo (Imersão vs. Professores)
+### 5.1. Separação de Conteúdo (Imersão vs. Professores)
 - Canais de **"Professores"** (que ensinam regras gramaticais, vocabulário pontual, dicas de estudo) não se misturam com canais de **"YouTube (Imersão Nativa)"**.
 - Professores pertencem à sua própria aba dedicada.
 
-### 3.2. Metadados Oficiais do YouTube (Tolerância Zero a Descrições de IA)
+### 5.2. Metadados Oficiais do YouTube (Tolerância Zero a Descrições de IA)
 - Nome do canal, foto de avatar e bio/descrição **DEVEM** ser extraídos diretamente e verbatim das fontes oficiais do YouTube (aba "About", metatag oficial, descrição da playlist ou do vídeo).
 - ❌ **TERMINANTEMENTE PROIBIDO inventar, resumir ou sintetizar descrições autorais por IA.** Não crie sinopses da sua cabeça.
 - Se for uma playlist ou série hospedada no YouTube (ex: *Extra*), extraia a descrição oficial da playlist/vídeo no YouTube ou da emissora produtora original.
 
-### 3.3. Taxonomia Atômica de Tags (Proibição de Termos Duplos & Conectivos)
+### 5.3. Taxonomia Atômica de Tags (Proibição de Termos Duplos & Conectivos)
 - ❌ **TERMINANTEMENTE PROIBIDO tags compostas ou com conectivos (`&`, `e`, `/`):**
   - Banido: `"Cultura e Entretenimento"`, `"Gastronomia & Culinária"`, `"Ciência & Astronomia"`, `"Notícias & Atualidades"`, `"Comédia & Humor"`.
   - Tags genéricas de "saco-de-gatos" como `"Cultura e Entretenimento"` ou `"Geral"` são estritamente proibidas.
@@ -78,16 +108,16 @@
 
 ---
 
-## 4. Eliminação Total de Textos Inúteis ("AI Tells")
+## 6. Eliminação Total de Textos Inúteis ("AI Tells")
 
 - ❌ **PROIBIDO qualquer slogan promocional ou de autoelogio:**
   - Banido: *"100% autênticos e verificados"*, *"Explore nossa vasta biblioteca"*, *"Catálogo atualizado diariamente"*, *"Imersão garantida"*.
-- ✅ **Ações Diretas em Verbo Imperativo + Objeto Direto:**
-  - `Limpar filtros`, `Abrir ↗`, `Favoritar`.
+- ✅ **Ações Diretas em Verbo Imperativo + Objeto Direto (Com Ícones SVG Oficiais):**
+  - `Limpar filtros`, `Abrir` (acompanhado do ícone `<ExternalLink className="size-4" />`, nunca caractere `↗`), `Favoritar`.
 
 ---
 
-## 5. Limites de Arquitetura de Código & Tokens
+## 7. Limites de Arquitetura de Código & Tokens
 
 - **Limite de Tamanho:** Nenhum componente pode exceder **200 linhas de código**. Decomponha imediatamente em subcomponentes ou hooks.
 - **Edições Cirúrgicas:** Use `replace_file_content` para alterações cirúrgicas. Nunca reescreva arquivos inteiros para mudar poucas linhas.
@@ -95,7 +125,7 @@
 
 ---
 
-## 6. Fidelidade Irrevogável aos Previews Aprovados (Regra Anti-Invenção)
+## 8. Fidelidade Irrevogável aos Previews Aprovados (Regra Anti-Invenção)
 
 > ⛔ **CLÁUSULA PÉTREA DE DESIGN:** Uma vez que um preview em HTML na pasta `previews/` é aprovado pelo usuário, ele se torna o **único contrato de verdade visual**.
 
@@ -112,7 +142,7 @@
 
 ---
 
-## 7. Checklist Obrigatório Anti-Regressão (Antes de Entregar ao Usuário)
+## 9. Checklist Obrigatório Anti-Regressão (Antes de Entregar ao Usuário)
 
 Antes de responder ao usuário dizendo que uma tarefa está pronta, o agente é OBRIGADO a executar e validar internamente:
 1. **Verificação de Assets Externos:** Imagens e avatares externos possuem `referrerPolicy="no-referrer"` e fallback visual para evitar telas em branco ou hotlink bloqueado?
@@ -127,7 +157,7 @@ Antes de responder ao usuário dizendo que uma tarefa está pronta, o agente é 
 
 ---
 
-## 8. Protocolo Rígido de Sincronização de Conteúdo (Anti-Cache & Anti-Zumbi)
+## 10. Protocolo Rígido de Sincronização de Conteúdo (Anti-Cache & Anti-Zumbi)
 
 > ⛔ **REGRA DE OURO:** "Salvo no disco" não significa "visível no navegador". O assistente é responsável pela integridade ponta a ponta.
 
@@ -145,7 +175,7 @@ Antes de responder ao usuário dizendo que uma tarefa está pronta, o agente é 
 
 ---
 
-## 9. Protocolo Anti-Alucinação & Verificação de Código Antes de Docs (Grounded Truth)
+## 11. Protocolo Anti-Alucinação & Verificação de Código Antes de Docs (Grounded Truth)
 
 > ⛔ **PROIBIDO ALUCINAR ESTADO DO PROJETO:** O código-fonte em execução (`app/src/` e `scripts/`) é a única verdade factual sobre o que está construído.
 

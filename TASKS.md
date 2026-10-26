@@ -41,11 +41,14 @@
 - [x] **Card de Pôster Vertical 2:3 (`Séries` e `Filmes`):** [`SeriesMovieCard.tsx`](app/src/components/SeriesMovieCard.tsx) aprovado via [`previews/preview-series-filmes.html`](previews/preview-series-filmes.html) — grid de 3 colunas no desktop, sem sinopse no card, pill da plataforma no topo esquerdo, gradiente inferior escuro, subtítulo editorial com gêneros separados por `·` + aviso `Original em [Idioma]` quando dublado, e linha única de badges (`Iniciante`, `Áudio Original` / `Dublado`, `Legendado [CC]`).
 
 ### Deploy & Infraestrutura (Cloudflare Pages)
+- [x] **Bandeiras em SVG Vetoriais (`country-flag-icons`):**
+  - Implementado [`FlagIcon.tsx`](app/src/components/FlagIcon.tsx) para resolver o problema crônico de navegadores no Windows (onde a fonte nativa Segoe UI Emoji exibe códigos de texto como "US", "DE", "FR" em vez de bandeiras).
+  - Bandeiras 100% vetoriais em proporção 3:2, bordas arredondadas e anel de contraste sutil para destacar bandeiras com partes brancas contra o tema escuro. Integrado no Header desktop, Language Drawer mobile e telas do Admin.
 - [x] **Deploy de Produção no Cloudflare Pages:**
   - Build validado com zero erros e publicado no domínio canônico de produção:
     - **URL Produção:** `https://biblioteca-infinita.pages.dev`
-    - **Última Versão Imutável:** `https://85e3a849.biblioteca-infinita.pages.dev`
-    - **Versão Anterior:** `https://da37ef6f.biblioteca-infinita.pages.dev`
+    - **Última Versão Imutável:** `https://c1b15f57.biblioteca-infinita.pages.dev`
+    - **Versões Anteriores:** `https://85e3a849.biblioteca-infinita.pages.dev`, `https://da37ef6f.biblioteca-infinita.pages.dev`
 - [x] **Deploy de Staging no Cloudflare Pages:**
   - Publicado na branch `staging`:
     - **URL Staging:** `https://staging.biblioteca-infinita.pages.dev`

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { LanguageDrawer } from './LanguageDrawer';
+import { FlagIcon } from './FlagIcon';
 import type { MediaCategory } from '../types/content';
 import { getLanguageCode, type LanguageItem } from '../constants/languages';
 
@@ -94,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
                 langOpen ? 'border-zinc-700 bg-[#16161a]' : 'border-zinc-800'
               }`}
             >
-              <span className="text-base leading-none">{currentLang.flag}</span>
+              <FlagIcon languageId={currentLang.id} flag={currentLang.flag} alt={currentLang.name} />
               <span className="sm:hidden text-xs font-semibold tracking-wider text-zinc-300">
                 {getLanguageCode(currentLang.id)}
               </span>
@@ -136,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="text-base leading-none">{lang.flag}</span>
+                        <FlagIcon languageId={lang.id} flag={lang.flag} alt={lang.name} />
                         <span>{lang.name}</span>
                       </div>
                       {isSelected && (

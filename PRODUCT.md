@@ -42,8 +42,8 @@ O catálogo separa claramente conteúdos de **imersão nativa autêntica** de co
 
 ## 4. Filosofia de UX & Microcopy
 - **Operate / Experience:** A interface não compete com o conteúdo. Zero slogans de autoelogio (*"catálogo atualizado"*, *"100% autêntico"*).
-- **Acessibilidade Universal:** Contraste mínimo WCAG AA em todos os textos, piso tipográfico de 12px para tags e 14px para inputs de busca e leitura.
-- **Ações Diretas:** `Limpar filtros`, `Abrir ↗`, `Favoritar`.
+- **Acessibilidade Universal:** Contraste mínimo WCAG AA em todos os textos, piso tipográfico de 12px restrito a tags/badges passivas e 14px mínimo para controles interativos, inputs de busca e leitura.
+- **Ações Diretas:** `Limpar filtros`, `Abrir` (com ícone SVG `<ExternalLink />`, sem caractere de texto solto), `Favoritar`.
 
 ---
 

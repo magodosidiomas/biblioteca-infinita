@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { LanguageItem } from '../../constants/languages';
+import { FlagIcon } from '../FlagIcon';
 
 export type AdminView = 'content' | 'new' | 'languages';
 
@@ -116,7 +117,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
                   langOpen ? 'border-zinc-700 bg-[#16161a]' : 'border-zinc-800 hover:border-zinc-700'
                 }`}
               >
-                <span className="text-sm leading-none">{currentLang.flag}</span>
+                <FlagIcon languageId={currentLang.id} flag={currentLang.flag} alt={currentLang.name} />
                 <span>{currentLang.name}</span>
                 <svg
                   className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
@@ -154,7 +155,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
                         }`}
                       >
                         <div className="flex items-center gap-2">
-                          <span className="text-sm leading-none">{lang.flag}</span>
+                          <FlagIcon languageId={lang.id} flag={lang.flag} alt={lang.name} />
                           <span>{lang.name}</span>
                         </div>
                         {isSelected && (

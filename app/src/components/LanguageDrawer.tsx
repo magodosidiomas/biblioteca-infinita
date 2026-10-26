@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, ExternalLink } from 'lucide-react';
 import { Sheet, SheetContent } from './ui/sheet';
+import { FlagIcon } from './FlagIcon';
 import type { LanguageItem } from '../constants/languages';
 
 interface LanguageDrawerProps {
@@ -54,7 +55,7 @@ export const LanguageDrawer: React.FC<LanguageDrawerProps> = ({
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
-                    <span className="text-xl shrink-0 leading-none">{lang.flag}</span>
+                    <FlagIcon languageId={lang.id} flag={lang.flag} alt={lang.name} className="w-[20px] h-[14px]" />
                     <span className="text-sm font-semibold text-zinc-100 truncate">
                       {lang.name}
                     </span>

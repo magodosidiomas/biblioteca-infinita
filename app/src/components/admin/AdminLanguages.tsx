@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { PRESET_CATALOG, INITIAL_LANGS, type LanguageItem } from '../../constants/languages';
+import { FlagIcon } from '../FlagIcon';
 
 const STORAGE_KEY = 'immersion_admin_languages_v1';
 
@@ -148,7 +149,7 @@ export const AdminLanguages: React.FC = () => {
                       : 'hover:border-zinc-700 hover:bg-[#1f1f23] hover:text-white cursor-pointer'
                   }`}
                 >
-                  <span className="text-base">{p.flag}</span>
+                  <FlagIcon languageId={p.id} flag={p.flag} alt={p.name} />
                   <span className="truncate">{p.name}</span>
                 </button>
               );
@@ -218,7 +219,7 @@ export const AdminLanguages: React.FC = () => {
               className="flex justify-between items-center px-4 py-3 border-b border-[#1f1f23] last:border-b-0"
             >
               <div className="flex items-center gap-3">
-                <span className="text-[18px] w-6 text-center select-none">{l.flag}</span>
+                <FlagIcon languageId={l.id} flag={l.flag} alt={l.name} className="w-5 h-3.5" />
                 <div>
                   <span className="font-semibold text-zinc-100 text-[14px]">{l.name}</span>
                   <span className="text-[12px] text-zinc-400 font-mono ml-1.5">{l.id}</span>
