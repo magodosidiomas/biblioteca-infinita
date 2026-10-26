@@ -1,6 +1,7 @@
 import React from 'react';
+import { LanguageDrawer } from './LanguageDrawer';
 import type { MediaCategory } from '../types/content';
-import type { LanguageItem } from '../constants/languages';
+import { getLanguageCode, type LanguageItem } from '../constants/languages';
 
 interface HeaderProps {
   activeTab: MediaCategory;
@@ -17,6 +18,7 @@ const TABS: { id: MediaCategory; label: string }[] = [
   { id: 'movies', label: 'Filmes' },
   { id: 'sites', label: 'Sites' },
   { id: 'professores', label: 'Professores' },
+  { id: 'pronuncia', label: 'Pronúncia' },
 ];
 
 export const Header: React.FC<HeaderProps> = ({
@@ -27,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   onLanguageChange,
 }) => {
   const [langOpen, setLangOpen] = React.useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const currentLang = languages.find((l) => l.id === selectedLanguage) || {
@@ -45,9 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
       }
     }
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setLangOpen(false);
-      }
+      if (event.key === 'Escape') setLangOpen(false);
     }
 
     if (langOpen) {
@@ -60,12 +61,20 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, [langOpen]);
 
+  const handleLangButtonClick = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setMobileDrawerOpen(true);
+    } else {
+      setLangOpen((prev) => !prev);
+    }
+  };
+
   return (
-    <header className="bg-[#09090b] sticky top-0 z-50">
+    <header className="bg-[#09090b] w-full max-w-full overflow-hidden">
       {/* Tier 1: Brand & TopNav Actions */}
       <div className="border-b border-zinc-800/80">
-        <div className="max-w-[1180px] mx-auto px-6 h-14 flex items-center justify-between gap-4">
-          <a href="/" className="flex items-center gap-2.5 flex-shrink-0 text-zinc-100 no-underline">
+        <div className="max-w-[1180px] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-3">
+          <a href="/" className="flex items-center gap-2 flex-shrink-0 text-zinc-100 no-underline">
             <span className="text-xl">🧙🏻‍♂️</span>
             <span className="font-bold text-base tracking-tight text-zinc-100">
               Biblioteca Infinita
@@ -75,17 +84,20 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative" ref={dropdownRef}>
             <button
               type="button"
-              onClick={() => setLangOpen((prev) => !prev)}
-              aria-expanded={langOpen}
+              onClick={handleLangButtonClick}
+              aria-expanded={langOpen || mobileDrawerOpen}
               aria-haspopup="listbox"
-              className={`h-9 px-3.5 rounded-lg bg-[#111114] border text-sm font-medium text-zinc-200 flex items-center gap-2.5 transition-colors cursor-pointer ${
-                langOpen ? 'border-zinc-700 bg-[#16161a]' : 'border-zinc-800 hover:border-zinc-700'
+              className={`h-9 px-3 rounded-lg bg-[#111114] border text-sm font-medium text-zinc-200 flex items-center gap-2 transition-colors cursor-pointer hover:border-zinc-700 active:scale-95 ${
+                langOpen ? 'border-zinc-700 bg-[#16161a]' : 'border-zinc-800'
               }`}
             >
               <span className="text-base leading-none">{currentLang.flag}</span>
-              <span>{currentLang.name}</span>
+              <span className="sm:hidden text-xs font-semibold tracking-wider text-zinc-300">
+                {getLanguageCode(currentLang.id)}
+              </span>
+              <span className="hidden sm:inline">{currentLang.name}</span>
               <svg
-                className={`w-4 h-4 text-zinc-400 -mr-0.5 transition-transform duration-200 ${
+                className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
                   langOpen ? 'rotate-180 text-zinc-200' : ''
                 }`}
                 fill="none"
@@ -96,10 +108,11 @@ export const Header: React.FC<HeaderProps> = ({
               </svg>
             </button>
 
+            {/* Popover Desktop (>= 768px) */}
             {langOpen && (
               <div
                 role="listbox"
-                className="absolute right-0 mt-1.5 w-52 max-h-72 overflow-y-auto bg-[#111114] border border-zinc-800 rounded-xl p-1.5 shadow-xl shadow-black/60 z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1"
+                className="hidden md:block absolute right-0 mt-1.5 w-56 max-h-80 overflow-y-auto bg-[#111114] border border-zinc-800 rounded-xl p-1.5 shadow-xl shadow-black/60 z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1 custom-scroll"
               >
                 {activeLanguages.map((lang) => {
                   const isSelected = lang.id === selectedLanguage;
@@ -129,15 +142,27 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   );
                 })}
+
+                {import.meta.env.DEV && (
+                  <div className="pt-1.5 mt-1 border-t border-zinc-800/60">
+                    <a
+                      href="/admin"
+                      className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-[#18181b]/60 no-underline cursor-pointer transition-colors"
+                    >
+                      <span>Gerenciar idiomas</span>
+                      <span>↗</span>
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Tier 2: Tabs (sem linhas cortando acima ou abaixo) */}
-      <nav className="bg-[#09090b]">
-        <div className="max-w-[1180px] mx-auto px-6 flex items-center gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap">
+      {/* Tier 2: Tabs */}
+      <nav className="bg-[#09090b] w-full max-w-full overflow-hidden">
+        <div className="max-w-[1180px] mx-auto px-4 md:px-6 flex items-center gap-6 sm:gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap no-scrollbar w-full min-w-0">
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -145,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => onTabChange(tab.id)}
-                className={`py-3.5 border-b-2 transition-colors cursor-pointer ${
+                className={`py-3.5 border-b-2 transition-colors cursor-pointer flex-shrink-0 ${
                   isActive
                     ? 'border-purple-500 text-zinc-100 font-semibold'
                     : 'border-transparent text-zinc-400 hover:text-zinc-200'
@@ -157,6 +182,15 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </div>
       </nav>
+
+      {/* Mobile Drawer de Idiomas (< 768px, padrão Imerso) */}
+      <LanguageDrawer
+        isOpen={mobileDrawerOpen}
+        onClose={() => setMobileDrawerOpen(false)}
+        languages={languages}
+        selectedLanguage={selectedLanguage}
+        onLanguageChange={onLanguageChange}
+      />
     </header>
   );
 };

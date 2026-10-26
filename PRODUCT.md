@@ -17,6 +17,7 @@ O catálogo separa claramente conteúdos de **imersão nativa autêntica** de co
 4. **`Séries`:** Produções seriadas em formato pôster vertical (`2:3`), sem sinopse no card, com indicação de onde assistir (`Netflix`, `YouTube`, `Disney+`, `Prime Video`, `Apple TV+`, `Max`), áudio original vs. dublado (`Original em ...`) e `Legendado [CC]`.
 5. **`Filmes`:** Longas-metragens separados de `Séries` em aba própria, compartilhando a mesma arquitetura de pôster vertical `2:3`.
 6. **`Sites`:** Jornais, leituras graduadas, ferramentas e comunidades.
+7. **`Pronúncia`:** Recursos focados em fonética, IPA, entonação e shadowing, divididos em dois blocos visuais: **Vídeos** (com miniatura 16:9 do YouTube, nome do canal e descrição do vídeo) e **Guias & Recursos** (artigos, sites e aplicativos com filtros rápidos `Vídeos`, `Artigos`, `Sites`, `Apps`).
 
 ---
 
@@ -41,3 +42,10 @@ O catálogo separa claramente conteúdos de **imersão nativa autêntica** de co
 - **Operate / Experience:** A interface não compete com o conteúdo. Zero slogans de autoelogio (*"catálogo atualizado"*, *"100% autêntico"*).
 - **Acessibilidade Universal:** Contraste mínimo WCAG AA em todos os textos, piso tipográfico de 12px para tags e 14px para inputs de busca e leitura.
 - **Ações Diretas:** `Limpar filtros`, `Abrir ↗`, `Favoritar`.
+
+---
+
+## 5. Experiência Mobile & Responsividade
+- **Smart Auto-hide no Scroll:** Em viewports mobile (`< 768px`), o conjunto unificado do topo (Header + FilterBar) desliza suavemente para fora (`-translate-y-full`) ao rolar para baixo, liberando 100% da altura da tela para os cards. Qualquer toque de rolagem para cima reexibe o topo imediatamente. Permanece sempre fixo quando o campo de busca estiver focado.
+- **Linha Única de Filtros Rápidos:** No mobile, os controles de filtro e ordenação não quebram em múltiplas linhas verticais. Ficam alinhados em uma linha única horizontal com rolagem por toque suave (`overflow-x-auto no-scrollbar`), trazendo o gatilho de **Categorias** na primeiríssima posição.
+- **Bottom Sheet de Categorias (Drawer Inferior):** Em telas mobile, o filtro de categorias abre um drawer tátil inferior com busca dedicada, área de tópicos ativos para desmarcar em 1 toque, espaçamento arejado de 4px entre itens, ausência de caixas ou dividers pesados, ação de "Limpar" contextual e botão "Ver resultados". No desktop, o combobox flutuante permanece ativo.

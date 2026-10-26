@@ -4,6 +4,7 @@ import { FilterBar } from '../FilterBar';
 import { EmptyState } from '../EmptyState';
 import { AdminEditDrawer } from './AdminEditDrawer';
 import { AdminChannelCard } from './AdminChannelCard';
+import { PronunciaVideoCard } from '../PronunciaVideoCard';
 import { SeriesMovieCard, normalizeLangKey } from '../SeriesMovieCard';
 
 interface AdminContentListProps {
@@ -20,6 +21,7 @@ interface AdminContentListProps {
 const TABS: { id: MediaCategory; label: string }[] = [
   { id: 'youtube', label: 'YouTube' },
   { id: 'professores', label: 'Professores' },
+  { id: 'pronuncia', label: 'Pronúncia' },
   { id: 'podcasts', label: 'Podcasts' },
   { id: 'series', label: 'Séries' },
   { id: 'movies', label: 'Filmes' },
@@ -77,6 +79,7 @@ export const AdminContentList: React.FC<AdminContentListProps> = ({
     const res: Record<string, number> = {
       youtube: 0,
       professores: 0,
+      pronuncia: 0,
       podcasts: 0,
       series: 0,
       movies: 0,
@@ -156,6 +159,8 @@ export const AdminContentList: React.FC<AdminContentListProps> = ({
       ? 'canais de imersão'
       : activeTab === 'professores'
       ? 'professores'
+      : activeTab === 'pronuncia'
+      ? 'itens de pronúncia'
       : activeTab === 'podcasts'
       ? 'podcasts'
       : activeTab === 'series'
@@ -239,6 +244,8 @@ export const AdminContentList: React.FC<AdminContentListProps> = ({
             {filteredList.map((c) =>
               c.category === 'series' || c.category === 'movies' ? (
                 <SeriesMovieCard key={c.id} channel={c} onEdit={setEditingChannel} />
+              ) : c.category === 'pronuncia' && ((c.topics || []).includes('Vídeo') || /(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i.test(c.url || '')) ? (
+                <PronunciaVideoCard key={c.id} channel={c} onEdit={setEditingChannel} />
               ) : (
                 <AdminChannelCard key={c.id} channel={c} onEdit={setEditingChannel} />
               )

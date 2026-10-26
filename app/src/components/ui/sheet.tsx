@@ -3,14 +3,45 @@ import { Drawer as DrawerPrimitive } from "vaul"
 import { cn } from "@/lib/utils"
 
 const Sheet = ({
+  open,
+  onOpenChange,
   shouldScaleBackground = false,
+  repositionInputs = false,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root
-    shouldScaleBackground={shouldScaleBackground}
-    {...props}
-  />
-)
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
+  const hasPushedHistoryRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (open) {
+      window.history.pushState({ sheetOpen: true }, '');
+      hasPushedHistoryRef.current = true;
+
+      const handlePopState = () => {
+        hasPushedHistoryRef.current = false;
+        onOpenChange?.(false);
+      };
+
+      window.addEventListener('popstate', handlePopState);
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+        if (hasPushedHistoryRef.current) {
+          hasPushedHistoryRef.current = false;
+          window.history.back();
+        }
+      };
+    }
+  }, [open, onOpenChange]);
+
+  return (
+    <DrawerPrimitive.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      shouldScaleBackground={shouldScaleBackground}
+      repositionInputs={repositionInputs}
+      {...props}
+    />
+  );
+};
 Sheet.displayName = "Sheet"
 
 const SheetTrigger = DrawerPrimitive.Trigger

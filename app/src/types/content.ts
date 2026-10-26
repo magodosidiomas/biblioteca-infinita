@@ -4,7 +4,8 @@ export type MediaCategory =
   | 'series'
   | 'movies'
   | 'sites'
-  | 'professores';
+  | 'professores'
+  | 'pronuncia';
 
 export type SortOption = 'name-asc' | 'name-desc' | 'favs-first';
 

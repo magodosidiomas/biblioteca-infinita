@@ -29,6 +29,7 @@ export const AdminLanguages: React.FC = () => {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(langs));
+      window.dispatchEvent(new CustomEvent('immersion_languages_updated', { detail: langs }));
     } catch (e) {
       console.error(e);
     }

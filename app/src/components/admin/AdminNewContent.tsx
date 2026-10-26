@@ -5,6 +5,7 @@ import { CHANNELS } from '../../data/channels';
 import { INITIAL_LANGS, LANG_STORAGE_KEY, type LanguageItem } from '../../constants/languages';
 import { ALL_CANONICAL_TAGS, resolveTag } from '../../constants/tags';
 import { SeriesMovieCard, inferPlatformFromUrl } from '../SeriesMovieCard';
+import { PronunciaVideoCard } from '../PronunciaVideoCard';
 import { formatDurationDisplay } from '../../utils/duration';
 
 interface AdminNewContentProps {
@@ -46,6 +47,17 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
   const [duplicateMatch, setDuplicateMatch] = useState<{ id: string; title: string; language: string; format: string } | null>(null);
   const [qualityAlerts, setQualityAlerts] = useState<string[]>([]);
   const [resolvedFromVideoInfo, setResolvedFromVideoInfo] = useState<{ videoTitle: string | null; channelUrl: string } | null>(null);
+  const [videoMetaCache, setVideoMetaCache] = useState<{
+    videoUrl: string;
+    videoTitle: string;
+    videoDesc: string;
+    videoThumb: string;
+    authorName: string;
+    channelUrl: string;
+    channelTitle: string;
+    channelDesc: string;
+    channelAvatar: string;
+  } | null>(null);
 
   const isVideoUrl = useMemo(
     () => /(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i.test(url.trim()),
@@ -110,21 +122,50 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
       const res = await fetch(`/api/fetch-meta?url=${encodeURIComponent(trimmed)}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.resolvedUrl) {
-          setUrl(data.resolvedUrl);
-        }
-        if (data.resolvedFromVideo && data.resolvedUrl) {
-          setResolvedFromVideoInfo({
-            videoTitle: data.originalVideoTitle || null,
-            channelUrl: data.resolvedUrl,
+        const isPron = data.suggestedType === 'pronuncia' || category === 'pronuncia';
+        const hasVideoPayload = Boolean(data.originalVideoUrl && data.originalVideoTitle);
+
+        if (hasVideoPayload) {
+          setVideoMetaCache({
+            videoUrl: data.originalVideoUrl,
+            videoTitle: data.originalVideoTitle || data.title || '',
+            videoDesc: data.originalVideoDesc ?? data.desc ?? '',
+            videoThumb: data.originalVideoThumb || data.avatar || '',
+            authorName: data.videoAuthorName || data.title || '',
+            channelUrl: data.resolvedUrl || trimmed,
+            channelTitle: data.title || '',
+            channelDesc: data.desc || '',
+            channelAvatar: data.avatar || '',
           });
         } else {
-          setResolvedFromVideoInfo(null);
+          setVideoMetaCache(null);
         }
-        if (data.title) setTitle(data.title);
-        if (data.desc) setDesc(data.desc);
-        if (data.avatar) setAvatar(data.avatar);
-        if (data.platform) setPlatform(data.platform);
+
+        if (isPron && hasVideoPayload) {
+          setUrl(data.originalVideoUrl);
+          setTitle(data.originalVideoTitle);
+          setDesc(data.originalVideoDesc ?? '');
+          setAvatar(data.originalVideoThumb || data.avatar || '');
+          setPlatform(data.videoAuthorName || data.title || null);
+          setResolvedFromVideoInfo(null);
+        } else {
+          if (data.resolvedUrl) {
+            setUrl(data.resolvedUrl);
+          }
+          if (data.resolvedFromVideo && data.resolvedUrl) {
+            setResolvedFromVideoInfo({
+              videoTitle: data.originalVideoTitle || null,
+              channelUrl: data.resolvedUrl,
+            });
+          } else {
+            setResolvedFromVideoInfo(null);
+          }
+          if (data.title) setTitle(data.title);
+          if (data.desc) setDesc(data.desc);
+          if (data.avatar) setAvatar(data.avatar);
+          if (data.platform) setPlatform(data.platform);
+        }
+
         if (data.originalLanguage) setOriginalLanguage(data.originalLanguage);
         if (data.originalLanguageLabel) setOriginalLanguageLabel(data.originalLanguageLabel);
         if (data.detectedLanguage) {
@@ -144,7 +185,7 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
         }
 
         // Checagem de duplicatas
-        if (data.existingMatch) {
+        if (data.existingMatch && !(isPron && hasVideoPayload)) {
           setDuplicateMatch(data.existingMatch);
         } else {
           setDuplicateMatch(null);
@@ -158,7 +199,7 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
         }
 
         // Sugestão de tipo
-        if (data.suggestedType) {
+        if (data.suggestedType && category !== 'pronuncia') {
           setCategory(data.suggestedType);
         }
 
@@ -168,11 +209,18 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
         }
 
         // Sugestão de tags canônicas
-        if (Array.isArray(data.suggestedTags) && data.suggestedTags.length > 0) {
-          setTags((prev) => {
-            const merged = new Set([...prev, ...data.suggestedTags]);
-            return Array.from(merged);
-          });
+        const nextTags = new Set<string>(Array.isArray(data.suggestedTags) ? data.suggestedTags : []);
+        if (isPron) {
+          if (hasVideoPayload || trimmed.includes('youtube.com/watch') || trimmed.includes('youtu.be/')) {
+            nextTags.add('Vídeo');
+          } else if (trimmed.includes('apps.apple.com') || trimmed.includes('play.google.com')) {
+            nextTags.add('App');
+          } else {
+            nextTags.add('Site');
+          }
+        }
+        if (nextTags.size > 0) {
+          setTags((prev) => Array.from(new Set([...prev, ...nextTags])));
         }
 
         setIsLoaded(true);
@@ -383,6 +431,7 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
   const canSave = isLoaded && Boolean(title.trim()) && Boolean(url.trim()) && effectiveTags.length > 0 && !hasBlockedVideoUrl;
 
   const isPosterCategory = category === 'series' || category === 'movies';
+  const isPronunciaVideo = category === 'pronuncia' && (effectiveTags.includes('Vídeo') || isVideoUrl);
 
   const handleSave = () => {
     if (!canSave) return;
@@ -394,11 +443,11 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
       avatar: avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
       initials: title.trim().slice(0, 2).toUpperCase(),
       description: isPosterCategory ? '' : desc,
-      beginnerFriendly: category !== 'professores' && beginner,
+      beginnerFriendly: category !== 'professores' && category !== 'pronuncia' && beginner,
       subtitlesAvailable: category !== 'podcasts' && category !== 'sites' && subtitles,
       transcriptUrl: category === 'podcasts' ? (transcriptUrl.trim() || undefined) : undefined,
       avgDuration: category === 'podcasts' ? (avgDuration.trim() || undefined) : undefined,
-      platform: isPosterCategory ? inferPlatformFromUrl(url, platform) : undefined,
+      platform: isPosterCategory ? inferPlatformFromUrl(url, platform) : category === 'pronuncia' ? (platform || undefined) : undefined,
       originalLanguage: isPosterCategory ? (originalLanguage || selectedLanguage) : undefined,
       originalLanguageLabel: isPosterCategory ? (originalLanguageLabel || undefined) : undefined,
       nonNative,
@@ -558,6 +607,7 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
                     {[
                       { id: 'youtube', label: 'YouTube' },
                       { id: 'professores', label: 'Professor' },
+                      { id: 'pronuncia', label: 'Pronúncia' },
                       { id: 'podcasts', label: 'Podcast' },
                       { id: 'series', label: 'Série' },
                       { id: 'movies', label: 'Filme' },
@@ -567,8 +617,34 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
                         key={t.id}
                         type="button"
                         onClick={() => {
-                          setCategory(t.id as MediaCategory);
-                          if (t.id === 'professores') setBeginner(false);
+                          const nextCat = t.id as MediaCategory;
+                          setCategory(nextCat);
+                          if (nextCat === 'professores' || nextCat === 'pronuncia') setBeginner(false);
+                          if (nextCat === 'pronuncia' && videoMetaCache) {
+                            setUrl(videoMetaCache.videoUrl);
+                            setTitle(videoMetaCache.videoTitle);
+                            setDesc(videoMetaCache.videoDesc);
+                            setAvatar(videoMetaCache.videoThumb);
+                            setPlatform(videoMetaCache.authorName);
+                            setResolvedFromVideoInfo(null);
+                            setDuplicateMatch(null);
+                            setTags((prev) => Array.from(new Set(['Vídeo', ...prev])));
+                          } else if ((nextCat === 'youtube' || nextCat === 'professores') && videoMetaCache) {
+                            setUrl(videoMetaCache.channelUrl);
+                            setTitle(videoMetaCache.channelTitle);
+                            setDesc(videoMetaCache.channelDesc);
+                            setAvatar(videoMetaCache.channelAvatar);
+                            setResolvedFromVideoInfo({
+                              videoTitle: videoMetaCache.videoTitle,
+                              channelUrl: videoMetaCache.channelUrl,
+                            });
+                            setTags((prev) => prev.filter((x) => x !== 'Vídeo'));
+                          } else if (nextCat === 'pronuncia' && !videoMetaCache) {
+                            setTags((prev) => {
+                              const hasType = prev.some((x) => ['Vídeo', 'Artigo', 'Site', 'App'].includes(x));
+                              return hasType ? prev : ['Site', ...prev];
+                            });
+                          }
                         }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                           category === t.id ? 'bg-[#f4f4f5] text-[#09090b] border-[#f4f4f5] font-semibold' : 'bg-[#18181b] border-[#3f3f46] text-[#d4d4d8]'
@@ -585,7 +661,7 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
                   <div className="flex flex-wrap gap-1.5">
                     <button
                       type="button"
-                      disabled={category === 'professores'}
+                      disabled={category === 'professores' || category === 'pronuncia'}
                       onClick={() => setBeginner(!beginner)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed ${
                         beginner ? 'bg-[#f4f4f5] text-[#09090b] border-[#f4f4f5] font-semibold' : 'bg-[#18181b] border-[#3f3f46] text-[#d4d4d8]'
@@ -661,6 +737,66 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
                         </span>
                       </div>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Linha 3b: Configurações de Pronúncia (Condicional) */}
+              {category === 'pronuncia' && (
+                <div className="bg-[#141418] border border-[#27272a] rounded-xl p-3.5 space-y-2.5">
+                  <div className="text-xs font-semibold text-zinc-300">
+                    Configurações de Pronúncia
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-[1.15fr_0.85fr] gap-3 items-start">
+                    <div>
+                      <label className="block text-[12px] font-medium text-[#d4d4d8] mb-1">
+                        Tipo de recurso
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(['Vídeo', 'Artigo', 'Site', 'App'] as const).map((subType) => {
+                          const isActive = effectiveTags.includes(subType);
+                          return (
+                            <button
+                              key={subType}
+                              type="button"
+                              onClick={() => {
+                                setTags((prev) => {
+                                  const withoutTypes = prev.filter(
+                                    (t) => !['Vídeo', 'Artigo', 'Site', 'App'].includes(t)
+                                  );
+                                  return [subType, ...withoutTypes];
+                                });
+                              }}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+                                isActive
+                                  ? 'bg-[#f4f4f5] text-[#09090b] border-[#f4f4f5] font-semibold'
+                                  : 'bg-[#18181b] border-[#3f3f46] text-[#d4d4d8]'
+                              }`}
+                            >
+                              {subType}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    {isPronunciaVideo && (
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <label className="text-[12px] font-medium text-[#d4d4d8]" htmlFor="inPronChannel">
+                            Canal de origem
+                          </label>
+                          <span className="text-[11px] text-[#a1a1aa]">via oEmbed</span>
+                        </div>
+                        <input
+                          id="inPronChannel"
+                          type="text"
+                          value={platform || ''}
+                          onChange={(e) => setPlatform(e.target.value)}
+                          placeholder="Sounds American"
+                          className="w-full bg-[#111114] border border-[#3f3f46] rounded-lg px-2.5 py-1.5 text-xs text-[#fafafa] focus:outline-none focus:border-[#71717a]"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -838,7 +974,13 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
                 title={isPosterCategory ? 'Recarregar pôster' : 'Recarregar foto do canal'}
                 className="bg-transparent border-0 text-[#a1a1aa] hover:text-[#f4f4f5] text-xs cursor-pointer p-0 hover:underline disabled:opacity-50"
               >
-                {isRefetchingAvatar ? 'Buscando...' : isPosterCategory ? 'Recarregar capa' : 'Recarregar ícone'}
+                {isRefetchingAvatar
+                  ? 'Buscando...'
+                  : isPosterCategory
+                  ? 'Recarregar capa'
+                  : isPronunciaVideo
+                  ? 'Recarregar miniatura'
+                  : 'Recarregar ícone'}
               </button>
             )}
           </div>
@@ -860,6 +1002,26 @@ export const AdminNewContent: React.FC<AdminNewContentProps> = ({
                   platform: inferPlatformFromUrl(url, platform),
                   originalLanguage: originalLanguage || selectedLanguage,
                   originalLanguageLabel: originalLanguageLabel,
+                  language: selectedLanguage,
+                  topics: effectiveTags,
+                }}
+              />
+            </div>
+          ) : isLoaded && isPronunciaVideo ? (
+            <div className="w-full max-w-[380px]">
+              <PronunciaVideoCard
+                isPreview
+                channel={{
+                  id: 'preview',
+                  category,
+                  title: title || 'Sem título',
+                  url,
+                  avatar,
+                  initials: (title || 'PR').slice(0, 2).toUpperCase(),
+                  description: desc,
+                  beginnerFriendly: false,
+                  subtitlesAvailable: subtitles,
+                  platform: platform || undefined,
                   language: selectedLanguage,
                   topics: effectiveTags,
                 }}

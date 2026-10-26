@@ -17,10 +17,29 @@
   - [`scripts/validate-catalog.js`](scripts/validate-catalog.js) valida paridade 1:1 entre `content.json` e `channels.ts`, audita descrições contra AI slop e valida todas as tags contra o dicionário canônico ([`app/src/constants/tags.ts`](app/src/constants/tags.ts)). Executado automaticamente antes de `npm run build`.
 
 ### Front-end do Aluno (`http://localhost:5173/`)
-- [x] **Navegação Horizontal Escalável & Seletor de Idioma:** [`Header.tsx`](app/src/components/Header.tsx) com abas separadas (`YouTube`, `Professores`, `Podcasts`, `Séries`, `Filmes`, `Sites`) e seletor de idiomas ativos à direita.
+- [x] **Navegação Horizontal Escalável & Seletor de Idioma:** [`Header.tsx`](app/src/components/Header.tsx) com abas separadas (`YouTube`, `Professores`, `Pronúncia`, `Podcasts`, `Séries`, `Filmes`, `Sites`) e seletor de idiomas ativos à direita.
+- [x] **Aba `Pronúncia` (Subheaders `Vídeos` e `Guias & Recursos` + Thumbs 16:9):** [`PronunciaVideoCard.tsx`](app/src/components/PronunciaVideoCard.tsx) + [`App.tsx`](app/src/App.tsx) aprovados via [`previews/preview-pronuncia-recursos.html`](previews/preview-pronuncia-recursos.html) — divide a aba em dois subheaders (`Vídeos` com thumbnail 16:9 do YouTube, nome do canal, título e descrição; `Guias & Recursos` para artigos, sites e aplicativos), com filtros rápidos `Vídeos`, `Artigos`, `Sites`, `Apps` na [`FilterBar.tsx`](app/src/components/FilterBar.tsx) e suporte completo no Admin para salvar vídeos individuais do YouTube sem convertê-los para canal quando a categoria é `Pronúncia`.
+- [x] **Smart Auto-Hide Unificado & Bottom Sheet de Categorias no Mobile:**
+  - Aprovado via [`previews/preview-mobile-filter-sheet.html`](previews/preview-mobile-filter-sheet.html).
+  - **Smart Scroll Auto-Hide:** [`app/src/hooks/useSmartScroll.ts`](app/src/hooks/useSmartScroll.ts) acoplado ao wrapper superior em [`App.tsx`](app/src/App.tsx). Ao rolar para baixo em telas mobile (`< 768px`), todo o conjunto do topo (Header + FilterBar) recolhe suavemente (`-translate-y-full`). Ao rolar para cima (mesmo sutilmente), o topo reaparece instantaneamente. Eliminado o antigo timeout artificial de 450ms que causava tremulação no meio da leitura.
+  - **Filtros em Linha Única Horizontal:** Em [`FilterBar.tsx`](app/src/components/FilterBar.tsx), os filtros rápidos ficam organizados em linha única com scroll horizontal suave (`overflow-x-auto no-scrollbar`), com o botão **Categorias** posicionado como primeiríssimo item e "Ordenar" integrado na linha no mobile.
+  - **Bottom Sheet de Categorias:** [`CategorySheet.tsx`](app/src/components/CategorySheet.tsx) substitui o popover de desktop em telas mobile, abrindo um drawer nativo inferior com busca dedicada, área de categorias ativas com remoção rápida, espaçamento limpo de 4px entre itens (`space-y-1`), ausência total de dividers inúteis ou cards pesados, ação de "Limpar" contextual e botão "Ver resultados". No desktop, o combobox inline flutuante permanece preservado.
+  - **Eliminação de Scroll Horizontal da Página:** Trava estrita de viewport via `html, body { overflow-x: hidden; max-width: 100vw; }` em [`index.css`](app/src/index.css) e contenção de largura com `w-full min-w-0 max-w-full overflow-hidden` nos containers de [`Header.tsx`](app/src/components/Header.tsx) e [`FilterBar.tsx`](app/src/components/FilterBar.tsx).
+  - **Language Drawer Mobile (Padrão Imerso) & Sincronização de Idiomas:**
+    - [`LanguageDrawer.tsx`](app/src/components/LanguageDrawer.tsx) implementado sobre o Vaul para substituir o dropdown flutuante no mobile: sobe um drawer limpo com título "Idioma", lista de idiomas com alvos de toque generosos ($\ge 48\text{px}$), bandeira, nome, checkmark roxo no ativo e link direto "Gerenciar idiomas ↗" no ambiente dev.
+    - Sincronização em tempo real de idiomas ativados via Admin: [`AdminLanguages.tsx`](app/src/components/admin/AdminLanguages.tsx) emite evento customizado `immersion_languages_updated` e [`App.tsx`](app/src/App.tsx) sincroniza imediatamente seu estado local (`languages`, `setLanguages`) sem depender de reload manual.
+    - Idiomas com catálogo real (Inglês, Italiano, Francês, Espanhol, Alemão, Japonês, Português, Russo) definidos como ativos por padrão em [`languages.ts`](app/src/constants/languages.ts).
 - [x] **Barra de Filtros Contextual:** [`FilterBar.tsx`](app/src/components/FilterBar.tsx) + [`CategoryCombobox.tsx`](app/src/components/CategoryCombobox.tsx) com busca, toggle `Para iniciantes` (oculto em Professores), toggle contextual `Legendas` (`YouTube`, `Séries`, `Filmes`) / `Com transcrição` (`Podcasts`), `Favoritos` e ordenação.
 - [x] **Card 4A (YouTube, Professores e Podcasts):** [`ChannelCard.tsx`](app/src/components/ChannelCard.tsx) com avatar circular + fallback tipográfico, botão de favoritar, bio em 3 linhas, badges (`Iniciante`, `Legendado`, link clicável `Transcrição` para podcasts), tags atômicas e duração média (`Episódios de ~30 min`).
 - [x] **Card de Pôster Vertical 2:3 (`Séries` e `Filmes`):** [`SeriesMovieCard.tsx`](app/src/components/SeriesMovieCard.tsx) aprovado via [`previews/preview-series-filmes.html`](previews/preview-series-filmes.html) — grid de 3 colunas no desktop, sem sinopse no card, pill da plataforma no topo esquerdo, gradiente inferior escuro, subtítulo editorial com gêneros separados por `·` + aviso `Original em [Idioma]` quando dublado, e linha única de badges (`Iniciante`, `Áudio Original` / `Dublado`, `Legendado [CC]`).
+
+### Deploy & Infraestrutura (Cloudflare Pages)
+- [x] **Deploy de Staging no Cloudflare Pages:**
+  - Build de produção verificado com zero erros (`npm run build`).
+  - Deploy publicado no ambiente de staging com branch `staging`:
+    - **URL Staging:** `https://staging.biblioteca-infinita.pages.dev`
+    - **Última Versão:** `https://11b27419.biblioteca-infinita.pages.dev`
+    - Implementado interceptador de navegação no `Sheet` (`history.pushState` + `popstate`): o botão Voltar (hardware/gesto de sistema no Android) agora fecha exclusivamente o drawer aberto sem navegar para trás no histórico da aba.
 
 ### Painel Admin (`http://localhost:5173/admin`)
 - [x] **Listagem & Filtros por Aba/Idioma:** [`AdminContentList.tsx`](app/src/components/admin/AdminContentList.tsx) + [`AdminChannelCard.tsx`](app/src/components/admin/AdminChannelCard.tsx) + [`SeriesMovieCard.tsx`](app/src/components/SeriesMovieCard.tsx) (modo Admin com botão `Editar` no hover) com contadores separados para `Séries` e `Filmes`.
@@ -68,9 +87,11 @@
 
 ## 🚦 Próximos Passos (Em Aberto)
 
-### 🟠 P1 — Curadoria & Conteúdo para Lançamento
-- [ ] **Catálogo Atual:** 122 itens ativos (110 em `YouTube`, 2 em `Podcasts`, 6 em `Séries`, 4 em `Filmes`). `Professores` e `Sites` seguem aguardando curadoria/migração sob demanda.
-- [ ] **Ingestão / Conversão de Lotes:** Converter ou ingerir canais de `YouTube`, `Professores` e `Podcasts` por idioma conforme solicitado pelo Vitor.
+### 🔴 P0 — Ajustes Finais de Interface
+- [ ] **Adaptações Mobile & Responsividade:** Revisão fina da experiência no celular (toque, padding dos pôsteres 2:3, gaveta de edição, sticky nav e filtros sem quebra de layout em telas pequenas). Após fechar isso, o front-end fica 100% concluído e o projeto entra em modo puro de povoamento ("adding stuff").
+
+### 🟠 P1 — Curadoria & Povoamento de Conteúdo (Alimentação Contínua)
+- [ ] **Povoamento por Idioma:** Adicionar novos canais, séries, podcasts e sites sob demanda diretamente pelo Admin local (`localhost:5173/admin`). Catálogo atual conta com 122 itens ativos sincronizados.
 
 ### 🟡 P2 — Deploy & Produção
 - [ ] **Deploy Cloudflare Pages:** Executar `npm run build` e publicar `app/dist` no Cloudflare Pages (`biblioteca-infinita.pages.dev`) após fechar o lote inicial de lançamento.

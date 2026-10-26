@@ -48,6 +48,17 @@ const FORMAT_META: Record<
     reloadImageLabel: '↻ Recarregar foto',
     confirmDelete: 'Excluir este professor?',
   },
+  pronuncia: {
+    headerTitle: 'Editar item de pronúncia',
+    entityNoun: 'item',
+    openTooltip: 'Abrir link',
+    urlLabel: 'Link do recurso',
+    urlPlaceholder: 'https://www.youtube.com/watch?v=... ou site',
+    fetchButtonLabel: '↻ Buscar metadados',
+    imageLabel: 'Miniatura / Ícone',
+    reloadImageLabel: '↻ Recarregar imagem',
+    confirmDelete: 'Excluir este item de pronúncia?',
+  },
   podcasts: {
     headerTitle: 'Editar podcast',
     entityNoun: 'podcast',
@@ -226,11 +237,11 @@ export const AdminEditDrawer: React.FC<AdminEditDrawerProps> = ({
       description: isPosterCategory ? '' : description.trim(),
       category,
       avatar: avatar || channel.avatar,
-      beginnerFriendly: category !== 'professores' && beginner,
+      beginnerFriendly: category !== 'professores' && category !== 'pronuncia' && beginner,
       subtitlesAvailable: category !== 'podcasts' && category !== 'sites' && subtitles,
       transcriptUrl: category === 'podcasts' ? (transcriptUrl.trim() || undefined) : undefined,
       avgDuration: category === 'podcasts' ? (avgDuration.trim() || undefined) : undefined,
-      platform: isPosterCategory ? inferPlatformFromUrl(url, platform) : undefined,
+      platform: isPosterCategory ? inferPlatformFromUrl(url, platform) : category === 'pronuncia' ? (platform || undefined) : undefined,
       originalLanguage: isPosterCategory ? finalOrigKey : undefined,
       originalLanguageLabel: isPosterCategory ? (matchedOrigLangObj?.name || originalLanguageLabel || undefined) : undefined,
       language,
@@ -408,6 +419,7 @@ export const AdminEditDrawer: React.FC<AdminEditDrawerProps> = ({
                 {[
                   { id: 'youtube', label: 'YouTube' },
                   { id: 'professores', label: 'Professor' },
+                  { id: 'pronuncia', label: 'Pronúncia' },
                   { id: 'podcasts', label: 'Podcast' },
                   { id: 'series', label: 'Série' },
                   { id: 'movies', label: 'Filme' },
@@ -418,7 +430,7 @@ export const AdminEditDrawer: React.FC<AdminEditDrawerProps> = ({
                     type="button"
                     onClick={() => {
                       setCategory(t.id as MediaCategory);
-                      if (t.id === 'professores') setBeginner(false);
+                      if (t.id === 'professores' || t.id === 'pronuncia') setBeginner(false);
                     }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                       category === t.id ? 'bg-[#f4f4f5] text-[#09090b] border-[#f4f4f5] font-semibold' : 'bg-[#18181b] border-[#3f3f46] text-[#d4d4d8]'
@@ -435,7 +447,7 @@ export const AdminEditDrawer: React.FC<AdminEditDrawerProps> = ({
               <div className="flex flex-wrap gap-1.5">
                 <button
                   type="button"
-                  disabled={category === 'professores'}
+                  disabled={category === 'professores' || category === 'pronuncia'}
                   onClick={() => setBeginner(!beginner)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed ${
                     beginner ? 'bg-[#f4f4f5] text-[#09090b] border-[#f4f4f5] font-semibold' : 'bg-[#18181b] border-[#3f3f46] text-[#d4d4d8]'
@@ -495,6 +507,54 @@ export const AdminEditDrawer: React.FC<AdminEditDrawerProps> = ({
                     </span>
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Linha 3b: Campos Específicos de Pronúncia (Condicional) */}
+          {category === 'pronuncia' && (
+            <div className="bg-[#141418] border border-[#27272a] rounded-xl p-3.5 space-y-2.5">
+              <div className="text-xs font-semibold text-zinc-300">
+                Configurações de Pronúncia
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[12px] font-medium text-[#d4d4d8] mb-1">Tipo de recurso</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(['Vídeo', 'Artigo', 'Site', 'App'] as const).map((subType) => {
+                      const isActive = parsedTopics.includes(subType);
+                      return (
+                        <button
+                          key={subType}
+                          type="button"
+                          onClick={() => {
+                            const others = parsedTopics.filter((t) => !['Vídeo', 'Artigo', 'Site', 'App'].includes(t));
+                            setTagsStr([subType, ...others].join(', '));
+                          }}
+                          className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors cursor-pointer ${
+                            isActive
+                              ? 'bg-[#f4f4f5] text-[#09090b] border-[#f4f4f5] font-semibold'
+                              : 'bg-[#18181b] border-[#3f3f46] text-[#d4d4d8]'
+                          }`}
+                        >
+                          {subType}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                {parsedTopics.includes('Vídeo') && (
+                  <div>
+                    <label className="block text-[12px] font-medium text-[#d4d4d8] mb-1">Canal de origem</label>
+                    <input
+                      type="text"
+                      value={platform || ''}
+                      onChange={(e) => setPlatform(e.target.value)}
+                      placeholder="Ex: Sounds American"
+                      className="w-full bg-[#18181b] border border-[#3f3f46] rounded-lg px-2.5 py-1.5 text-xs text-[#fafafa] focus:outline-none focus:border-[#71717a]"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}

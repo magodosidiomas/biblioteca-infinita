@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Infinita — Mobile Craft Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+      color: #f4f4f5;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#09090b] text-zinc-100 antialiased pb-28">
+
+  <!-- ======================================================== -->
+  <!-- WRAPPER FIXO DO TOPO (HEADER + FILTERBAR) COM SMART AUTO-HIDE -->
+  <!-- ======================================================== -->
+  <div 
+    id="sticky-top-container" 
+    class="sticky top-0 z-40 bg-[#09090b] transition-transform duration-300 ease-out will-change-transform"
+  >
+    
+    <!-- HEADER — EXATO Header.tsx -->
+    <header class="bg-[#09090b]">
+      <!-- Tier 1: Brand & TopNav Actions -->
+      <div class="border-b border-zinc-800/80">
+        <div class="max-w-[1180px] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-4">
+          <a href="#" class="flex items-center gap-2.5 flex-shrink-0 text-zinc-100 no-underline">
+            <span class="text-xl">🧙🏻‍♂️</span>
+            <span class="font-bold text-base tracking-tight text-zinc-100">
+              Biblioteca Infinita
+            </span>
+          </a>
+
+          <div class="relative">
+            <button
+              type="button"
+              class="h-9 px-3.5 rounded-lg bg-[#111114] border border-zinc-800 text-sm font-medium text-zinc-200 flex items-center gap-2.5 transition-colors cursor-pointer"
+            >
+              <span class="text-base leading-none">🇬🇧</span>
+              <span>English</span>
+              <svg class="w-4 h-4 text-zinc-400 -mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tier 2: Tabs -->
+      <nav class="bg-[#09090b]">
+        <div class="max-w-[1180px] mx-auto px-4 md:px-6 flex items-center gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap no-scrollbar">
+          <button type="button" class="py-3.5 border-b-2 border-purple-500 text-zinc-100 font-semibold cursor-pointer">
+            YouTube
+          </button>
+          <button type="button" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Podcasts
+          </button>
+          <button type="button" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Séries
+          </button>
+          <button type="button" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Filmes
+          </button>
+          <button type="button" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Sites
+          </button>
+          <button type="button" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Professores
+          </button>
+          <button type="button" class="py-3.5 border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+            Pronúncia
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- FILTERBAR — EXATO FilterBar.tsx -->
+    <section class="bg-[#09090b] pt-3 pb-3 border-b border-zinc-800/80">
+      <div class="max-w-[1180px] mx-auto px-4 md:px-6 space-y-3">
+        
+        <!-- Input de Busca Principal -->
+        <div class="relative w-full">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" stroke-width="2"></circle>
+            <path d="m21 21-4.3-4.3" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <input
+            type="text"
+            id="main-search-input"
+            placeholder="Buscar por canal, assunto ou palavra-chave..."
+            class="w-full pl-10 pr-4 h-10 bg-transparent border border-white/[0.08] focus:border-purple-500 rounded-lg text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none transition-all"
+          />
+        </div>
+
+        <!-- Linha de Controles: No mobile (< 768px), sangra até a parede da tela (-mx-4 px-4) e esconde a scrollbar -->
+        <div 
+          id="filters-scroll-row"
+          class="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar py-0.5 cursor-grab active:cursor-grabbing select-none -mx-4 px-4 md:mx-0 md:px-0"
+        >
+          <!-- 1. Gatilho de Categorias (IMEDIATAMENTE VISÍVEL NA PRIMEIRA POSIÇÃO) -->
+          <button
+            id="category-combobox-trigger"
+            type="button"
+            class="h-8 px-3 rounded-lg border text-xs font-medium inline-flex items-center gap-2 transition-colors cursor-pointer border-white/[0.08] bg-transparent hover:bg-white/[0.04] text-zinc-300 hover:text-zinc-100 flex-shrink-0"
+          >
+            <div id="category-trigger-content" class="flex items-center gap-1.5">
+              <span class="text-zinc-400">Categorias</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-zinc-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- 2. Botão "Para iniciantes" -->
+          <button
+            id="filter-beginner-btn"
+            type="button"
+            class="h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium flex-shrink-0"
+          >
+            Para iniciantes
+          </button>
+
+          <!-- 3. Botão "Legendas" -->
+          <button
+            id="filter-subs-btn"
+            type="button"
+            class="h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium flex-shrink-0"
+          >
+            <svg class="w-3.5 h-3.5 text-zinc-400 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Legendas</span>
+          </button>
+
+          <!-- 4. Botão "Favoritos" -->
+          <button
+            id="filter-favs-btn"
+            type="button"
+            class="h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium flex-shrink-0"
+          >
+            <svg class="w-3.5 h-3.5 text-rose-500 fill-current" viewBox="0 0 24 24">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+            </svg>
+            <span>Favoritos</span>
+          </button>
+
+          <!-- 5. Ordenação como Pill alinhada -->
+          <div class="relative inline-flex items-center flex-shrink-0">
+            <select class="h-8 pl-3 pr-8 bg-[#111114] border border-white/[0.08] hover:border-zinc-700 rounded-lg text-xs font-medium text-zinc-300 focus:outline-none focus:border-zinc-500 appearance-none cursor-pointer transition-colors">
+              <option value="name-asc" class="bg-[#111114]">Nome (A-Z)</option>
+              <option value="name-desc" class="bg-[#111114]">Nome (Z-A)</option>
+              <option value="favs-first" class="bg-[#111114]">Favoritos primeiro</option>
+            </select>
+            <svg class="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
+          <!-- 6. Limpar Filtros -->
+          <button
+            id="reset-filters-btn"
+            type="button"
+            class="hidden h-8 px-3 text-xs font-semibold text-purple-400 hover:text-purple-300 transition-colors inline-flex items-center cursor-pointer flex-shrink-0"
+          >
+            Limpar filtros
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CONTEÚDO PRINCIPAL (EXATO ChannelCard.tsx COM DADOS REAIS) -->
+  <!-- ======================================================== -->
+  <main class="max-w-[1180px] mx-auto px-4 md:px-6 pt-6">
+    <div class="mb-5 flex items-center justify-between">
+      <h2 class="text-base font-bold text-zinc-100">YouTube</h2>
+      <span id="channel-counter" class="text-xs text-zinc-500">4 canais</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="channels-grid">
+      
+      <!-- Card 1: Ali Abdaal -->
+      <div class="bg-[#111114] border border-zinc-800 hover:border-zinc-700/80 rounded-2xl p-6 transition-all flex flex-col justify-between group min-h-[260px] cursor-pointer">
+        <div>
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-zinc-200 relative">
+                <img 
+                  src="https://yt3.googleusercontent.com/ytc/AIdro_m2xx6mCZwsyjARnkwBKJxEv0FqGxGS2NwWNkjWH__Smw=s900-c-k-c0x00ffffff-no-rj" 
+                  alt="Ali Abdaal" 
+                  referrerPolicy="no-referrer"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="inline-flex items-center gap-1.5 max-w-full">
+                  <h3 class="text-base font-bold text-zinc-100 group-hover:text-white transition-colors truncate">
+                    Ali Abdaal
+                  </h3>
+                  <svg class="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="w-8 h-8 rounded-lg hover:bg-zinc-800/60 flex items-center justify-center flex-shrink-0 transition-all text-zinc-600 hover:text-rose-500 active:scale-95 cursor-pointer">
+              <svg class="w-[18px] h-[18px] text-zinc-600 hover:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-300 line-clamp-3 mb-5">
+            I'm Ali - doctor turned entrepreneur, YouTuber, and author of the New York Times bestseller Feel-Good Productivity. On this channel, we explore evidence-based strategies to live a healthier and happier life.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2.5 pt-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Legendado
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+              Produtividade
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Great Big Story -->
+      <div class="bg-[#111114] border border-zinc-800 hover:border-zinc-700/80 rounded-2xl p-6 transition-all flex flex-col justify-between group min-h-[260px] cursor-pointer">
+        <div>
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-zinc-200 relative">
+                <img 
+                  src="https://yt3.googleusercontent.com/jNeTB9OVcqD4QsRe3sbWkybRe-GKjRwttqtHNV_BurWxga_sKhwING5odp53QPU8g_krSF1KEQ=s900-c-k-c0x00ffffff-no-rj" 
+                  alt="Great Big Story" 
+                  referrerPolicy="no-referrer"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="inline-flex items-center gap-1.5 max-w-full">
+                  <h3 class="text-base font-bold text-zinc-100 group-hover:text-white transition-colors truncate">
+                    Great Big Story
+                  </h3>
+                  <svg class="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="w-8 h-8 rounded-lg hover:bg-zinc-800/60 flex items-center justify-center flex-shrink-0 transition-all text-zinc-600 hover:text-rose-500 active:scale-95 cursor-pointer">
+              <svg class="w-[18px] h-[18px] text-zinc-600 hover:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-300 line-clamp-3 mb-5">
+            Welcome to Great Big Story, where the extraordinary hides in plain sight. We are a global filmmaking collective telling remarkable human stories from around the world.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2.5 pt-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Legendado
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+              Curiosidades
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: English with Evie -->
+      <div class="bg-[#111114] border border-zinc-800 hover:border-zinc-700/80 rounded-2xl p-6 transition-all flex flex-col justify-between group min-h-[260px] cursor-pointer">
+        <div>
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-zinc-200 relative">
+                <img 
+                  src="https://yt3.googleusercontent.com/qA-ixmUrXLc3oFdHzFHNFQA-Vx8EurpzfD9OTLFqRhGvHbzVU_XLt5kGLUam-in1O8ZOIU8YKg=s900-c-k-c0x00ffffff-no-rj" 
+                  alt="English with Evie" 
+                  referrerPolicy="no-referrer"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="inline-flex items-center gap-1.5 max-w-full">
+                  <h3 class="text-base font-bold text-zinc-100 group-hover:text-white transition-colors truncate">
+                    English with Evie
+                  </h3>
+                  <svg class="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="w-8 h-8 rounded-lg hover:bg-zinc-800/60 flex items-center justify-center flex-shrink-0 transition-all text-zinc-600 hover:text-rose-500 active:scale-95 cursor-pointer">
+              <svg class="w-[18px] h-[18px] text-zinc-600 hover:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-300 line-clamp-3 mb-5">
+            Natural immersion and adapted stories for intermediate learners, focused on comprehensible input and relaxed listening.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2.5 pt-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              Iniciante
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+              Materiais Adaptados
+            </span>
+            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+              Vlog
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Adam Neely -->
+      <div class="bg-[#111114] border border-zinc-800 hover:border-zinc-700/80 rounded-2xl p-6 transition-all flex flex-col justify-between group min-h-[260px] cursor-pointer">
+        <div>
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-full bg-zinc-800 border border-zinc-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs text-zinc-200 relative">
+                <span class="w-full h-full flex items-center justify-center text-xs font-bold text-zinc-300">AN</span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="inline-flex items-center gap-1.5 max-w-full">
+                  <h3 class="text-base font-bold text-zinc-100 group-hover:text-white transition-colors truncate">
+                    Adam Neely
+                  </h3>
+                  <svg class="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="w-8 h-8 rounded-lg hover:bg-zinc-800/60 flex items-center justify-center flex-shrink-0 transition-all text-zinc-600 hover:text-rose-500 active:scale-95 cursor-pointer">
+              <svg class="w-[18px] h-[18px] text-zinc-600 hover:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="text-sm leading-relaxed text-zinc-300 line-clamp-3 mb-5">
+            Bass lessons, video essays and explorations on modern music theory, performance philosophy and audio analysis.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2.5 pt-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Legendado
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+              Música
+            </span>
+            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+              Educação
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MOBILE BOTTOM SHEET (VAUL / SHADCN PARITY COM sheet.tsx) -->
+  <!-- ======================================================== -->
+  <div 
+    id="mobile-sheet-overlay" 
+    class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm transition-opacity duration-200 opacity-0 pointer-events-none"
+  >
+    <div 
+      id="mobile-sheet-content"
+      class="fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[85vh] flex-col rounded-t-[24px] border-t border-zinc-800 bg-[#121215] p-5 shadow-2xl transition-transform duration-300 ease-out transform translate-y-full"
+    >
+      <!-- Handle do Drawer (Exato sheet.tsx) -->
+      <div class="mx-auto mb-3 h-1.5 w-12 rounded-full bg-zinc-700/60"></div>
+
+      <!-- Cabeçalho Limpo: Título direto e Ação com Respiro Perfeito (Zero Subheader, Zero Linha Divisória) -->
+      <div class="flex items-center justify-between px-1 mb-3">
+        <h2 class="text-base font-bold text-zinc-100">
+          Categorias
+        </h2>
+        <button 
+          id="sheet-clear-all" 
+          type="button" 
+          class="hidden text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors whitespace-nowrap cursor-pointer"
+        >
+          Limpar
+        </button>
+      </div>
+
+      <!-- Busca Interna (Sem dividers ao redor) -->
+      <div class="relative mb-3">
+        <svg class="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" stroke-width="2"></circle>
+          <path d="m21 21-4.3-4.3" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <input
+          id="sheet-search-input"
+          type="text"
+          placeholder="Buscar categoria..."
+          class="w-full h-10 pl-9 pr-8 bg-zinc-900/90 border border-zinc-800 focus:border-zinc-600 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none transition-colors"
+        />
+        <button 
+          id="sheet-search-clear" 
+          type="button" 
+          class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 p-0.5 cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tópicos Selecionados Ativos (Se houver) -->
+      <div id="sheet-selected-area" class="hidden pb-2 mb-2">
+        <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto custom-scroll pr-1" id="sheet-selected-chips">
+          <!-- Chips gerados dinamicamente com estilo fiel ao CategoryCombobox -->
+        </div>
+      </div>
+
+      <!-- Lista de Opções Rolável (Leve, plana, sem caixas pesadas nem dividers, 4px de respiro) -->
+      <div class="overflow-y-auto flex-1 custom-scroll space-y-1 pr-1 py-1" id="sheet-topics-list">
+        <!-- Renderizado dinamicamente -->
+      </div>
+
+      <!-- Rodapé com Botão Principal (Sem divider inútil) -->
+      <div class="pt-3 mt-1">
+        <button
+          id="sheet-apply-btn"
+          type="button"
+          class="w-full h-11 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-purple-950/40"
+        >
+          <span>Ver resultados</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT DE INTERAÇÃO -->
+  <script>
+    // Taxonomia Atômica Canônica do Projeto (conforme content.json / tags.ts)
+    const AVAILABLE_TOPICS = [
+      'Produtividade', 'Curiosidades', 'Materiais Adaptados', 'Vlog', 
+      'Música', 'Educação', 'Ciência', 'Tecnologia', 'Notícias', 
+      'Cinema', 'Filosofia', 'História', 'Design', 'Finanças', 'Viagem'
+    ];
+
+    let selectedTopics = [];
+    let isBeginnerActive = false;
+    let isSubsActive = false;
+    let isFavsActive = false;
+
+    // Elementos DOM
+    const stickyTop = document.getElementById('sticky-top-container');
+    const mainSearchInput = document.getElementById('main-search-input');
+    const categoryTrigger = document.getElementById('category-combobox-trigger');
+    const categoryTriggerContent = document.getElementById('category-trigger-content');
+    const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+    const sheetOverlay = document.getElementById('mobile-sheet-overlay');
+    const sheetContent = document.getElementById('mobile-sheet-content');
+    const sheetClearAll = document.getElementById('sheet-clear-all');
+    const sheetSearchInput = document.getElementById('sheet-search-input');
+    const sheetSearchClear = document.getElementById('sheet-search-clear');
+    const sheetSelectedArea = document.getElementById('sheet-selected-area');
+    const sheetSelectedChips = document.getElementById('sheet-selected-chips');
+    const sheetTopicsList = document.getElementById('sheet-topics-list');
+    const sheetApplyBtn = document.getElementById('sheet-apply-btn');
+
+    const filterBeginnerBtn = document.getElementById('filter-beginner-btn');
+    const filterSubsBtn = document.getElementById('filter-subs-btn');
+    const filterFavsBtn = document.getElementById('filter-favs-btn');
+
+    // ========================================================
+    // 1. SMART AUTO-HIDE NO SCROLL (SEM TIMEOUTS, PURA DIREÇÃO)
+    // ========================================================
+    let lastScrollY = window.scrollY;
+    let isHidden = false;
+
+    window.addEventListener('scroll', () => {
+      // Se o input principal estiver focado, não esconde
+      if (document.activeElement === mainSearchInput) return;
+
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY;
+
+      // Se estiver próximo ao topo, garante que permaneça visível
+      if (currentY <= 40) {
+        if (isHidden) {
+          stickyTop.style.transform = 'translateY(0)';
+          isHidden = false;
+        }
+      } 
+      // Rolar para BAIXO com folga mínima de 6px: esconde suavemente
+      else if (delta > 6 && currentY > 60 && !isHidden) {
+        stickyTop.style.transform = 'translateY(-100%)';
+        isHidden = true;
+      } 
+      // Rolar para CIMA com folga mínima de 6px: mostra suavemente
+      else if (delta < -6 && isHidden) {
+        stickyTop.style.transform = 'translateY(0)';
+        isHidden = false;
+      }
+
+      lastScrollY = currentY;
+    }, { passive: true });
+
+    // ========================================================
+    // 2. ATUALIZAÇÃO DO GATILHO DE CATEGORIAS (ESTILO CategoryCombobox)
+    // ========================================================
+    function updateTriggerState() {
+      const hasSelection = selectedTopics.length > 0;
+
+      if (!hasSelection) {
+        categoryTrigger.className = 'h-8 px-3 rounded-lg border text-xs font-medium inline-flex items-center gap-2 transition-colors cursor-pointer border-white/[0.08] bg-transparent hover:bg-white/[0.04] text-zinc-300 hover:text-zinc-100';
+        categoryTriggerContent.innerHTML = '<span class="text-zinc-400">Categorias</span>';
+      } else {
+        categoryTrigger.className = 'h-8 px-3 rounded-lg border text-xs font-medium inline-flex items-center gap-2 transition-colors cursor-pointer border-zinc-700 bg-zinc-800/40 text-zinc-100';
+        const first = selectedTopics[0];
+        const remaining = selectedTopics.length - 1;
+        
+        categoryTriggerContent.innerHTML = `
+          <span class="inline-flex items-center gap-1.5 pl-2 pr-1.5 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium leading-none">
+            <span>${first}</span>
+          </span>
+          ${remaining > 0 ? `<span class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 text-xs font-medium leading-none">+${remaining}</span>` : ''}
+        `;
+      }
+
+      checkResetFiltersVisibility();
+    }
+
+    function checkResetFiltersVisibility() {
+      const isFiltering = isBeginnerActive || isSubsActive || isFavsActive || selectedTopics.length > 0;
+      if (isFiltering) {
+        resetFiltersBtn.classList.remove('hidden');
+      } else {
+        resetFiltersBtn.classList.add('hidden');
+      }
+    }
+
+    // ========================================================
+    // 3. RENDERIZAÇÃO DO BOTTOM SHEET
+    // ========================================================
+    function renderTopicsList(filterQuery = '') {
+      const q = filterQuery.toLowerCase().trim();
+      const filtered = AVAILABLE_TOPICS.filter(t => !q || t.toLowerCase().includes(q));
+
+      sheetTopicsList.innerHTML = '';
+      if (filtered.length === 0) {
+        sheetTopicsList.innerHTML = `
+          <div class="py-8 text-center text-xs text-zinc-500">
+            Nenhuma categoria encontrada
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(topic => {
+        const isSelected = selectedTopics.includes(topic);
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = `w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-left text-sm font-medium flex items-center justify-between transition-colors cursor-pointer ${
+          isSelected 
+            ? 'bg-zinc-800/60 text-zinc-100 font-semibold' 
+            : 'bg-transparent hover:bg-white/[0.04] text-zinc-300 hover:text-zinc-100'
+        }`;
+
+        item.innerHTML = `
+          <span>${topic}</span>
+          ${isSelected ? `
+            <svg class="w-4 h-4 text-purple-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          ` : '<span class="w-4 h-4"></span>'}
+        `;
+
+        item.addEventListener('click', () => {
+          toggleTopic(topic);
+        });
+
+        sheetTopicsList.appendChild(item);
+      });
+    }
+
+    function renderSelectedChips() {
+      if (selectedTopics.length === 0) {
+        sheetSelectedArea.classList.add('hidden');
+        sheetClearAll.classList.add('hidden');
+        sheetSelectedChips.innerHTML = '';
+        return;
+      }
+
+      sheetSelectedArea.classList.remove('hidden');
+      sheetClearAll.classList.remove('hidden');
+      sheetSelectedChips.innerHTML = '';
+
+      selectedTopics.forEach(topic => {
+        const chip = document.createElement('span');
+        chip.className = 'inline-flex items-center gap-1.5 pl-2.5 pr-2 py-1 rounded-md bg-[#18181b] border border-zinc-700/60 text-zinc-200 text-xs font-medium';
+        chip.innerHTML = `
+          <span>${topic}</span>
+          <button type="button" class="p-0.5 hover:text-white hover:bg-zinc-700/50 rounded text-zinc-400 cursor-pointer">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        `;
+
+        chip.querySelector('button').addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleTopic(topic);
+        });
+
+        sheetSelectedChips.appendChild(chip);
+      });
+    }
+
+    function toggleTopic(topic) {
+      if (selectedTopics.includes(topic)) {
+        selectedTopics = selectedTopics.filter(t => t !== topic);
+      } else {
+        selectedTopics.push(topic);
+      }
+      renderTopicsList(sheetSearchInput.value);
+      renderSelectedChips();
+      updateTriggerState();
+    }
+
+    // ========================================================
+    // 4. ABRIR E FECHAR O BOTTOM SHEET
+    // ========================================================
+    function openSheet() {
+      sheetOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      sheetOverlay.classList.add('opacity-100');
+      sheetContent.classList.remove('translate-y-full');
+      sheetContent.classList.add('translate-y-0');
+      document.body.style.overflow = 'hidden';
+      renderTopicsList();
+      renderSelectedChips();
+      setTimeout(() => sheetSearchInput.focus(), 150);
+    }
+
+    function closeSheet() {
+      sheetOverlay.classList.add('opacity-0', 'pointer-events-none');
+      sheetOverlay.classList.remove('opacity-100');
+      sheetContent.classList.add('translate-y-full');
+      sheetContent.classList.remove('translate-y-0');
+      document.body.style.overflow = '';
+      sheetSearchInput.value = '';
+      sheetSearchClear.classList.add('hidden');
+    }
+
+    categoryTrigger.addEventListener('click', openSheet);
+    sheetApplyBtn.addEventListener('click', closeSheet);
+    sheetOverlay.addEventListener('click', (e) => {
+      if (e.target === sheetOverlay) closeSheet();
+    });
+
+    sheetClearAll.addEventListener('click', () => {
+      selectedTopics = [];
+      renderTopicsList(sheetSearchInput.value);
+      renderSelectedChips();
+      updateTriggerState();
+    });
+
+    sheetSearchInput.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (val) {
+        sheetSearchClear.classList.remove('hidden');
+      } else {
+        sheetSearchClear.classList.add('hidden');
+      }
+      renderTopicsList(val);
+    });
+
+    sheetSearchClear.addEventListener('click', () => {
+      sheetSearchInput.value = '';
+      sheetSearchClear.classList.add('hidden');
+      renderTopicsList('');
+      sheetSearchInput.focus();
+    });
+
+    // ========================================================
+    // 5. FILTROS RÁPIDOS ADICIONAIS (IGUAL FilterBar.tsx)
+    // ========================================================
+    filterBeginnerBtn.addEventListener('click', () => {
+      isBeginnerActive = !isBeginnerActive;
+      filterBeginnerBtn.className = isBeginnerActive
+        ? 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
+        : 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium';
+      checkResetFiltersVisibility();
+    });
+
+    filterSubsBtn.addEventListener('click', () => {
+      isSubsActive = !isSubsActive;
+      filterSubsBtn.className = isSubsActive
+        ? 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold'
+        : 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium';
+      checkResetFiltersVisibility();
+    });
+
+    filterFavsBtn.addEventListener('click', () => {
+      isFavsActive = !isFavsActive;
+      filterFavsBtn.className = isFavsActive
+        ? 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-rose-800/60 bg-rose-950/40 text-rose-200 font-semibold'
+        : 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium';
+      checkResetFiltersVisibility();
+    });
+
+    resetFiltersBtn.addEventListener('click', () => {
+      selectedTopics = [];
+      isBeginnerActive = false;
+      isSubsActive = false;
+      isFavsActive = false;
+
+      filterBeginnerBtn.className = 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium';
+      filterSubsBtn.className = 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium';
+      filterFavsBtn.className = 'h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium';
+      
+      updateTriggerState();
+    });
+
+    // Suporte a scroll horizontal com mouse wheel no PC e drag-to-scroll
+    function enableHorizontalScroll(container) {
+      if (!container) return;
+      
+      // Converte rolagem vertical da rodinha do mouse em scroll horizontal
+      container.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0 && container.scrollWidth > container.clientWidth) {
+          e.preventDefault();
+          container.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+
+      // Suporte a clicar e arrastar com o mouse (desktop inspect / trackpad)
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      container.addEventListener('mousedown', (e) => {
+        // Se clicar em um input ou select, não faz drag
+        if (['INPUT', 'SELECT', 'OPTION'].includes(e.target.tagName)) return;
+        isDown = true;
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDown = false;
+      });
+
+      container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        container.scrollLeft = scrollLeft - walk;
+      });
+    }
+
+    const filtersScrollRow = document.getElementById('filters-scroll-row');
+    const tabsNav = document.querySelector('nav > div');
+    enableHorizontalScroll(filtersScrollRow);
+    enableHorizontalScroll(tabsNav);
+
+    // Início
+    renderTopicsList();
+  </script>
+</body>
+</html>

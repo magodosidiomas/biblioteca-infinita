@@ -2,15 +2,18 @@ import { useState, useMemo, useEffect } from 'react';
 import { Header } from './components/Header';
 import { FilterBar } from './components/FilterBar';
 import { ChannelCard } from './components/ChannelCard';
+import { PronunciaVideoCard } from './components/PronunciaVideoCard';
 import { SeriesMovieCard, normalizeLangKey } from './components/SeriesMovieCard';
 import { EmptyState } from './components/EmptyState';
 import { CHANNELS } from './data/channels';
 import { INITIAL_LANGS, LANG_STORAGE_KEY, SELECTED_LANG_KEY, mergeWithInitialLangs, type LanguageItem } from './constants/languages';
-import type { MediaCategory, FilterState } from './types/content';
+import { useSmartScroll } from './hooks/useSmartScroll';
+import type { MediaCategory, FilterState, ChannelItem } from './types/content';
 
 const TAB_TITLES: Record<MediaCategory, string> = {
   youtube: 'YouTube',
   professores: 'Professores',
+  pronuncia: 'Pronúncia',
   podcasts: 'Podcasts',
   series: 'Séries',
   movies: 'Filmes',
@@ -29,7 +32,7 @@ const INITIAL_FILTERS: FilterState = {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<MediaCategory>('youtube');
-  const [languages] = useState<LanguageItem[]>(() => {
+  const [languages, setLanguages] = useState<LanguageItem[]>(() => {
     try {
       const saved = localStorage.getItem(LANG_STORAGE_KEY);
       if (saved) {
@@ -41,6 +44,27 @@ export default function App() {
     }
     return INITIAL_LANGS;
   });
+
+  useEffect(() => {
+    const syncLangs = () => {
+      try {
+        const saved = localStorage.getItem(LANG_STORAGE_KEY);
+        if (saved) {
+          setLanguages(mergeWithInitialLangs(JSON.parse(saved)));
+        }
+      } catch {}
+    };
+
+    window.addEventListener('storage', syncLangs);
+    window.addEventListener('immersion_languages_updated', syncLangs);
+    window.addEventListener('focus', syncLangs);
+
+    return () => {
+      window.removeEventListener('storage', syncLangs);
+      window.removeEventListener('immersion_languages_updated', syncLangs);
+      window.removeEventListener('focus', syncLangs);
+    };
+  }, []);
 
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
     try {
@@ -61,6 +85,7 @@ export default function App() {
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [channels, setChannels] = useState<typeof CHANNELS>(CHANNELS);
+  const { isHidden, inputFocusedRef } = useSmartScroll();
 
   useEffect(() => {
     try {
@@ -175,55 +200,131 @@ export default function App() {
   }, [currentCategoryItems, filters, favorites, activeTab]);
 
   const isPosterTab = activeTab === 'series' || activeTab === 'movies';
-  const unitSingular = isPosterTab ? 'título' : 'canal';
-  const unitPlural = isPosterTab ? 'títulos' : 'canais';
+  const isPronunciaTab = activeTab === 'pronuncia';
+  const unitSingular = isPosterTab ? 'título' : isPronunciaTab ? 'item' : 'canal';
+  const unitPlural = isPosterTab ? 'títulos' : isPronunciaTab ? 'itens' : 'canais';
+
+  const isPronunciaVideo = (c: ChannelItem) =>
+    (c.topics || []).includes('Vídeo') ||
+    /(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i.test(c.url || '');
+
+  const pronunciaVideos = useMemo(
+    () => (isPronunciaTab ? filteredChannels.filter(isPronunciaVideo) : []),
+    [isPronunciaTab, filteredChannels]
+  );
+
+  const pronunciaResources = useMemo(
+    () => (isPronunciaTab ? filteredChannels.filter((c) => !isPronunciaVideo(c)) : []),
+    [isPronunciaTab, filteredChannels]
+  );
 
   return (
-    <div className="min-h-screen pb-28 text-zinc-100 bg-[#09090b]">
-      <Header
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        selectedLanguage={selectedLanguage}
-        languages={languages}
-        onLanguageChange={setSelectedLanguage}
-      />
+    <div className="min-h-screen pb-28 text-zinc-100 bg-[#09090b] overflow-x-hidden w-full max-w-full">
+      {/* Topo Unificado com Smart Auto-hide no Scroll Mobile */}
+      <div
+        className={`sticky top-0 z-40 bg-[#09090b] w-full max-w-full overflow-hidden transition-transform duration-300 ease-out will-change-transform ${
+          isHidden ? 'max-md:-translate-y-full max-md:pointer-events-none' : 'translate-y-0'
+        }`}
+      >
+        <Header
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          selectedLanguage={selectedLanguage}
+          languages={languages}
+          onLanguageChange={setSelectedLanguage}
+        />
 
-      <FilterBar
-        filters={filters}
-        activeTab={activeTab}
-        availableTopics={availableTopics}
-        onFilterChange={handleFilterChange}
-        onResetFilters={handleResetFilters}
-      />
+        <FilterBar
+          filters={filters}
+          activeTab={activeTab}
+          availableTopics={availableTopics}
+          onFilterChange={handleFilterChange}
+          onResetFilters={handleResetFilters}
+          onSearchFocus={() => {
+            inputFocusedRef.current = true;
+          }}
+          onSearchBlur={() => {
+            inputFocusedRef.current = false;
+          }}
+        />
+      </div>
 
-      <main className="max-w-[1180px] mx-auto px-6 pt-6">
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-base font-bold text-zinc-100">{TAB_TITLES[activeTab]}</h2>
-          <span className="text-xs text-zinc-500">
-            {filteredChannels.length} {filteredChannels.length === 1 ? unitSingular : unitPlural}
-          </span>
-        </div>
+      <main className="max-w-[1180px] mx-auto px-4 md:px-6 pt-6 w-full min-w-0">
+        {!isPronunciaTab && (
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-base font-bold text-zinc-100">{TAB_TITLES[activeTab]}</h2>
+            <span className="text-xs text-zinc-500">
+              {filteredChannels.length} {filteredChannels.length === 1 ? unitSingular : unitPlural}
+            </span>
+          </div>
+        )}
 
         {filteredChannels.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredChannels.map((channel) =>
-              channel.category === 'series' || channel.category === 'movies' ? (
-                <SeriesMovieCard
-                  key={channel.id}
-                  channel={channel}
-                  isFavorite={favorites.includes(channel.id)}
-                  onToggleFavorite={handleToggleFavorite}
-                />
-              ) : (
-                <ChannelCard
-                  key={channel.id}
-                  channel={channel}
-                  isFavorite={favorites.includes(channel.id)}
-                  onToggleFavorite={handleToggleFavorite}
-                />
-              )
-            )}
-          </div>
+          isPronunciaTab ? (
+            <div className="space-y-10">
+              {pronunciaVideos.length > 0 && (
+                <section>
+                  <div className="mb-4 flex items-baseline justify-between">
+                    <h2 className="text-base font-bold text-zinc-100 tracking-tight">Vídeos</h2>
+                    <span className="text-xs font-medium text-zinc-500">
+                      {pronunciaVideos.length} {pronunciaVideos.length === 1 ? 'vídeo' : 'vídeos'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {pronunciaVideos.map((channel) => (
+                      <PronunciaVideoCard
+                        key={channel.id}
+                        channel={channel}
+                        isFavorite={favorites.includes(channel.id)}
+                        onToggleFavorite={handleToggleFavorite}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {pronunciaResources.length > 0 && (
+                <section>
+                  <div className="mb-4 flex items-baseline justify-between">
+                    <h2 className="text-base font-bold text-zinc-100 tracking-tight">Guias & Recursos</h2>
+                    <span className="text-xs font-medium text-zinc-500">
+                      {pronunciaResources.length} {pronunciaResources.length === 1 ? 'recurso' : 'recursos'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {pronunciaResources.map((channel) => (
+                      <ChannelCard
+                        key={channel.id}
+                        channel={channel}
+                        isFavorite={favorites.includes(channel.id)}
+                        onToggleFavorite={handleToggleFavorite}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredChannels.map((channel) =>
+                channel.category === 'series' || channel.category === 'movies' ? (
+                  <SeriesMovieCard
+                    key={channel.id}
+                    channel={channel}
+                    isFavorite={favorites.includes(channel.id)}
+                    onToggleFavorite={handleToggleFavorite}
+                  />
+                ) : (
+                  <ChannelCard
+                    key={channel.id}
+                    channel={channel}
+                    isFavorite={favorites.includes(channel.id)}
+                    onToggleFavorite={handleToggleFavorite}
+                  />
+                )
+              )}
+            </div>
+          )
         ) : (
           <EmptyState
             title={

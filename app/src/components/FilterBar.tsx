@@ -9,8 +9,17 @@ interface FilterBarProps {
   availableTopics: string[];
   onFilterChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
   onResetFilters: () => void;
+  onSearchFocus?: () => void;
+  onSearchBlur?: () => void;
   stickyClassName?: string;
 }
+
+const PRONUNCIA_TYPE_FILTERS: { tag: string; label: string }[] = [
+  { tag: 'Vídeo', label: 'Vídeos' },
+  { tag: 'Artigo', label: 'Artigos' },
+  { tag: 'Site', label: 'Sites' },
+  { tag: 'App', label: 'Apps' },
+];
 
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
@@ -18,9 +27,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   availableTopics,
   onFilterChange,
   onResetFilters,
-  stickyClassName = 'sticky top-[98px]',
+  onSearchFocus,
+  onSearchBlur,
+  stickyClassName = '',
 }) => {
   const isPosterTab = activeTab === 'series' || activeTab === 'movies';
+  const isPronunciaTab = activeTab === 'pronuncia';
 
   const isFiltering =
     Boolean(filters.searchQuery) ||
@@ -30,67 +42,114 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     filters.filterFavs ||
     (filters.selectedTopics && filters.selectedTopics.length > 0);
 
+  const togglePronunciaType = (tag: string) => {
+    const current = filters.selectedTopics || [];
+    const next = current.includes(tag)
+      ? current.filter((t) => t !== tag)
+      : [...current, tag];
+    onFilterChange('selectedTopics', next);
+  };
 
   return (
-    <section className={`bg-[#09090b] pt-4 pb-2 z-40 ${stickyClassName}`}>
-      <div className="max-w-[1180px] mx-auto px-6 space-y-3">
+    <section className={`bg-[#09090b] pt-3 pb-3 border-b border-zinc-800/80 w-full max-w-full overflow-hidden ${stickyClassName}`}>
+      <div className="max-w-[1180px] mx-auto px-4 md:px-6 space-y-3 w-full min-w-0">
         <div className="relative w-full">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
           <input
             type="text"
             value={filters.searchQuery}
+            onFocus={onSearchFocus}
+            onBlur={onSearchBlur}
             onChange={(e) => onFilterChange('searchQuery', e.target.value)}
             placeholder={
               isPosterTab
                 ? 'Buscar por título, gênero ou plataforma...'
+                : isPronunciaTab
+                ? 'Buscar em pronúncia...'
                 : 'Buscar por canal, assunto ou palavra-chave...'
             }
             className="w-full pl-10 pr-4 h-10 bg-transparent border border-white/[0.08] focus:border-purple-500 rounded-lg text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none transition-all"
           />
         </div>
 
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2 flex-wrap">
-            {activeTab !== 'professores' && (
-              <button
-                type="button"
-                onClick={() => onFilterChange('filterBeginner', !filters.filterBeginner)}
-                className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
-                  filters.filterBeginner
-                    ? 'border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
-                    : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
-                }`}
-              >
-                Para iniciantes
-              </button>
+        {/* Linha de Controles: No mobile (< 768px), sangra até a parede da tela (-mx-4 px-4) e esconde a scrollbar */}
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar py-0.5 w-auto -mx-4 px-4 min-w-0 md:mx-0 md:px-0 md:w-full md:flex-wrap md:justify-between">
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* 1. Categorias SEMPRE em Primeiro Lugar */}
+            {!isPronunciaTab && availableTopics.length > 0 && (
+              <CategoryCombobox
+                availableTopics={availableTopics}
+                selectedTopics={filters.selectedTopics || []}
+                onChange={(topics) => onFilterChange('selectedTopics', topics)}
+              />
             )}
 
-            {isPosterTab && (
-              <button
-                type="button"
-                onClick={() => onFilterChange('filterOriginalAudio', !filters.filterOriginalAudio)}
-                className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
-                  filters.filterOriginalAudio
-                    ? 'border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
-                    : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
-                }`}
-              >
-                Apenas Áudio Original
-              </button>
-            )}
+            {isPronunciaTab ? (
+              <>
+                {PRONUNCIA_TYPE_FILTERS.map(({ tag, label }) => {
+                  const isActive = (filters.selectedTopics || []).includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => togglePronunciaType(tag)}
+                      className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
+                        isActive
+                          ? 'border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold'
+                          : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
+                      }`}
+                    >
+                      {isActive ? `✓ ${label}` : label}
+                    </button>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {activeTab !== 'professores' && (
+                  <button
+                    type="button"
+                    onClick={() => onFilterChange('filterBeginner', !filters.filterBeginner)}
+                    className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
+                      filters.filterBeginner
+                        ? 'border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
+                        : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
+                    }`}
+                  >
+                    Para iniciantes
+                  </button>
+                )}
 
-            <button
-              type="button"
-              onClick={() => onFilterChange('filterSubs', !filters.filterSubs)}
-              className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer ${
-                filters.filterSubs
-                  ? 'border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold'
-                  : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
-              }`}
-            >
-              <Check className="w-3.5 h-3.5 text-zinc-400 stroke-[2.5]" />
-              <span>{activeTab === 'podcasts' ? 'Com transcrição' : 'Legendas'}</span>
-            </button>
+                {isPosterTab && (
+                  <button
+                    type="button"
+                    onClick={() => onFilterChange('filterOriginalAudio', !filters.filterOriginalAudio)}
+                    className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
+                      filters.filterOriginalAudio
+                        ? 'border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
+                        : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
+                    }`}
+                  >
+                    Apenas Áudio Original
+                  </button>
+                )}
+
+                {activeTab !== 'sites' && (
+                  <button
+                    type="button"
+                    onClick={() => onFilterChange('filterSubs', !filters.filterSubs)}
+                    className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer ${
+                      filters.filterSubs
+                        ? 'border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold'
+                        : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
+                    }`}
+                  >
+                    <Check className="w-3.5 h-3.5 text-zinc-400 stroke-[2.5]" />
+                    <span>{activeTab === 'podcasts' ? 'Com transcrição' : 'Legendas'}</span>
+                  </button>
+                )}
+              </>
+            )}
 
             <button
               type="button"
@@ -105,14 +164,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <span>Favoritos</span>
             </button>
 
-            {availableTopics.length > 0 && (
-              <CategoryCombobox
-                availableTopics={availableTopics}
-                selectedTopics={filters.selectedTopics || []}
-                onChange={(topics) => onFilterChange('selectedTopics', topics)}
-              />
-            )}
-
             {isFiltering && (
               <button
                 type="button"
@@ -124,7 +175,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Ordenação */}
+          <div className="flex items-center gap-2 flex-shrink-0 pr-2 md:pr-0">
             <span className="text-xs text-zinc-500">Ordenar:</span>
             <div className="relative inline-flex items-center">
               <select

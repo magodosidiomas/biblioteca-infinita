@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronDown, X, Search, Check } from 'lucide-react';
+import { CategorySheet } from './CategorySheet';
 
 interface CategoryComboboxProps {
   availableTopics: string[];
@@ -13,11 +14,11 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
   const [search, setSearch] = useState('');
   const wrapperRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Fechar ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -28,7 +29,6 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Foco no input ao abrir
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => searchInputRef.current?.focus(), 50);
@@ -37,26 +37,22 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
     }
   }, [isOpen]);
 
-  // Fechar com ESC
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setIsOpen(false);
-    }
+    if (e.key === 'Escape') setIsOpen(false);
   };
 
   const filteredTopics = useMemo(() => {
     const q = search.toLowerCase().trim();
-    if (!q) return availableTopics;
-    return availableTopics.filter((t) => t.toLowerCase().includes(q));
+    return q ? availableTopics.filter((t) => t.toLowerCase().includes(q)) : availableTopics;
   }, [availableTopics, search]);
 
   const handleToggle = (topic: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (selectedTopics.includes(topic)) {
-      onChange(selectedTopics.filter((t) => t !== topic));
-    } else {
-      onChange([...selectedTopics, topic]);
-    }
+    onChange(
+      selectedTopics.includes(topic)
+        ? selectedTopics.filter((t) => t !== topic)
+        : [...selectedTopics, topic]
+    );
   };
 
   const handleRemove = (topic: string, e: React.MouseEvent) => {
@@ -64,9 +60,12 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
     onChange(selectedTopics.filter((t) => t !== topic));
   };
 
-  const handleClearAll = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onChange([]);
+  const handleTriggerClick = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setIsMobileSheetOpen(true);
+    } else {
+      setIsOpen((prev) => !prev);
+    }
   };
 
   const hasSelection = selectedTopics.length > 0;
@@ -74,11 +73,10 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
   const remainingCount = selectedTopics.length - 1;
 
   return (
-    <div className="relative inline-block" ref={wrapperRef} onKeyDown={handleKeyDown}>
-      {/* Gatilho Fechado */}
+    <div className="relative inline-block flex-shrink-0" ref={wrapperRef} onKeyDown={handleKeyDown}>
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleTriggerClick}
         className={`h-8 px-3 rounded-lg border text-xs font-medium inline-flex items-center gap-2 transition-colors cursor-pointer ${
           hasSelection
             ? 'border-zinc-700 bg-zinc-800/40 text-zinc-100'
@@ -111,45 +109,26 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
             </>
           )}
         </div>
-
-        <ChevronDown
-          className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 pointer-events-none ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
+        <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 pointer-events-none ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {/* Popover Aberto */}
+      {/* Popover Desktop (>= 768px) */}
       {isOpen && (
-        <div className="absolute left-0 top-full mt-1.5 w-[340px] bg-[#121215] border border-zinc-800 rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100">
-          {/* Topo com selecionadas */}
+        <div className="hidden md:block absolute left-0 top-full mt-1.5 w-[340px] bg-[#121215] border border-zinc-800 rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100">
           {hasSelection && (
             <div className="pb-2.5 mb-2.5 border-b border-zinc-800/80">
               <div className="flex items-center justify-between mb-2 px-1">
-                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-                  Selecionadas
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAll}
-                  className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
-                >
-                  Limpar todas
+                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Selecionadas</span>
+                <button type="button" onClick={() => onChange([])} className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+                  Limpar
                 </button>
               </div>
               <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto pr-1">
                 {selectedTopics.map((topic) => (
-                  <span
-                    key={topic}
-                    className="inline-flex items-center gap-1.5 pl-2.5 pr-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs font-medium"
-                  >
+                  <span key={topic} className="inline-flex items-center gap-1.5 pl-2.5 pr-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs font-medium">
                     <span>{topic}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => handleRemove(topic, e)}
-                      className="p-0.5 hover:text-white hover:bg-zinc-800 rounded text-zinc-400 cursor-pointer"
-                    >
-                      <X className="w-3.5 h-3.5" />
+                    <button type="button" onClick={(e) => handleRemove(topic, e)} className="p-0.5 hover:text-white hover:bg-zinc-800 rounded text-zinc-400 cursor-pointer">
+                      <X className="w-3 h-3" />
                     </button>
                   </span>
                 ))}
@@ -157,7 +136,6 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
             </div>
           )}
 
-          {/* Input de Busca */}
           <div className="relative mb-2">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
             <input
@@ -170,12 +148,9 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
             />
           </div>
 
-          {/* Lista com Checkbox */}
           <div className="max-h-60 overflow-y-auto space-y-1 pr-1">
             {filteredTopics.length === 0 ? (
-              <div className="py-6 text-center text-sm text-zinc-500">
-                Nenhuma categoria encontrada
-              </div>
+              <div className="py-6 text-center text-sm text-zinc-500">Nenhuma categoria encontrada</div>
             ) : (
               filteredTopics.map((topic) => {
                 const isSelected = selectedTopics.includes(topic);
@@ -185,19 +160,11 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
                     type="button"
                     onClick={(e) => handleToggle(topic, e)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm flex items-center justify-between transition-colors cursor-pointer ${
-                      isSelected
-                        ? 'bg-zinc-800/80 text-zinc-100 font-medium'
-                        : 'text-zinc-300 hover:bg-zinc-800/40 hover:text-zinc-100'
+                      isSelected ? 'bg-zinc-800/80 text-zinc-100 font-medium' : 'text-zinc-300 hover:bg-zinc-800/40 hover:text-zinc-100'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
-                          isSelected
-                            ? 'border-zinc-400 bg-zinc-200 text-zinc-900'
-                            : 'border-zinc-700 bg-transparent'
-                        }`}
-                      >
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'border-zinc-400 bg-zinc-200 text-zinc-900' : 'border-zinc-700 bg-transparent'}`}>
                         {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
                       <span>{topic}</span>
@@ -209,6 +176,15 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
           </div>
         </div>
       )}
+
+      {/* Bottom Sheet Mobile (< 768px) */}
+      <CategorySheet
+        isOpen={isMobileSheetOpen}
+        onClose={() => setIsMobileSheetOpen(false)}
+        availableTopics={availableTopics}
+        selectedTopics={selectedTopics}
+        onChange={onChange}
+      />
     </div>
   );
 };

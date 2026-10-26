@@ -13,7 +13,7 @@ const mapCat = {
   Séries: 'series',
   Filmes: 'movies',
   Professores: 'professores',
-  Pronúncia: 'professores',
+  Pronúncia: 'pronuncia',
   Recursos: 'sites'
 };
 

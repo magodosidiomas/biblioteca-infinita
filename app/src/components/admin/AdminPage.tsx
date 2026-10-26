@@ -53,6 +53,7 @@ export const AdminPage: React.FC = () => {
 
   const mapCatToFormat = (cat: string) =>
     cat === 'professores' ? 'Professores' :
+    cat === 'pronuncia' ? 'Pronúncia' :
     cat === 'podcasts' ? 'Podcasts' :
     cat === 'series' ? 'Séries' :
     cat === 'movies' ? 'Filmes' :

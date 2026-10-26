@@ -37,13 +37,13 @@ export const PRESET_CATALOG: PresetCatalogItem[] = [
 
 export const INITIAL_LANGS: LanguageItem[] = [
   { id: "english", name: "Inglês", flag: "🇺🇸", active: true },
-  { id: "german", name: "Alemão", flag: "🇩🇪", active: false },
-  { id: "french", name: "Francês", flag: "🇫🇷", active: false },
-  { id: "spanish", name: "Espanhol", flag: "🇪🇸", active: false },
-  { id: "italian", name: "Italiano", flag: "🇮🇹", active: false },
-  { id: "russian", name: "Russo", flag: "🇷🇺", active: false },
-  { id: "japanese", name: "Japonês", flag: "🇯🇵", active: false },
-  { id: "portuguese", name: "Português", flag: "🇧🇷", active: false },
+  { id: "italian", name: "Italiano", flag: "🇮🇹", active: true },
+  { id: "french", name: "Francês", flag: "🇫🇷", active: true },
+  { id: "spanish", name: "Espanhol", flag: "🇪🇸", active: true },
+  { id: "german", name: "Alemão", flag: "🇩🇪", active: true },
+  { id: "japanese", name: "Japonês", flag: "🇯🇵", active: true },
+  { id: "portuguese", name: "Português", flag: "🇧🇷", active: true },
+  { id: "russian", name: "Russo", flag: "🇷🇺", active: true },
   { id: "polish", name: "Polonês", flag: "🇵🇱", active: false },
   { id: "ukrainian", name: "Ucraniano", flag: "🇺🇦", active: false },
   { id: "arabic", name: "Árabe", flag: "🇸🇦", active: false },
@@ -81,4 +81,44 @@ export function mergeWithInitialLangs(saved: LanguageItem[] | null | undefined):
 
 export const LANG_STORAGE_KEY = 'immersion_admin_languages_v1';
 export const SELECTED_LANG_KEY = 'immersion_selected_language_v1';
+
+export const LANGUAGE_CODES: Record<string, string> = {
+  english: 'EN',
+  italian: 'IT',
+  french: 'FR',
+  spanish: 'ES',
+  german: 'DE',
+  japanese: 'JA',
+  portuguese: 'PT',
+  russian: 'RU',
+  polish: 'PL',
+  ukrainian: 'UK',
+  arabic: 'AR',
+  latin: 'LA',
+  korean: 'KO',
+  chinese: 'ZH',
+  dutch: 'NL',
+  swedish: 'SV',
+  norwegian: 'NO',
+  danish: 'DA',
+  finnish: 'FI',
+  turkish: 'TR',
+  greek: 'EL',
+  hebrew: 'HE',
+  hindi: 'HI',
+  vietnamese: 'VI',
+  thai: 'TH',
+  indonesian: 'ID',
+  czech: 'CS',
+  hungarian: 'HU',
+  romanian: 'RO',
+  catalan: 'CA',
+  croatian: 'HR',
+  esperanto: 'EO',
+};
+
+export function getLanguageCode(id: string): string {
+  if (!id) return '';
+  return LANGUAGE_CODES[id.toLowerCase()] || id.slice(0, 2).toUpperCase();
+}
 

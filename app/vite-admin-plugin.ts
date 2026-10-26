@@ -348,7 +348,7 @@ export function syncChannelsTsFromData(data: Record<string, any>) {
     Séries: 'series',
     Filmes: 'movies',
     Professores: 'professores',
-    Pronúncia: 'professores',
+    Pronúncia: 'pronuncia',
     Recursos: 'sites'
   }
   const items: any[] = []
@@ -494,10 +494,40 @@ export function adminDevPlugin(): Plugin {
             let effectiveUrl = targetUrl.trim()
             let resolvedFromVideo = false
             let originalVideoTitle: string | null = null
+            let originalVideoDesc: string | null = null
+            let originalVideoThumb: string | null = null
+            let videoAuthorName: string | null = null
             let detectedChannelUrl: string | null = null
 
-            const isYouTubeVideoUrl = /(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i.test(effectiveUrl)
-            if (isYouTubeVideoUrl) {
+            const videoIdMatch = effectiveUrl.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i)
+            const isYouTubeVideoUrl = Boolean(videoIdMatch)
+            if (isYouTubeVideoUrl && videoIdMatch) {
+              originalVideoThumb = `https://i.ytimg.com/vi/${videoIdMatch[1]}/hqdefault.jpg`
+              try {
+                // Buscar HTML original do vídeo para extrair descrição oficial do vídeo
+                const vRes = await fetch(effectiveUrl, {
+                  headers: {
+                    'User-Agent':
+                      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+                  },
+                  signal: AbortSignal.timeout(4500),
+                })
+                if (vRes.ok) {
+                  const vHtml = await vRes.text()
+                  const vDescMatch =
+                    vHtml.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']*)["']/i) ||
+                    vHtml.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i)
+                  if (vDescMatch?.[1]) {
+                    originalVideoDesc = decodeHtmlEntities(vDescMatch[1]).trim()
+                  }
+                  const vTitleMatch = vHtml.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)["']/i)
+                  if (vTitleMatch?.[1]) {
+                    originalVideoTitle = decodeHtmlEntities(vTitleMatch[1]).replace(/ - YouTube$/i, '').trim()
+                  }
+                }
+              } catch {}
+
               try {
                 const oembedRes = await fetch(
                   `https://www.youtube.com/oembed?url=${encodeURIComponent(effectiveUrl)}&format=json`,
@@ -505,9 +535,17 @@ export function adminDevPlugin(): Plugin {
                 )
                 if (oembedRes.ok) {
                   const oembedData: any = await oembedRes.json()
+                  if (oembedData?.title && !originalVideoTitle) {
+                    originalVideoTitle = oembedData.title
+                  }
+                  if (oembedData?.author_name) {
+                    videoAuthorName = oembedData.author_name
+                  }
+                  if (oembedData?.thumbnail_url) {
+                    originalVideoThumb = oembedData.thumbnail_url
+                  }
                   if (oembedData?.author_url) {
                     detectedChannelUrl = oembedData.author_url
-                    originalVideoTitle = oembedData.title || null
                     effectiveUrl = oembedData.author_url
                     resolvedFromVideo = true
                   }
@@ -785,12 +823,16 @@ export function adminDevPlugin(): Plugin {
               qualityAlerts.push('Avatar de alta resolução não encontrado (fallback aplicado).')
             }
 
-            // Heurística de classificação Imersão vs Professor vs Podcasts vs Séries/Filmes/Sites
+            // Heurística de classificação Imersão vs Professor vs Pronúncia vs Podcasts vs Séries/Filmes/Sites
+            const pronKeywords = /\b(pronunciation|pron[uú]ncia|phonetics?|fon[eé]tica|ipa\b|shadowing|pitch accent|youglish|forvo|boldvoice|elsa speak)\b/i
             const teacherKeywords = /\b(gram[aá]tica|grammar|aulas? de|learn english with|apprenez le|deutsch lernen mit regeln|teacher|professor|professora|curso de)\b/i
+            const fullInspectText = `${originalVideoTitle || ''} ${originalVideoDesc || ''} ${cleanTitle} ${cleanDesc} ${targetUrl}`
             let suggestedType = isSpotify
               ? 'podcasts'
               : isStreaming
               ? 'series'
+              : pronKeywords.test(fullInspectText)
+              ? 'pronuncia'
               : isYouTube
               ? (teacherKeywords.test(`${cleanTitle} ${cleanDesc}`) ? 'professores' : 'youtube')
               : 'sites'
@@ -910,7 +952,11 @@ export function adminDevPlugin(): Plugin {
                 avatar: cleanAvatar || ogImage,
                 resolvedUrl: effectiveUrl !== targetUrl.trim() ? effectiveUrl : null,
                 resolvedFromVideo,
+                originalVideoUrl: isYouTubeVideoUrl ? targetUrl.trim() : null,
                 originalVideoTitle,
+                originalVideoDesc,
+                originalVideoThumb,
+                videoAuthorName: videoAuthorName || (isYouTube ? cleanTitle : null),
                 isVideoUrl: isYouTubeVideoUrl && !resolvedFromVideo,
                 avgDuration,
                 transcriptUrl: detectedTranscriptUrl,
@@ -955,7 +1001,8 @@ export function adminDevPlugin(): Plugin {
                 Podcasts: 'Podcasts',
                 professores: 'Professores',
                 Professores: 'Professores',
-                Pronúncia: 'Professores',
+                pronuncia: 'Pronúncia',
+                Pronúncia: 'Pronúncia',
                 series: 'Séries',
                 'Séries': 'Séries',
                 movies: 'Filmes',
@@ -1023,9 +1070,13 @@ export function adminDevPlugin(): Plugin {
 
               const collection = data[targetLang][format]
 
-              // Normalizar URLs e handles para detecção precisa
-              const normalizeUrl = (u: string) =>
-                (u || '').toLowerCase().replace(/\/+$/, '').split('?')[0]
+              // Normalizar URLs e handles para detecção precisa (preservando ?v= em vídeos do YouTube)
+              const normalizeUrl = (u: string) => {
+                const raw = (u || '').toLowerCase().trim().replace(/\/+$/, '')
+                const vMatch = raw.match(/(?:watch\?.*v=|youtu\.be\/|shorts\/)([a-z0-9_-]{11})/i)
+                if (vMatch) return `https://www.youtube.com/watch?v=${vMatch[1]}`
+                return raw.split('?')[0]
+              }
 
               const extractHandle = (u: string) => {
                 if (!u) return ''
