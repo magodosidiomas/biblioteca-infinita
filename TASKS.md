@@ -17,7 +17,13 @@
   - [`scripts/validate-catalog.js`](scripts/validate-catalog.js) valida paridade 1:1 entre `content.json` e `channels.ts`, audita descrições contra AI slop e valida todas as tags contra o dicionário canônico ([`app/src/constants/tags.ts`](app/src/constants/tags.ts)). Executado automaticamente antes de `npm run build`.
 
 ### Front-end do Aluno (`http://localhost:5173/`)
-- [x] **Navegação Horizontal Escalável & Seletor de Idioma:** [`Header.tsx`](app/src/components/Header.tsx) com abas separadas (`YouTube`, `Professores`, `Pronúncia`, `Podcasts`, `Séries`, `Filmes`, `Sites`) e seletor de idiomas ativos à direita.
+- [x] **Navegação Horizontal Escalável & Seletor de Idioma:** [`Header.tsx`](app/src/components/Header.tsx) com abas dinâmicas (oculta categorias com 0 itens para o idioma selecionado) e seletor de idiomas ativos à direita.
+- [x] **Ocultação Dinâmica de Abas Vazias (`count === 0`):** Abas sem itens cadastrados no idioma ativo (como `Professores` e `Pronúncia` enquanto não povoadas, ou `Podcasts` em Alemão) são ocultadas da barra de navegação sem deixar "cidades fantasma". Se o usuário troca para um idioma que não possui a categoria atual, a navegação redireciona automaticamente para a primeira categoria com itens. Conforme novos itens são cadastrados no Admin, as abas surgem automaticamente.
+- [x] **Persistência Canônica de Idiomas (Admin ➔ Disco/`languages.ts`):**
+  - Endpoints `/api/save-languages` e `/api/get-languages` criados em [`app/vite-admin-plugin.ts`](app/vite-admin-plugin.ts).
+  - Toggles e adições no painel Admin salvam diretamente no arquivo [`app/src/constants/languages.ts`](app/src/constants/languages.ts), eliminando o descompasso entre browsers e garantindo que o build de produção espelhe exatamente o que o admin configurou.
+  - Idiomas ativos padronizados no disco para os 4 idiomas com catálogo verificado: **Inglês, Alemão, Francês e Italiano**. Demais idiomas (Espanhol, Japonês, etc.) definidos como `active: false` até o povoamento de canais.
+  - Fallback automático: se um idioma for desativado, o front-end migra automaticamente para o primeiro idioma ativo.
 - [x] **Aba `Pronúncia` (Subheaders `Vídeos` e `Guias & Recursos` + Thumbs 16:9):** [`PronunciaVideoCard.tsx`](app/src/components/PronunciaVideoCard.tsx) + [`App.tsx`](app/src/App.tsx) aprovados via [`previews/preview-pronuncia-recursos.html`](previews/preview-pronuncia-recursos.html) — divide a aba em dois subheaders (`Vídeos` com thumbnail 16:9 do YouTube, nome do canal, título e descrição; `Guias & Recursos` para artigos, sites e aplicativos), com filtros rápidos `Vídeos`, `Artigos`, `Sites`, `Apps` na [`FilterBar.tsx`](app/src/components/FilterBar.tsx) e suporte completo no Admin para salvar vídeos individuais do YouTube sem convertê-los para canal quando a categoria é `Pronúncia`.
 - [x] **Smart Auto-Hide Unificado & Bottom Sheet de Categorias no Mobile:**
   - Aprovado via [`previews/preview-mobile-filter-sheet.html`](previews/preview-mobile-filter-sheet.html).
@@ -86,6 +92,8 @@
 2. **Sem Tag "Iniciante" para Professores:** Professores é uma categoria separada; o toggle `Iniciante` fica desabilitado quando o formato é `Professor`.
 3. **Pôster 2:3 para `Séries` e `Filmes` (Sem Sinopse e Sem Classificação Indicativa `12+`):** Abas separadas (`Séries` | `Filmes`), sinopse reservada ao site externo, gêneros como subtítulo separado por `·`, detecção automática de áudio original vs. dublado (`Original em ...`) e badge `Legendado [CC]`.
 4. **Migração de Conteúdo Legado sob Demanda:** Os conteúdos antigos arquivados em `content.full_multilingual_backup.json` serão convertidos/importados para o modelo novo apenas quando solicitado por idioma/categoria no lançamento.
+5. **Ocultação de Abas Sem Itens (`count === 0`):** Abas sem conteúdos disponíveis para o idioma selecionado não são exibidas na barra do aluno. Meta editorial individual de $\ge 5$ itens por categoria para expansão, mas o software libera qualquer categoria com $\ge 1$ item.
+6. **Fonte da Verdade de Idiomas no Disco:** O painel Admin persiste o estado ativo dos idiomas em `languages.ts` via endpoint dedicado; browsers de alunos e builds de produção não utilizam `localStorage` para sobrescrever idiomas ativos do catálogo.
 
 ---
 

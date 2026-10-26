@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, ExternalLink } from 'lucide-react';
 import { Sheet, SheetContent } from './ui/sheet';
 import type { LanguageItem } from '../constants/languages';
 
@@ -71,14 +71,14 @@ export const LanguageDrawer: React.FC<LanguageDrawerProps> = ({
 
         {/* Gerenciar Idiomas (Imerso pattern) */}
         {import.meta.env.DEV && (
-          <div className="pt-3 mt-2 border-t border-zinc-800/50">
+          <div className="pt-2 mt-2">
             <a
               href="/admin"
               onClick={onClose}
-              className="w-full h-11 min-h-[44px] rounded-xl bg-zinc-800/40 hover:bg-zinc-800/80 text-zinc-300 text-xs font-medium transition-colors flex items-center justify-center gap-2 no-underline cursor-pointer"
+              className="w-full h-11 min-h-[44px] rounded-xl bg-zinc-800/40 hover:bg-zinc-800/80 text-zinc-200 text-sm font-semibold transition-colors flex items-center justify-center gap-2 no-underline cursor-pointer"
             >
               <span>Gerenciar idiomas</span>
-              <span>↗</span>
+              <ExternalLink className="w-4 h-4 text-zinc-400" />
             </a>
           </div>
         )}

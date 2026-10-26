@@ -4,23 +4,32 @@ import { AdminContentList } from './AdminContentList';
 import { AdminNewContent } from './AdminNewContent';
 import { AdminLanguages } from './AdminLanguages';
 import { CHANNELS } from '../../data/channels';
-import { INITIAL_LANGS, LANG_STORAGE_KEY, SELECTED_LANG_KEY, mergeWithInitialLangs, type LanguageItem } from '../../constants/languages';
+import { INITIAL_LANGS, SELECTED_LANG_KEY, type LanguageItem } from '../../constants/languages';
 import type { ChannelItem } from '../../types/content';
 
 export const AdminPage: React.FC = () => {
   const [currentView, setCurrentView] = useState<AdminView>('content');
-  const [languages] = useState<LanguageItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(LANG_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return mergeWithInitialLangs(parsed);
+  const [languages, setLanguages] = useState<LanguageItem[]>(INITIAL_LANGS);
+
+  useEffect(() => {
+    fetch('/api/get-languages')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setLanguages(data);
+      })
+      .catch(() => {});
+
+    const handleUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<LanguageItem[]>;
+      if (customEvent.detail && Array.isArray(customEvent.detail)) {
+        setLanguages(customEvent.detail);
       }
-    } catch {
-      // ignore
-    }
-    return INITIAL_LANGS;
-  });
+    };
+    window.addEventListener('immersion_languages_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('immersion_languages_updated', handleUpdate);
+    };
+  }, []);
 
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
     try {

@@ -19,6 +19,8 @@ O catálogo separa claramente conteúdos de **imersão nativa autêntica** de co
 6. **`Sites`:** Jornais, leituras graduadas, ferramentas e comunidades.
 7. **`Pronúncia`:** Recursos focados em fonética, IPA, entonação e shadowing, divididos em dois blocos visuais: **Vídeos** (com miniatura 16:9 do YouTube, nome do canal e descrição do vídeo) e **Guias & Recursos** (artigos, sites e aplicativos com filtros rápidos `Vídeos`, `Artigos`, `Sites`, `Apps`).
 
+> **Comportamento Dinâmico de Exibição:** Abas com contagem zero (`count === 0`) para o idioma selecionado são automaticamente ocultadas da barra de navegação do aluno. Isso evita abas vazias enquanto categorias novas estiverem sendo povoadas. A categoria surge instantaneamente no cabeçalho assim que o primeiro item for cadastrado.
+
 ---
 
 ## 3. Extração & Autenticidade dos Dados

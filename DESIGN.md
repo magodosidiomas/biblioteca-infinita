@@ -13,16 +13,20 @@
   - Proibido texto cinza desbotado de baixo contraste (`text-zinc-600` ou similar para leitura é banido).
 - **Piso Tipográfico Absoluto (Zero Fontes Ilegíveis):**
   - **Proibido texto menor que 12px em qualquer lugar.**
+  - **Controles Interativos, Botões e Filtros:** Mínimo obrigatório de **14px** (`text-sm font-medium`). Proibido `text-xs` (12px) em botões de ação, filtros ou menus.
   - **Inputs de busca e formulários:** Mínimo **14px** (evita zoom no mobile e garante legibilidade imediata).
-  - **Bios e descrições:** **13px a 14px** com entrelinha arejada (`leading-relaxed`).
+  - **Bios e descrições:** **13px a 14px** com entrelinha arejada (`leading-relaxed text-zinc-300`).
   - **Títulos:** **15px a 16px bold** com tracking equilibrado (`tracking-[-0.015em]`).
-  - **Tags e Badges:** Mínimo **12px** (font-medium). Proibido tags de 9px ou 10px.
+  - **Tags e Badges Informativas:** Mínimo **12px** (`text-xs font-medium`), restrito a tags passivas dentro de cards.
 - **Eliminação de Amontoamento de Containers:**
   - Proibido "cards dentro de cards dentro de caixas".
   - A interface deve respirar. Respiro vertical simétrico e generoso.
-- **Divisores Perfeitos ou Nenhum Divisor:**
-  - Todo divisor (`<hr>` ou linha de borda) deve ter padding **rigorosamente simétrico** acima e abaixo.
-  - Proibido divisores colados ou desalinhados horizontalmente com o grid.
+- **Divisores Decorativos Banidos:**
+  - Proibido enfiar `<hr>`, `border-t` ou `border-b` em rodapés de menus, dropdowns ou entre barras de controle e o grid. Se não for estruturalmente indispensável, **não use divisor**.
+- **Iconografia Oficial (lucide-react):**
+  - Proibido caracteres de texto soltos (`↗`, `+`, `x`). Use sempre ícones SVG oficiais do `lucide-react`.
+- **Isolamento de Overflow (Mobile vs. Desktop):**
+  - Nunca coloque `overflow-x-auto` ou `overflow-hidden` em containers pais que abrigam popovers flutuantes ou comboboxes. Scroll horizontal fica restrito ao mobile (`max-md:overflow-x-auto`), com `overflow-visible md:flex-wrap` no desktop.
 
 ---
 

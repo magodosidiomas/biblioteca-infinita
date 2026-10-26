@@ -6,7 +6,7 @@ import { PronunciaVideoCard } from './components/PronunciaVideoCard';
 import { SeriesMovieCard, normalizeLangKey } from './components/SeriesMovieCard';
 import { EmptyState } from './components/EmptyState';
 import { CHANNELS } from './data/channels';
-import { INITIAL_LANGS, LANG_STORAGE_KEY, SELECTED_LANG_KEY, mergeWithInitialLangs, type LanguageItem } from './constants/languages';
+import { INITIAL_LANGS, SELECTED_LANG_KEY, type LanguageItem } from './constants/languages';
 import { useSmartScroll } from './hooks/useSmartScroll';
 import type { MediaCategory, FilterState, ChannelItem } from './types/content';
 
@@ -32,47 +32,39 @@ const INITIAL_FILTERS: FilterState = {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<MediaCategory>('youtube');
-  const [languages, setLanguages] = useState<LanguageItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(LANG_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return mergeWithInitialLangs(parsed);
-      }
-    } catch {
-      // ignore
-    }
-    return INITIAL_LANGS;
-  });
+  const [languages, setLanguages] = useState<LanguageItem[]>(INITIAL_LANGS);
 
   useEffect(() => {
-    const syncLangs = () => {
-      try {
-        const saved = localStorage.getItem(LANG_STORAGE_KEY);
-        if (saved) {
-          setLanguages(mergeWithInitialLangs(JSON.parse(saved)));
-        }
-      } catch {}
+    const handleUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<LanguageItem[]>;
+      if (customEvent.detail && Array.isArray(customEvent.detail)) {
+        setLanguages(customEvent.detail);
+      }
     };
 
-    window.addEventListener('storage', syncLangs);
-    window.addEventListener('immersion_languages_updated', syncLangs);
-    window.addEventListener('focus', syncLangs);
-
+    window.addEventListener('immersion_languages_updated', handleUpdate);
     return () => {
-      window.removeEventListener('storage', syncLangs);
-      window.removeEventListener('immersion_languages_updated', syncLangs);
-      window.removeEventListener('focus', syncLangs);
+      window.removeEventListener('immersion_languages_updated', handleUpdate);
     };
   }, []);
 
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
     try {
-      return localStorage.getItem(SELECTED_LANG_KEY) || 'english';
+      const saved = localStorage.getItem(SELECTED_LANG_KEY);
+      const activeIds = INITIAL_LANGS.filter((l) => l.active).map((l) => l.id);
+      if (saved && activeIds.includes(saved)) return saved;
+      return activeIds[0] || 'english';
     } catch {
       return 'english';
     }
   });
+
+  useEffect(() => {
+    const activeIds = languages.filter((l) => l.active).map((l) => l.id);
+    if (activeIds.length > 0 && !activeIds.includes(selectedLanguage)) {
+      setSelectedLanguage(activeIds[0] || 'english');
+    }
+  }, [languages, selectedLanguage]);
 
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
@@ -204,6 +196,42 @@ export default function App() {
   const unitSingular = isPosterTab ? 'título' : isPronunciaTab ? 'item' : 'canal';
   const unitPlural = isPosterTab ? 'títulos' : isPronunciaTab ? 'itens' : 'canais';
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<MediaCategory, number> = {
+      youtube: 0,
+      podcasts: 0,
+      series: 0,
+      movies: 0,
+      sites: 0,
+      professores: 0,
+      pronuncia: 0,
+    };
+    for (const c of channels) {
+      if (c.language === selectedLanguage && counts[c.category] !== undefined) {
+        counts[c.category]++;
+      }
+    }
+    return counts;
+  }, [channels, selectedLanguage]);
+
+  useEffect(() => {
+    if (categoryCounts[activeTab] === 0) {
+      const order: MediaCategory[] = [
+        'youtube',
+        'podcasts',
+        'series',
+        'movies',
+        'sites',
+        'professores',
+        'pronuncia',
+      ];
+      const first = order.find((cat) => (categoryCounts[cat] || 0) > 0);
+      if (first && first !== activeTab) {
+        setActiveTab(first);
+      }
+    }
+  }, [categoryCounts, activeTab]);
+
   const isPronunciaVideo = (c: ChannelItem) =>
     (c.topics || []).includes('Vídeo') ||
     /(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i.test(c.url || '');
@@ -222,7 +250,7 @@ export default function App() {
     <div className="min-h-screen pb-28 text-zinc-100 bg-[#09090b] overflow-x-hidden w-full max-w-full">
       {/* Topo Unificado com Smart Auto-hide no Scroll Mobile */}
       <div
-        className={`sticky top-0 z-40 bg-[#09090b] w-full max-w-full overflow-hidden transition-transform duration-300 ease-out will-change-transform ${
+        className={`sticky top-0 z-40 bg-[#09090b] w-full max-w-full transition-transform duration-300 ease-out will-change-transform ${
           isHidden ? 'max-md:-translate-y-full max-md:pointer-events-none' : 'translate-y-0'
         }`}
       >
@@ -232,6 +260,7 @@ export default function App() {
           selectedLanguage={selectedLanguage}
           languages={languages}
           onLanguageChange={setSelectedLanguage}
+          categoryCounts={categoryCounts}
         />
 
         <FilterBar

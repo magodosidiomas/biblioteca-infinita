@@ -9,10 +9,11 @@
 ### 1.1. Tipografia & Legibilidade (Piso Rígido)
 - ❌ **PROIBIDO fontes minúsculas abaixo de 12px:**
   - Zero `text-[9px]`, `text-[10px]` ou `text-[11px]` em textos informativos ou funcionais.
-  - Tags/Badges: Mínimo absoluto de **12px** (`text-xs font-medium`).
-  - Inputs de busca e formulários: Mínimo de **14px** (`text-sm`) para evitar zoom indesejado no mobile e garantir legibilidade rápida.
-  - Bios e descrições: **13px a 14px** com entrelinha arejada (`leading-relaxed text-zinc-300`).
-  - Títulos: **15px a 16px bold** (`text-zinc-100`).
+  - **Controles Interativos, Botões e Filtros:** Mínimo obrigatório de **14px** (`text-sm font-medium`). É TERMINANTEMENTE PROIBIDO usar `text-xs` (12px) em botões de filtro, comboboxes, links de menu, dropdowns ou ações.
+  - **Badges/Tags Informativas:** Mínimo absoluto de **12px** (`text-xs font-medium`), ESTRITAMENTE RESTRITO a tags passivas dentro de cards (`Iniciante`, `Legendado`, tópicos).
+  - **Inputs de busca e formulários:** Mínimo de **14px** (`text-sm`) para evitar zoom indesejado no mobile e garantir legibilidade rápida.
+  - **Bios e descrições:** **13px a 14px** com entrelinha arejada (`leading-relaxed text-zinc-300`).
+  - **Títulos:** **15px a 16px bold** (`text-zinc-100`).
 
 ### 1.2. Contraste & Paleta Silenciosa (WCAG AA)
 - ❌ **PROIBIDO texto cinza desbotado ou ilegível contra fundo escuro:**
@@ -28,8 +29,19 @@
 - ❌ **PROIBIDO amontoamento de containers:**
   - Sem caixas aninhadas sem propósito ("cards dentro de cards dentro de boxes").
   - O respiro vertical entre título, bio e tags deve ser simétrico e perceptível (espaçamento de 12px a 16px).
-- ❌ **PROIBIDO dividers colados ou assimétricos:**
-  - Qualquer divisor (`border-t`, `<hr>`) deve ter padding rigorosamente igual acima e abaixo. Se não for perfeito, não use divisor.
+- ❌ **PROIBIDO divisores decorativos ou arbitrários:**
+  - Proibido enfiar `<hr>`, `border-t` ou `border-b` em rodapés de dropdowns, cabeçalhos de gavetas ou entre a barra de filtros e o grid de conteúdo. Se o divisor não tiver propósito estrutural indispensável, **NÃO USE DIVISOR**.
+  - Qualquer divisor legítimo (`border-t`, `<hr>`) deve ter padding rigorosamente igual acima e abaixo.
+
+### 1.4. Iconografia Padronizada (Fim de Caracteres Inventados)
+- ❌ **PROIBIDO caracteres de texto soltos como ícones:**
+  - Terminantemente proibido usar `↗`, `->`, `+`, `x` em botões, links ou cabeçalhos.
+  - Use SEMPRE os ícones SVG oficiais da biblioteca `lucide-react` (ex: `ExternalLink`, `ChevronDown`, `X`, `Plus`).
+
+### 1.5. Isolamento Arquitetural de Overflow (Mobile vs. Desktop)
+- ❌ **PROIBIDO overflow quebrando menus e popovers flutuantes:**
+  - NUNCA aplique `overflow-x-auto` ou `overflow-hidden` em containers que abrigam dropdowns, comboboxes ou menus com posicionamento absoluto.
+  - O scroll horizontal de filtros no mobile deve ficar estritamente isolado no breakpoint mobile (`max-md:overflow-x-auto`), preservando `overflow-visible md:flex-wrap` no desktop para que popovers flutuantes nunca fiquem presos ou cortados.
 
 ---
 
@@ -110,6 +122,8 @@ Antes de responder ao usuário dizendo que uma tarefa está pronta, o agente é 
 5. **Confronto com o Preview:** A tela gerada no React foi comparada diretamente com o arquivo correspondente em `previews/`? Há qualquer desvio estrutural ou estético? Se houver, desfaça imediatamente.
 6. **Double Check de Metadados Oficiais (Tolerância Zero a Descrições Criadas por IA):** O assistente conferiu item por item do lote para garantir que NENHUMA descrição foi inventada ou sintetizada por IA? Todas as bios devem ser trechos literais da aba "About" / metadados oficiais do YouTube/plataforma.
 7. **Auditoria de Taxonomia Atômica:** Nenhuma tag nova contém conectivos (`&`, `e`), termos duplos ou generalismos vazios (`Cultura e Entretenimento`). Tags compostas foram unificadas em aliases canônicos.
+8. **Auditoria Cruzada Responsiva (Mobile vs. Desktop):** Qualquer alteração para suporte mobile foi testada mentalmente ou visualizada no DOM em ambos os breakpoints (< 768px e >= 768px), garantindo que regras de overflow mobile não quebraram popovers, comboboxes ou dropdowns no desktop?
+9. **Auditoria de Ícones Oficiais:** Nenhum caractere de texto solto (`↗`, `+`, `x`) foi utilizado em botões ou links? Apenas componentes SVG de `lucide-react`?
 
 ---
 

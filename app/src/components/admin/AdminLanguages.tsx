@@ -1,21 +1,24 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { PRESET_CATALOG, INITIAL_LANGS, mergeWithInitialLangs, type LanguageItem } from '../../constants/languages';
+import { PRESET_CATALOG, INITIAL_LANGS, type LanguageItem } from '../../constants/languages';
 
 const STORAGE_KEY = 'immersion_admin_languages_v1';
 
 export const AdminLanguages: React.FC = () => {
-  const [langs, setLangs] = useState<LanguageItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return mergeWithInitialLangs(parsed);
-      }
-    } catch {
-      // fallback
-    }
-    return INITIAL_LANGS;
-  });
+  const [langs, setLangs] = useState<LanguageItem[]>(INITIAL_LANGS);
+
+  useEffect(() => {
+    fetch('/api/get-languages')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setLangs(data);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          } catch {}
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const [showCatalog, setShowCatalog] = useState(false);
   const [search, setSearch] = useState('');
@@ -26,18 +29,24 @@ export const AdminLanguages: React.FC = () => {
   const [cName, setCName] = useState('');
   const [cSlug, setCSlug] = useState('');
 
-  useEffect(() => {
+  const saveLanguages = (updated: LanguageItem[]) => {
+    setLangs(updated);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(langs));
-      window.dispatchEvent(new CustomEvent('immersion_languages_updated', { detail: langs }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent('immersion_languages_updated', { detail: updated }));
     } catch (e) {
       console.error(e);
     }
-  }, [langs]);
+    fetch('/api/save-languages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ languages: updated }),
+    }).catch((err) => console.error('Falha ao salvar idiomas no disco:', err));
+  };
 
   const filteredAndSortedLangs = useMemo(() => {
     const q = search.trim().toLowerCase();
-    const list = langs.filter(
+    const list = [...langs].filter(
       (l) => l.name.toLowerCase().includes(q) || l.id.toLowerCase().includes(q)
     );
 
@@ -59,18 +68,18 @@ export const AdminLanguages: React.FC = () => {
   }, [langs, search, sortBy]);
 
   const toggleActive = (id: string) => {
-    setLangs((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, active: !l.active } : l))
-    );
+    const next = langs.map((l) => (l.id === id ? { ...l, active: !l.active } : l));
+    saveLanguages(next);
   };
 
   const addFromPreset = (id: string) => {
     const found = PRESET_CATALOG.find((p) => p.id === id);
     if (!found || langs.some((l) => l.id === id)) return;
-    setLangs((prev) => [
-      ...prev,
+    const next = [
+      ...langs,
       { id: found.id, name: found.name, flag: found.flag, active: true },
-    ]);
+    ];
+    saveLanguages(next);
   };
 
   const handleSaveCustom = (e: React.FormEvent) => {
@@ -83,10 +92,11 @@ export const AdminLanguages: React.FC = () => {
 
     if (langs.some((l) => l.id === slug)) return;
 
-    setLangs((prev) => [
-      ...prev,
+    const next = [
+      ...langs,
       { id: slug, name, flag, active: true },
-    ]);
+    ];
+    saveLanguages(next);
     setCFlag('');
     setCName('');
     setCSlug('');

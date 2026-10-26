@@ -1,4 +1,5 @@
 import React from 'react';
+import { ExternalLink } from 'lucide-react';
 import { LanguageDrawer } from './LanguageDrawer';
 import type { MediaCategory } from '../types/content';
 import { getLanguageCode, type LanguageItem } from '../constants/languages';
@@ -9,6 +10,7 @@ interface HeaderProps {
   selectedLanguage: string;
   languages: LanguageItem[];
   onLanguageChange: (langId: string) => void;
+  categoryCounts?: Record<MediaCategory, number>;
 }
 
 const TABS: { id: MediaCategory; label: string }[] = [
@@ -27,37 +29,38 @@ export const Header: React.FC<HeaderProps> = ({
   selectedLanguage,
   languages,
   onLanguageChange,
+  categoryCounts,
 }) => {
   const [langOpen, setLangOpen] = React.useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
+  const visibleTabs = React.useMemo(() => {
+    if (!categoryCounts) return TABS;
+    const filtered = TABS.filter((t) => (categoryCounts[t.id] || 0) > 0);
+    return filtered.length > 0 ? filtered : [TABS[0]];
+  }, [categoryCounts]);
+
   const currentLang = languages.find((l) => l.id === selectedLanguage) || {
-    id: selectedLanguage,
-    name: selectedLanguage,
-    flag: '🌐',
-    active: true,
+    id: selectedLanguage, name: selectedLanguage, flag: '🌐', active: true,
   };
 
   const activeLanguages = languages.filter((l) => l.active);
 
   React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setLangOpen(false);
-      }
-    }
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') setLangOpen(false);
-    }
-
+    const handleOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setLangOpen(false);
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLangOpen(false);
+    };
     if (langOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('mousedown', handleOutside);
+      document.addEventListener('keydown', handleKey);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('keydown', handleKey);
     };
   }, [langOpen]);
 
@@ -70,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="bg-[#09090b] w-full max-w-full overflow-hidden">
+    <header className="bg-[#09090b] w-full max-w-full">
       {/* Tier 1: Brand & TopNav Actions */}
       <div className="border-b border-zinc-800/80">
         <div className="max-w-[1180px] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-3">
@@ -144,13 +147,13 @@ export const Header: React.FC<HeaderProps> = ({
                 })}
 
                 {import.meta.env.DEV && (
-                  <div className="pt-1.5 mt-1 border-t border-zinc-800/60">
+                  <div className="pt-1 mt-1">
                     <a
                       href="/admin"
-                      className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-[#18181b]/60 no-underline cursor-pointer transition-colors"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-zinc-100 hover:bg-[#18181b]/60 no-underline cursor-pointer transition-colors"
                     >
                       <span>Gerenciar idiomas</span>
-                      <span>↗</span>
+                      <ExternalLink className="w-4 h-4 text-zinc-400" />
                     </a>
                   </div>
                 )}
@@ -161,9 +164,9 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Tier 2: Tabs */}
-      <nav className="bg-[#09090b] w-full max-w-full overflow-hidden">
+      <nav className="bg-[#09090b] w-full max-w-full">
         <div className="max-w-[1180px] mx-auto px-4 md:px-6 flex items-center gap-6 sm:gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap no-scrollbar w-full min-w-0">
-          {TABS.map((tab) => {
+          {visibleTabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button

@@ -51,7 +51,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <section className={`bg-[#09090b] pt-3 pb-3 border-b border-zinc-800/80 w-full max-w-full overflow-hidden ${stickyClassName}`}>
+    <section className={`bg-[#09090b] pt-4 pb-2 w-full max-w-full ${stickyClassName}`}>
       <div className="max-w-[1180px] mx-auto px-4 md:px-6 space-y-3 w-full min-w-0">
         <div className="relative w-full">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
@@ -73,8 +73,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
 
         {/* Linha de Controles: No mobile (< 768px), sangra até a parede da tela (-mx-4 px-4) e esconde a scrollbar */}
-        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar py-0.5 w-auto -mx-4 px-4 min-w-0 md:mx-0 md:px-0 md:w-full md:flex-wrap md:justify-between">
-          <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2.5 overflow-x-auto whitespace-nowrap no-scrollbar py-0.5 w-auto -mx-4 px-4 min-w-0 md:mx-0 md:px-0 md:w-full md:flex-wrap md:justify-between md:overflow-visible md:whitespace-normal">
+          <div className="flex items-center gap-2.5 flex-shrink-0 md:flex-wrap">
             {/* 1. Categorias SEMPRE em Primeiro Lugar */}
             {!isPronunciaTab && availableTopics.length > 0 && (
               <CategoryCombobox
@@ -93,7 +93,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       key={tag}
                       type="button"
                       onClick={() => togglePronunciaType(tag)}
-                      className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
+                      className={`h-9 px-3.5 rounded-lg border text-sm transition-all inline-flex items-center cursor-pointer ${
                         isActive
                           ? 'border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold'
                           : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
@@ -110,7 +110,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <button
                     type="button"
                     onClick={() => onFilterChange('filterBeginner', !filters.filterBeginner)}
-                    className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
+                    className={`h-9 px-3.5 rounded-lg border text-sm transition-all inline-flex items-center cursor-pointer ${
                       filters.filterBeginner
                         ? 'border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
                         : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
@@ -124,7 +124,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <button
                     type="button"
                     onClick={() => onFilterChange('filterOriginalAudio', !filters.filterOriginalAudio)}
-                    className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center cursor-pointer ${
+                    className={`h-9 px-3.5 rounded-lg border text-sm transition-all inline-flex items-center cursor-pointer ${
                       filters.filterOriginalAudio
                         ? 'border-emerald-700/60 bg-[#152319] text-emerald-300 font-semibold'
                         : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
@@ -138,13 +138,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <button
                     type="button"
                     onClick={() => onFilterChange('filterSubs', !filters.filterSubs)}
-                    className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer ${
+                    className={`h-9 px-3.5 rounded-lg border text-sm transition-all inline-flex items-center gap-2 cursor-pointer ${
                       filters.filterSubs
                         ? 'border-purple-700/60 bg-purple-950/40 text-purple-200 font-semibold'
                         : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
                     }`}
                   >
-                    <Check className="w-3.5 h-3.5 text-zinc-400 stroke-[2.5]" />
+                    <Check className="w-4 h-4 text-zinc-400 stroke-[2.5]" />
                     <span>{activeTab === 'podcasts' ? 'Com transcrição' : 'Legendas'}</span>
                   </button>
                 )}
@@ -154,13 +154,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <button
               type="button"
               onClick={() => onFilterChange('filterFavs', !filters.filterFavs)}
-              className={`h-8 px-3 rounded-lg border text-xs transition-all inline-flex items-center gap-1.5 cursor-pointer ${
+              className={`h-9 px-3.5 rounded-lg border text-sm transition-all inline-flex items-center gap-2 cursor-pointer ${
                 filters.filterFavs
                   ? 'border-rose-800/60 bg-rose-950/40 text-rose-200 font-semibold'
                   : 'border-white/[0.08] bg-transparent text-zinc-300 hover:text-zinc-100 hover:bg-white/[0.03] font-medium'
               }`}
             >
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-current" />
+              <Heart className="w-4 h-4 text-rose-500 fill-current" />
               <span>Favoritos</span>
             </button>
 
@@ -168,7 +168,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <button
                 type="button"
                 onClick={onResetFilters}
-                className="h-8 px-3 text-xs font-semibold text-purple-400 hover:text-purple-300 transition-colors inline-flex items-center cursor-pointer"
+                className="h-9 px-3.5 text-sm font-semibold text-purple-400 hover:text-purple-300 transition-colors inline-flex items-center cursor-pointer"
               >
                 Limpar filtros
               </button>
@@ -176,19 +176,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           </div>
 
           {/* Ordenação */}
-          <div className="flex items-center gap-2 flex-shrink-0 pr-2 md:pr-0">
-            <span className="text-xs text-zinc-500">Ordenar:</span>
+          <div className="flex items-center gap-2.5 flex-shrink-0 pr-2 md:pr-0">
+            <span className="text-sm font-medium text-zinc-400">Ordenar:</span>
             <div className="relative inline-flex items-center">
               <select
                 value={filters.sortBy}
                 onChange={(e) => onFilterChange('sortBy', e.target.value as SortOption)}
-                className="h-8 pl-3 pr-8 bg-[#111114] border border-white/[0.08] hover:border-zinc-700 rounded-lg text-xs font-medium text-zinc-300 focus:outline-none focus:border-zinc-500 appearance-none cursor-pointer transition-colors"
+                className="h-9 pl-3.5 pr-8 bg-[#111114] border border-white/[0.08] hover:border-zinc-700 rounded-lg text-sm font-medium text-zinc-200 focus:outline-none focus:border-zinc-500 appearance-none cursor-pointer transition-colors"
               >
                 <option value="name-asc" className="bg-[#111114]">Nome (A-Z)</option>
                 <option value="name-desc" className="bg-[#111114]">Nome (Z-A)</option>
                 <option value="favs-first" className="bg-[#111114]">Favoritos primeiro</option>
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
+              <ChevronDown className="w-4 h-4 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
             </div>
           </div>
         </div>

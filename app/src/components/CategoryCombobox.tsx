@@ -77,7 +77,7 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
       <button
         type="button"
         onClick={handleTriggerClick}
-        className={`h-8 px-3 rounded-lg border text-xs font-medium inline-flex items-center gap-2 transition-colors cursor-pointer ${
+        className={`h-9 px-3.5 rounded-lg border text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer ${
           hasSelection
             ? 'border-zinc-700 bg-zinc-800/40 text-zinc-100'
             : 'border-white/[0.08] bg-transparent hover:bg-white/[0.04] text-zinc-300 hover:text-zinc-100'
@@ -85,7 +85,7 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
       >
         <div className="flex items-center gap-1.5">
           {!hasSelection ? (
-            <span className="text-zinc-400">Categorias</span>
+            <span className="text-zinc-300">Categorias</span>
           ) : (
             <>
               <span className="inline-flex items-center gap-1.5 pl-2 pr-1.5 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium leading-none">
@@ -109,17 +109,17 @@ export const CategoryCombobox: React.FC<CategoryComboboxProps> = ({
             </>
           )}
         </div>
-        <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 pointer-events-none ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform duration-150 pointer-events-none ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Popover Desktop (>= 768px) */}
       {isOpen && (
-        <div className="hidden md:block absolute left-0 top-full mt-1.5 w-[340px] bg-[#121215] border border-zinc-800 rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100">
+        <div className="hidden md:block absolute left-0 top-full mt-1.5 w-[360px] bg-[#121215] border border-zinc-800 rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100">
           {hasSelection && (
             <div className="pb-2.5 mb-2.5 border-b border-zinc-800/80">
               <div className="flex items-center justify-between mb-2 px-1">
-                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Selecionadas</span>
-                <button type="button" onClick={() => onChange([])} className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
+                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Selecionadas</span>
+                <button type="button" onClick={() => onChange([])} className="text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer">
                   Limpar
                 </button>
               </div>

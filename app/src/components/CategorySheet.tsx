@@ -60,7 +60,7 @@ export const CategorySheet: React.FC<CategorySheetProps> = ({
             <button
               type="button"
               onClick={handleClearAll}
-              className="text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors whitespace-nowrap cursor-pointer"
+              className="text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors whitespace-nowrap cursor-pointer"
             >
               Limpar
             </button>
@@ -121,7 +121,7 @@ export const CategorySheet: React.FC<CategorySheetProps> = ({
           className="overflow-y-auto flex-1 min-h-0 custom-scroll space-y-1 pr-1 py-1"
         >
           {filteredTopics.length === 0 ? (
-            <div className="py-8 text-center text-xs text-zinc-500">
+            <div className="py-8 text-center text-sm text-zinc-500">
               Nenhuma categoria encontrada
             </div>
           ) : (

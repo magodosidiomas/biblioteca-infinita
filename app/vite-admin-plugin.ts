@@ -1370,6 +1370,60 @@ export function adminDevPlugin(): Plugin {
           return
         }
 
+        // 7. Endpoint para salvar a configuração de idiomas no languages.ts
+        if (req.url === '/api/save-languages' && req.method === 'POST') {
+          let body = ''
+          req.on('data', (chunk) => {
+            body += chunk
+          })
+          req.on('end', () => {
+            try {
+              const { languages: newLangs } = JSON.parse(body)
+              if (!Array.isArray(newLangs) || newLangs.length === 0) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ error: 'Lista de idiomas inválida' }))
+                return
+              }
+
+              const languagesFilePath = path.resolve(__dirname, 'src/constants/languages.ts')
+              let content = fs.readFileSync(languagesFilePath, 'utf-8')
+              const jsonFormatted = JSON.stringify(newLangs, null, 2)
+              const regex = /export const INITIAL_LANGS: LanguageItem\[\] = \[[\s\S]*?\];/
+              if (regex.test(content)) {
+                content = content.replace(regex, `export const INITIAL_LANGS: LanguageItem[] = ${jsonFormatted};`)
+                fs.writeFileSync(languagesFilePath, content, 'utf-8')
+              }
+
+              res.setHeader('Content-Type', 'application/json')
+              res.end(JSON.stringify({ success: true, count: newLangs.length }))
+            } catch (err: any) {
+              res.statusCode = 500
+              res.setHeader('Content-Type', 'application/json')
+              res.end(JSON.stringify({ error: err.message }))
+            }
+          })
+          return
+        }
+
+        // 8. Endpoint para obter a lista canônica de idiomas do disco
+        if (req.url === '/api/get-languages' && req.method === 'GET') {
+          try {
+            const languagesFilePath = path.resolve(__dirname, 'src/constants/languages.ts')
+            const content = fs.readFileSync(languagesFilePath, 'utf-8')
+            const match = content.match(/export const INITIAL_LANGS: LanguageItem\[\] = (\[[\s\S]*?\]);/)
+            if (match) {
+              res.setHeader('Content-Type', 'application/json')
+              res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate')
+              res.end(match[1])
+              return
+            }
+          } catch {}
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify([]))
+          return
+        }
+
         next()
       })
     },
