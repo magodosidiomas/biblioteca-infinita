@@ -44,7 +44,8 @@
 - [x] **Deploy de Produção no Cloudflare Pages:**
   - Build validado com zero erros e publicado no domínio canônico de produção:
     - **URL Produção:** `https://biblioteca-infinita.pages.dev`
-    - **Versão Imutável:** `https://da37ef6f.biblioteca-infinita.pages.dev`
+    - **Última Versão Imutável:** `https://85e3a849.biblioteca-infinita.pages.dev`
+    - **Versão Anterior:** `https://da37ef6f.biblioteca-infinita.pages.dev`
 - [x] **Deploy de Staging no Cloudflare Pages:**
   - Publicado na branch `staging`:
     - **URL Staging:** `https://staging.biblioteca-infinita.pages.dev`
