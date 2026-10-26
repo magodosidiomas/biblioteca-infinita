@@ -35,9 +35,12 @@
 - [x] **Card de Pôster Vertical 2:3 (`Séries` e `Filmes`):** [`SeriesMovieCard.tsx`](app/src/components/SeriesMovieCard.tsx) aprovado via [`previews/preview-series-filmes.html`](previews/preview-series-filmes.html) — grid de 3 colunas no desktop, sem sinopse no card, pill da plataforma no topo esquerdo, gradiente inferior escuro, subtítulo editorial com gêneros separados por `·` + aviso `Original em [Idioma]` quando dublado, e linha única de badges (`Iniciante`, `Áudio Original` / `Dublado`, `Legendado [CC]`).
 
 ### Deploy & Infraestrutura (Cloudflare Pages)
+- [x] **Deploy de Produção no Cloudflare Pages:**
+  - Build validado com zero erros e publicado no domínio canônico de produção:
+    - **URL Produção:** `https://biblioteca-infinita.pages.dev`
+    - **Versão Imutável:** `https://da37ef6f.biblioteca-infinita.pages.dev`
 - [x] **Deploy de Staging no Cloudflare Pages:**
-  - Build de produção verificado com zero erros (`npm run build`).
-  - Deploy publicado no ambiente de staging com branch `staging`:
+  - Publicado na branch `staging`:
     - **URL Staging:** `https://staging.biblioteca-infinita.pages.dev`
     - **Última Versão:** `https://11b27419.biblioteca-infinita.pages.dev`
     - Implementado interceptador de navegação no `Sheet` (`history.pushState` + `popstate`): o botão Voltar (hardware/gesto de sistema no Android) agora fecha exclusivamente o drawer aberto sem navegar para trás no histórico da aba.
